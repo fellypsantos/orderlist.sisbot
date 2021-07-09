@@ -14,7 +14,7 @@ export default function LanguageChanger() {
 
   return (
     <>
-      <DropdownContainer>
+      <DropdownContainer isOpen={dropdownVisible}>
         <Button
           title="Selecione o idioma do sistema."
           onClick={() => setDropdownVisible(!dropdownVisible)}
@@ -23,7 +23,7 @@ export default function LanguageChanger() {
             icon={faGlobeAmericas}
             style={{marginRight: '5px'}}
           />
-          <span>Idioma</span>
+          <span id="language-dropdown-label">Idioma</span>
         </Button>
 
         <DropdownContent visible={dropdownVisible}>

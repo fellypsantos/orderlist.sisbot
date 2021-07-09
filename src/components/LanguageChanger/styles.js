@@ -4,6 +4,11 @@ import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 export const DropdownContainer = styled.div`
   position: relative;
+  z-index: 1000;
+
+  span#language-dropdown-label::after {
+    content: ' ${(props) => (props.isOpen ? ' ▴' : ' ▾')}';
+  }
 `;
 
 export const DropdownContent = styled.ul`
