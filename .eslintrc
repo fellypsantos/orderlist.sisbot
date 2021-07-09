@@ -1,0 +1,29 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "airbnb"
+  ],
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "no-alert": 0,
+    "react/prop-types": 0,
+    "object-curly-spacing": 0,
+    "no-console": 0,
+    "no-undef": 0,
+    "object-curly-newline": 0,
+    "radix": 0,
+    "import/prefer-default-export": 0,
+    "operator-linebreak": 0,
+    "semi": ["error", "always"],
+    "react/jsx-closing-bracket-location": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-unused-vars": "warn",
+    "prefer-template": "warn",
+  }
+}
