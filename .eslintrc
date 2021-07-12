@@ -20,6 +20,7 @@
     "radix": 0,
     "import/prefer-default-export": 0,
     "operator-linebreak": 0,
+    "react/jsx-one-expression-per-line": 0,
     "semi": ["error", "always"],
     "react/jsx-closing-bracket-location": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
