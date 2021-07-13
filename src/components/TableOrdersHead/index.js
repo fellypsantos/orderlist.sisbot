@@ -1,6 +1,11 @@
 import React, {useContext} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faDollarSign} from '@fortawesome/free-solid-svg-icons';
+import {
+  faCoins,
+  faHandHoldingUsd,
+  faEdit,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import Utils from '../../Utils';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
@@ -12,7 +17,7 @@ export default function TableOrdersHead() {
     <thead>
       <tr style={Utils.StyleHelper.TextAlign('center')}>
         <th style={{maxWidth: '50px'}}>
-          <FontAwesomeIcon icon={faDollarSign} />
+          <FontAwesomeIcon icon={faHandHoldingUsd} />
         </th>
         <th style={Utils.StyleHelper.TextAlign('left')}>Nome</th>
         <th>Número</th>
@@ -22,9 +27,15 @@ export default function TableOrdersHead() {
             <img src={clothingIcon.icon} alt="icon" height={25} />
           </th>
         ))}
-        <th>$$</th>
-        <th>-</th>
-        <th>-</th>
+        <th>
+          <FontAwesomeIcon icon={faCoins} />
+        </th>
+        <th>
+          <FontAwesomeIcon icon={faEdit} />
+        </th>
+        <th>
+          <FontAwesomeIcon icon={faTrash} />
+        </th>
       </tr>
     </thead>
   );

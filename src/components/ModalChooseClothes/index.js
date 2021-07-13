@@ -1,11 +1,14 @@
 import React, {useContext} from 'react';
+import {useToasts} from 'react-toast-notifications';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
+import {v4 as uuidv4} from 'uuid';
 import {OrderListContext} from '../../contexts/OrderListContext';
+import Utils from '../../Utils';
 
 const maxQuantityPerPiece = [...Array(50).keys()];
 
@@ -16,9 +19,17 @@ export default function ModalChooseClothes() {
     modalClothesOpened,
     setModalClothesOpened,
     Translator,
+    initialStateTempOrderItem,
     tempOrderItem,
     setTempOrderItem,
+    orderListItems,
+    setOrderListItems,
+    currentClothingPrices,
+    dashboardData,
+    setDashboardData,
   } = useContext(OrderListContext);
+
+  const {addToast} = useToasts();
 
   const handleChangeClotingSettings = (
     newValue,
@@ -50,11 +61,47 @@ export default function ModalChooseClothes() {
   };
 
   const handleAddNewOrderItem = () => {
-    // check if is empty settins in modal
-    // if not! save the item
-    setTempOrderItem({
-      ...tempOrderItem,
-      name: 'Analfa Beto',
+    const emptyItems = tempOrderItem.clothingSettings.filter(
+      (item) => item.size === '' || item.quantity === 0,
+    );
+
+    if (emptyItems.length === tempOrderItem.clothingSettings.length) {
+      // ALL ITEMS ARE EMPTY
+      addToast('Lista vazia! Não há nada para adicionar até o momento.', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+
+      return;
+    }
+
+    // CALCULATE PAYMENT VALUE BASED IN PRICES DATA
+    const paymentPriceForNewOrderItem = Utils.CalculatePaymentValueToOrderItem(
+      currentClothingPrices,
+      tempOrderItem.clothingSettings,
+    );
+
+    // UPDATE MAIN LIST
+    setOrderListItems([
+      ...orderListItems,
+      {
+        ...tempOrderItem,
+        id: uuidv4(),
+        payment: {
+          paid: false,
+          value: paymentPriceForNewOrderItem,
+        },
+      },
+    ]);
+
+    // CLEAR TEMP DATA
+    setTempOrderItem(initialStateTempOrderItem);
+
+    setModalClothesOpened(false);
+
+    addToast('Feito! Novo item adicionado na sua lista de pedidos.', {
+      appearance: 'success',
+      autoDismiss: true,
     });
   };
 
@@ -71,6 +118,21 @@ export default function ModalChooseClothes() {
     return phrase;
   };
 
+  const calculatePriceForCurrentSelectedClothes = () => {
+    // PROCESS ONLY NO EMPTY CLOTHES
+    // NO EMPTY HAS SIZE AND QUANTITY FILLED
+    const noEmptyClothes = tempOrderItem.clothingSettings.filter(
+      (clotheItem) => clotheItem.size !== '' && clotheItem.quantity !== 0,
+    );
+
+    const currentValue = Utils.CalculatePaymentValueToOrderItem(
+      currentClothingPrices,
+      noEmptyClothes,
+    );
+
+    return currentValue;
+  };
+
   return (
     <Modal
       show={modalClothesOpened}
@@ -81,7 +143,8 @@ export default function ModalChooseClothes() {
       <Modal.Body>
         <div className="d-block">{headerPhrase()}</div>
         <div className="d-block">
-          Valor dos itens: <strong>$ 0</strong>.
+          Valor dos itens:{' '}
+          <strong>$ {calculatePriceForCurrentSelectedClothes()}</strong>.
         </div>
 
         <div className="mt-4" style={{margin: '0 auto', maxWidth: '300px'}}>

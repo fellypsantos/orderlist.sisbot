@@ -1,5 +1,6 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
+import {ToastProvider} from 'react-toast-notifications';
 
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'flag-icon-css/css/flag-icon.min.css';
@@ -15,28 +16,34 @@ import Separator from '../Separator';
 import TableOrderList from '../TableOrderList';
 import ModalChooseClothes from '../ModalChooseClothes';
 import OrderListProvider from '../../contexts/OrderListContext';
+import GlobalStyle from '../../globalStyle';
+import ModalChoosePrices from '../ModalChoosePrices';
 
 export default function App() {
   return (
     <OrderListProvider>
-      <ModalChooseClothes />
+      <GlobalStyle />
+      <ToastProvider>
+        <ModalChooseClothes />
+        <ModalChoosePrices />
 
-      <NavbarContainer className="bg-primary">
-        <NavbarLeftContent>
-          <LanguageChanger />
-        </NavbarLeftContent>
-      </NavbarContainer>
+        <NavbarContainer className="bg-primary">
+          <NavbarLeftContent>
+            <LanguageChanger />
+          </NavbarLeftContent>
+        </NavbarContainer>
 
-      <MainContentContainer>
-        <Container>
-          <FormAddOrderItem />
-          <Separator />
-          <Title text="Lista de Pedidos" />
-          <DashboardReports />
-          <TableOrdersMenu />
-          <TableOrderList />
-        </Container>
-      </MainContentContainer>
+        <MainContentContainer>
+          <Container>
+            <FormAddOrderItem />
+            <Separator />
+            <Title text="Lista de Pedidos" />
+            <DashboardReports />
+            <TableOrdersMenu />
+            <TableOrderList />
+          </Container>
+        </MainContentContainer>
+      </ToastProvider>
     </OrderListProvider>
   );
 }

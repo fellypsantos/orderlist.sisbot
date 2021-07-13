@@ -1,10 +1,11 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
 // Multilanguage implementation
 import i18n from 'i18next';
 import {useTranslation, initReactI18next} from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
 import ClothingIconsList from '../clothinIcons';
+import Utils from '../Utils';
 
 export const OrderListContext = createContext();
 
@@ -28,6 +29,10 @@ const initialTempOrderItem = {
   name: '',
   number: '',
   gender: 'MALE',
+  payment: {
+    paid: false,
+    value: 0,
+  },
   clothingSettings: [
     {id: 1, name: 'tshirt', size: '', quantity: 0},
     {id: 2, name: 'tshirtLong', size: '', quantity: 0},
@@ -38,8 +43,18 @@ const initialTempOrderItem = {
   ],
 };
 
+const initialClothingPrices = [
+  {id: 1, icon: ClothingIconsList.tshirt, price: ''},
+  {id: 2, icon: ClothingIconsList.tshirtLong, price: ''},
+  {id: 3, icon: ClothingIconsList.shorts, price: ''},
+  {id: 4, icon: ClothingIconsList.pants, price: ''},
+  {id: 5, icon: ClothingIconsList.tanktop, price: ''},
+  {id: 6, icon: ClothingIconsList.vest, price: ''},
+];
+
 const OrderListProvider = ({children}) => {
   const {t: Translator} = useTranslation();
+
   const updateLanguage = (countryCode) => {
     i18n.changeLanguage(countryCode);
     console.log('New language is: ', countryCode);
@@ -72,10 +87,99 @@ const OrderListProvider = ({children}) => {
   ]);
 
   const [initialStateTempOrderItem] = useState(initialTempOrderItem);
+  const [initialStateClothingPrices] = useState(initialClothingPrices);
+
+  const [currentClothingPrices, setCurrentClothingPrices] = useState(
+    initialClothingPrices,
+  );
+
   const [tempOrderItem, setTempOrderItem] = useState(initialTempOrderItem);
+
+  const [orderListItems, setOrderListItems] = useState([]);
+
+  const [dashboardData, setDashboardData] = useState({
+    totalToReceive: 0,
+    totalReceived: 0,
+    needReceive: 0,
+    totalProgressAsPercentage: 0,
+  });
+
+  // HELPER FUNCTIONS TO UPDATE DASHBOARD
+  const calculateTotalToReceive = () => {
+    let totalPaymentValue = 0;
+
+    orderListItems.map((orderItem) => {
+      console.log('calculateTotalToReceive orderItem', orderItem);
+
+      // CALCULATE
+      totalPaymentValue += Utils.CalculatePaymentValueToOrderItem(
+        currentClothingPrices,
+        orderItem.clothingSettings,
+      );
+      return orderItem;
+    });
+
+    return totalPaymentValue;
+  };
+
+  const calculateTotalReceived = () => {
+    let totalToReceive = 0;
+
+    // FILTER ONLY PAID STATUS
+    const paidOrderItem = orderListItems.filter(
+      (orderItem) => orderItem.payment.paid,
+    );
+
+    paidOrderItem.map((orderItem) => {
+      totalToReceive += Utils.CalculatePaymentValueToOrderItem(
+        currentClothingPrices,
+        orderItem.clothingSettings,
+      );
+      return orderItem;
+    });
+
+    return totalToReceive;
+  };
 
   // Control modal with list of clothes
   const [modalClothesOpened, setModalClothesOpened] = useState(false);
+
+  // Control modal with prices
+  const [modalPricesOpened, setModalPricesOpened] = useState(false);
+
+  // LOAD SETTINGS
+  useEffect(() => {
+    console.log('LOAD SETTINGS');
+  }, []);
+
+  // SAVE ORDER LIST
+  useEffect(() => {
+    console.log('Salvar OrderList no LocalStorage');
+  }, [orderListItems]);
+
+  // SAVE PRICES
+  useEffect(() => {
+    console.log('Salvar preços no LocalStorage');
+  }, [currentClothingPrices]);
+
+  // KEEP DASHBOARD UPDATED
+  useEffect(() => {
+    console.log('UPDATE DASHBOARD');
+
+    const totalToReceive = calculateTotalToReceive();
+    const totalReceived = calculateTotalReceived();
+    const needReceive = totalToReceive - totalReceived;
+    const totalProgressAsPercentage = (totalReceived / totalToReceive) * 100;
+
+    setDashboardData({
+      totalToReceive,
+      totalReceived,
+      needReceive,
+      totalProgressAsPercentage: Number.isNaN(totalProgressAsPercentage)
+        ? 0
+        : totalProgressAsPercentage.toFixed(),
+    });
+  }, [orderListItems]);
 
   const ContextValues = {
     Translator,
@@ -88,6 +192,15 @@ const OrderListProvider = ({children}) => {
     initialStateTempOrderItem,
     tempOrderItem,
     setTempOrderItem,
+    orderListItems,
+    setOrderListItems,
+    initialStateClothingPrices,
+    currentClothingPrices,
+    setCurrentClothingPrices,
+    modalPricesOpened,
+    setModalPricesOpened,
+    dashboardData,
+    setDashboardData,
   };
 
   return (
