@@ -77,7 +77,7 @@ const TableOrdersBody = () => {
         handleClose={handleCloseDeleteDialog}
       />
 
-      <tbody>
+      <tbody id="tableOrderListItems">
         {orderListItems.length > 0 ? (
           orderListItems.map((item) => (
             <TableRow key={item.id} className={item.payment.paid && 'paid'}>

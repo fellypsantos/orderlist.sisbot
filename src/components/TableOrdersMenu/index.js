@@ -16,6 +16,8 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 const TableOrdersMenu = () => {
   const {setModalPricesOpened} = useContext(OrderListContext);
 
+  const handleScreenshot = () => {};
+
   return (
     <Row className="mt-4 mb-2">
       <Col className="d-flex justify-content-end">
@@ -31,7 +33,11 @@ const TableOrdersMenu = () => {
           <FontAwesomeIcon icon={faEraser} />
           <span className="ml-1 d-none d-md-inline-block">Limpar</span>
         </Button>
-        <Button variant="secondary" className="mr-2" size="sm">
+        <Button
+          variant="secondary"
+          className="mr-2"
+          size="sm"
+          onClick={handleScreenshot}>
           <FontAwesomeIcon icon={faCamera} />
           <span className="ml-1 d-none d-md-inline-block">Capturar</span>
         </Button>
