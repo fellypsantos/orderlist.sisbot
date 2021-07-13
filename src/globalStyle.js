@@ -10,8 +10,8 @@ const GlobalStyle = createGlobalStyle`
     color: #f03434;
   }
 
-  .color-flat-green {
-    color: #27b461;
+  .paid {
+    background-color: #c9f5d4 !important
   }
 `;
 

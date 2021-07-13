@@ -25,8 +25,6 @@ export default function ModalChooseClothes() {
     orderListItems,
     setOrderListItems,
     currentClothingPrices,
-    dashboardData,
-    setDashboardData,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();

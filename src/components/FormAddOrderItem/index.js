@@ -27,7 +27,6 @@ const FormAddOrderItem = () => {
   } = useContext(OrderListContext);
 
   const handleChangeName = (e) => {
-    console.log('handleChangeName');
     setTempOrderItem({
       ...tempOrderItem,
       name: e.target.value,

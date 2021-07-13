@@ -109,8 +109,6 @@ const OrderListProvider = ({children}) => {
     let totalPaymentValue = 0;
 
     orderListItems.map((orderItem) => {
-      console.log('calculateTotalToReceive orderItem', orderItem);
-
       // CALCULATE
       totalPaymentValue += Utils.CalculatePaymentValueToOrderItem(
         currentClothingPrices,
@@ -150,16 +148,58 @@ const OrderListProvider = ({children}) => {
   // LOAD SETTINGS
   useEffect(() => {
     console.log('LOAD SETTINGS');
+    const currentLocalStorageData = localStorage.getItem('sisbot');
+
+    // FIRST RUN, NO LOCALSTORAGE DATA
+    if (currentLocalStorageData !== null) {
+      console.log('RESTORING PREVIEWS SAVED DATA.');
+      const data = JSON.parse(currentLocalStorageData);
+
+      // RESTORE ORDER ITEMS LIST
+      setOrderListItems(data.orderListItems);
+
+      // RESTORE PRICES LIST
+      setCurrentClothingPrices(data.pricesList);
+    } else {
+      console.log('INITIALIZE WITH DEFAULT EMPTY DATA.');
+      localStorage.setItem(
+        'sisbot',
+        JSON.stringify({
+          orderListItems: [],
+          pricesList: {},
+        }),
+      );
+    }
   }, []);
 
   // SAVE ORDER LIST
   useEffect(() => {
-    console.log('Salvar OrderList no LocalStorage');
+    const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
+
+    localStorage.setItem(
+      'sisbot',
+      JSON.stringify({
+        ...currentLocalStorage,
+        orderListItems,
+      }),
+    );
+
+    console.log('[UPDATED] LocalStorage: orderListitems.');
   }, [orderListItems]);
 
   // SAVE PRICES
   useEffect(() => {
-    console.log('Salvar preços no LocalStorage');
+    const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
+
+    localStorage.setItem(
+      'sisbot',
+      JSON.stringify({
+        ...currentLocalStorage,
+        pricesList: currentClothingPrices,
+      }),
+    );
+
+    console.log('[UPDATED] LocalStorage: pricesList.');
   }, [currentClothingPrices]);
 
   // KEEP DASHBOARD UPDATED
@@ -171,13 +211,25 @@ const OrderListProvider = ({children}) => {
     const needReceive = totalToReceive - totalReceived;
     const totalProgressAsPercentage = (totalReceived / totalToReceive) * 100;
 
+    const fixedTotalToReceive = Number.isNaN(totalToReceive)
+      ? 0
+      : totalToReceive;
+
+    const fixedTotalReceived = Number.isNaN(totalReceived) ? 0 : totalReceived;
+
+    const fixedNeedReceive = Number.isNaN(needReceive) ? 0 : needReceive;
+
+    const fixedTotalProgressAsPercentage = Number.isNaN(
+      totalProgressAsPercentage,
+    )
+      ? 0
+      : totalProgressAsPercentage.toFixed();
+
     setDashboardData({
-      totalToReceive,
-      totalReceived,
-      needReceive,
-      totalProgressAsPercentage: Number.isNaN(totalProgressAsPercentage)
-        ? 0
-        : totalProgressAsPercentage.toFixed(),
+      totalToReceive: fixedTotalToReceive,
+      totalReceived: fixedTotalReceived,
+      needReceive: fixedNeedReceive,
+      totalProgressAsPercentage: fixedTotalProgressAsPercentage,
     });
   }, [orderListItems]);
 
