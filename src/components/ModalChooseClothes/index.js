@@ -258,8 +258,6 @@ export default function ModalChooseClothes() {
       'Quer mesmo excluir esse item da lista de pedidos?',
     );
 
-    console.log(confirmDialog);
-
     if (confirmDialog) {
       // USER CONFIRMED! DELETE
       const updatedOrderListItems = orderListItems.filter(
