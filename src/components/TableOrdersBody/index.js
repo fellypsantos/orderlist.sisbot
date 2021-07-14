@@ -1,14 +1,21 @@
 import React, {useContext, useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faEdit, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {faEdit, faEye, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {TableCell, TableRow} from './styles';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import ModalConfirmDialog from '../ModalConfirmDialog';
+import Utils from '../../Utils';
 
 const TableOrdersBody = () => {
-  const {orderListItems, setOrderListItems, Translator} = useContext(
-    OrderListContext,
-  );
+  const {
+    orderListItems,
+    setOrderListItems,
+    Translator,
+    screenshotMode,
+    dashboardData,
+    setEditMode,
+    setModalClothesOpened,
+  } = useContext(OrderListContext);
 
   const [confirmDeleteItem, setConfirmDeleteItem] = useState({});
 
@@ -66,6 +73,16 @@ const TableOrdersBody = () => {
     });
   };
 
+  const handleEdit = (orderItem) => {
+    console.log('Editing: ', orderItem);
+    setEditMode({
+      enabled: true,
+      orderItem,
+    });
+
+    setModalClothesOpened(true);
+  };
+
   return (
     <>
       {/* CONFIRM DELETE ITEM FROM LIST */}
@@ -81,6 +98,7 @@ const TableOrdersBody = () => {
         {orderListItems.length > 0 ? (
           orderListItems.map((item) => (
             <TableRow key={item.id} className={item.payment.paid && 'paid'}>
+              {/* PAID */}
               <TableCell>
                 <input
                   type="checkbox"
@@ -88,22 +106,51 @@ const TableOrdersBody = () => {
                   onChange={(e) => handleChange(e, item.id)}
                 />
               </TableCell>
+
+              {/* NAME */}
               <TableCell className="text-left">{item.name}</TableCell>
+
+              {/* NUMBER */}
               <TableCell>{item.number}</TableCell>
+
+              {/* CLOTHES COLUMNS */}
               {item.clothingSettings.map((clothe) => (
-                <TableCell key={clothe.id} className="d-none d-md-table-cell">
+                <TableCell
+                  key={clothe.id}
+                  className={`${
+                    !screenshotMode ? 'd-none d-md-table-cell' : ''
+                  }`}>
                   {isEmptyClothe(clothe)
                     ? '-'
                     : `${clothe.quantity}-${Translator(clothe.size)}`}
                 </TableCell>
               ))}
+
+              {/* PAYMENT VALUE */}
               <TableCell>$ {item.payment.value}</TableCell>
-              <TableCell>
-                <a href="#!">
+
+              {/* EYE ICON */}
+              <TableCell className="d-table-cell d-md-none">
+                <a href="#!" onClick={() => handleEdit(item)}>
+                  <FontAwesomeIcon icon={faEye} />
+                </a>
+              </TableCell>
+
+              {/* EDIT ICON */}
+              <TableCell
+                className={
+                  screenshotMode ? 'd-none' : 'd-none d-md-table-cell'
+                }>
+                <a href="#!" onClick={() => handleEdit(item)}>
                   <FontAwesomeIcon icon={faEdit} />
                 </a>
               </TableCell>
-              <TableCell>
+
+              {/* TRASH ICON */}
+              <TableCell
+                className={
+                  screenshotMode ? 'd-none' : 'd-none d-md-table-cell'
+                }>
                 <a
                   href="#!"
                   className="color-flat-red"
@@ -115,10 +162,26 @@ const TableOrdersBody = () => {
           ))
         ) : (
           <TableRow>
-            <TableCell colSpan={12}>Nenhum item até o momento.</TableCell>
+            <TableCell
+              colSpan={Utils.GetTotalColumnsTableOrderListItems(
+                document.getElementById('tableOrderListItems'),
+              )}>
+              Nenhum item até o momento.
+            </TableCell>
           </TableRow>
         )}
       </tbody>
+
+      <tfoot className={!screenshotMode ? 'd-none' : ''}>
+        <tr>
+          <td colSpan={9} className="text-right">
+            <strong>Valor Final</strong>
+          </td>
+          <td className="text-center">
+            <strong>$ {dashboardData.totalToReceive}</strong>
+          </td>
+        </tr>
+      </tfoot>
     </>
   );
 };

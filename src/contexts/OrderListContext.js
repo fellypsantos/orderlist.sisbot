@@ -93,9 +93,16 @@ const OrderListProvider = ({children}) => {
     initialClothingPrices,
   );
 
+  const [screenshotMode, setScreenshotMode] = useState(false);
+
   const [tempOrderItem, setTempOrderItem] = useState(initialTempOrderItem);
 
   const [orderListItems, setOrderListItems] = useState([]);
+
+  const [editMode, setEditMode] = useState({
+    enabled: false,
+    orderItem: null,
+  });
 
   const [dashboardData, setDashboardData] = useState({
     totalToReceive: 0,
@@ -253,6 +260,10 @@ const OrderListProvider = ({children}) => {
     setModalPricesOpened,
     dashboardData,
     setDashboardData,
+    screenshotMode,
+    setScreenshotMode,
+    editMode,
+    setEditMode,
   };
 
   return (

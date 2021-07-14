@@ -27,5 +27,6 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-unused-vars": "warn",
     "prefer-template": "warn",
+    "indent": "warn"
   }
 }

@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import html2canvas from 'html2canvas';
 
 import {
   faCamera,
@@ -12,11 +13,59 @@ import {
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import {OrderListContext} from '../../contexts/OrderListContext';
+import Utils from '../../Utils';
 
 const TableOrdersMenu = () => {
-  const {setModalPricesOpened} = useContext(OrderListContext);
+  const {setModalPricesOpened, setScreenshotMode} = useContext(
+    OrderListContext,
+  );
 
-  const handleScreenshot = () => {};
+  const handleScreenshot = async () => {
+    setScreenshotMode(true);
+
+    // CHANGE VIEWPORT TO SHOW ALL CONTENT AS DESKTOP
+    const vp = document.getElementById('viewportMeta').getAttribute('content');
+    document
+      .getElementById('viewportMeta')
+      .setAttribute('content', 'width=1000');
+
+    // DISABLE SCROLL TO PREVENT MESSED UP SCREENSHORT
+    document.body.style.overflow = 'hidden';
+
+    await Utils.Sleep(1000);
+
+    // GENERATE AND DOWNLOAD PNG FILE
+    html2canvas(document.getElementById('tableOrderListItems'), {
+      scrollY: -window.scrollY,
+    })
+      .then((canvas) => {
+        // CREATE CANVAS ELEMENT
+        const targetCanvas = canvas;
+        targetCanvas.style.display = 'none';
+        document.body.appendChild(targetCanvas);
+
+        // CREATE LINK DO ACTIVE IMAGE DOWNLOAD
+        const a = document.createElement('a');
+        a.href = targetCanvas.toDataURL();
+        a.download = 'Lista-2021-07-13.png';
+        document.body.appendChild(a);
+        a.click();
+
+        // REMOVE DOM ELEMENTS TO PREVENT DUPLICATES
+        a.remove();
+        targetCanvas.remove();
+      })
+      .then(() => {
+        // TURN OFF SCREENSHOT MODE
+        setScreenshotMode(false);
+
+        // RESTORE VIEWPORT TO FIT DEVICE
+        document.getElementById('viewportMeta').setAttribute('content', vp);
+
+        // ENABLE SCROLL AGAIN
+        document.body.style.overflow = 'unset';
+      });
+  };
 
   return (
     <Row className="mt-4 mb-2">

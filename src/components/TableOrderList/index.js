@@ -5,15 +5,15 @@ import {Table} from 'react-bootstrap';
 import TableOrdersHead from '../TableOrdersHead';
 import TableOrdersBody from '../TableOrdersBody';
 
-export default function TableOrderList() {
-  return (
-    <Row>
-      <Col>
-        <Table striped bordered hover>
-          <TableOrdersHead />
-          <TableOrdersBody />
-        </Table>
-      </Col>
-    </Row>
-  );
-}
+const TableOrderList = () => (
+  <Row>
+    <Col>
+      <Table id="tableOrderListItems" striped bordered hover>
+        <TableOrdersHead />
+        <TableOrdersBody />
+      </Table>
+    </Col>
+  </Row>
+);
+
+export default TableOrderList;

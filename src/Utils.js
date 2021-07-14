@@ -35,6 +35,15 @@ export default {
     return totalPrice;
   },
 
+  GetTotalColumnsTableOrderListItems: (tableElement) => {
+    if (tableElement !== null) {
+      const columnCount = tableElement.children[0].children[1].children.length;
+      return columnCount;
+    }
+
+    return 0;
+  },
+
   Sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 
   StyleHelper: {

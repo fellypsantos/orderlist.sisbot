@@ -5,35 +5,50 @@ import {
   faHandHoldingUsd,
   faEdit,
   faTrash,
+  faEye,
 } from '@fortawesome/free-solid-svg-icons';
 import Utils from '../../Utils';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 export default function TableOrdersHead() {
-  const context = useContext(OrderListContext);
-  const {clothingIcons} = context;
+  const {clothingIcons, screenshotMode} = useContext(OrderListContext);
 
   return (
     <thead>
+      <tr className={!screenshotMode ? 'd-none' : ''}>
+        <td colSpan={10} className="text-center">
+          <strong>Lista de Pedidos</strong>
+        </td>
+      </tr>
       <tr style={Utils.StyleHelper.TextAlign('center')}>
         <th style={{maxWidth: '50px'}}>
-          <FontAwesomeIcon icon={faHandHoldingUsd} />
+          {screenshotMode ? (
+            'Pago'
+          ) : (
+            <FontAwesomeIcon icon={faHandHoldingUsd} />
+          )}
         </th>
         <th style={Utils.StyleHelper.TextAlign('left')}>Nome</th>
         <th>Número</th>
 
+        {/* GENERATE ALL CLOTHING COLUMNS */}
         {clothingIcons.map((clothingIcon) => (
-          <th key={clothingIcon.id} className="d-none d-md-table-cell">
+          <th
+            key={clothingIcon.id}
+            className={`${!screenshotMode ? 'd-none d-md-table-cell' : ''}`}>
             <img src={clothingIcon.icon} alt="icon" height={25} />
           </th>
         ))}
-        <th>
-          <FontAwesomeIcon icon={faCoins} />
+
+        <th>{screenshotMode ? 'Preço' : <FontAwesomeIcon icon={faCoins} />}</th>
+        <th className="d-table-cell d-md-none">
+          <FontAwesomeIcon icon={faEye} />
         </th>
-        <th>
+
+        <th className={screenshotMode ? 'd-none' : 'd-none d-md-table-cell'}>
           <FontAwesomeIcon icon={faEdit} />
         </th>
-        <th>
+        <th className={screenshotMode ? 'd-none' : 'd-none d-md-table-cell'}>
           <FontAwesomeIcon icon={faTrash} />
         </th>
       </tr>

@@ -5,10 +5,14 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Accordion from 'react-bootstrap/Accordion';
 
 import {v4 as uuidv4} from 'uuid';
+import {faPen, faUser, faVenusMars} from '@fortawesome/free-solid-svg-icons';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
+import FormTextInput from '../FormTextInput';
+import FormInputSelect from '../FormInputSelect';
 
 const maxQuantityPerPiece = [...Array(50).keys()];
 
@@ -25,6 +29,9 @@ export default function ModalChooseClothes() {
     orderListItems,
     setOrderListItems,
     currentClothingPrices,
+    editMode,
+    setEditMode,
+    genderOptions,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -34,28 +41,44 @@ export default function ModalChooseClothes() {
     clotheIndex,
     propertyToChange,
   ) => {
-    // update clothing settins
-    const updatedClothingSettings = tempOrderItem.clothingSettings.map(
-      (item) => {
-        if (item.id === clotheIndex) {
-          // found the clothe to update
-          return {
-            ...item,
-            size: propertyToChange === 'size' ? newValue : item.size,
-            quantity:
-              propertyToChange === 'quantity' ? newValue : item.quantity,
-          };
-        }
+    // DEFINE WITH CLOTHE SETTINGS TO USE
+    // tempOrderItem -> FOR NEW ORDER ITEM
+    // editMode.orderItem -> FOR UPDATES
+    const targetClothingSettings = editMode.enabled
+      ? editMode.orderItem.clothingSettings
+      : tempOrderItem.clothingSettings;
 
-        return item;
-      },
-    );
+    // update clothing settins
+    const updatedClothingSettings = targetClothingSettings.map((item) => {
+      if (item.id === clotheIndex) {
+        // found the clothe to update
+        return {
+          ...item,
+          size: propertyToChange === 'size' ? newValue : item.size,
+          quantity: propertyToChange === 'quantity' ? newValue : item.quantity,
+        };
+      }
+
+      return item;
+    });
 
     // update global state
-    setTempOrderItem({
-      ...tempOrderItem,
-      clothingSettings: updatedClothingSettings,
-    });
+
+    // NEW ORDER ITEM
+    if (!editMode.enabled) {
+      setTempOrderItem({
+        ...tempOrderItem,
+        clothingSettings: updatedClothingSettings,
+      });
+    } else {
+      setEditMode({
+        enabled: true,
+        orderItem: {
+          ...editMode.orderItem,
+          clothingSettings: updatedClothingSettings,
+        },
+      });
+    }
   };
 
   const handleAddNewOrderItem = () => {
@@ -119,7 +142,11 @@ export default function ModalChooseClothes() {
   const calculatePriceForCurrentSelectedClothes = () => {
     // PROCESS ONLY NO EMPTY CLOTHES
     // NO EMPTY HAS SIZE AND QUANTITY FILLED
-    const noEmptyClothes = tempOrderItem.clothingSettings.filter(
+    const targetOrderItem = editMode.enabled
+      ? editMode.orderItem
+      : tempOrderItem;
+
+    const noEmptyClothes = targetOrderItem.clothingSettings.filter(
       (clotheItem) => clotheItem.size !== '' && clotheItem.quantity !== 0,
     );
 
@@ -131,21 +158,186 @@ export default function ModalChooseClothes() {
     return currentValue;
   };
 
+  const handleOnHide = () => {
+    setModalClothesOpened(false);
+
+    if (editMode) {
+      setEditMode({
+        enabled: false,
+        orderItem: null,
+      });
+    }
+  };
+
+  const handleChangeEditName = (e) => {
+    setEditMode({
+      enabled: true,
+      orderItem: {
+        ...editMode.orderItem,
+        name: e.target.value,
+      },
+    });
+  };
+
+  const handleChangeEditNumber = (e) => {
+    setEditMode({
+      enabled: true,
+      orderItem: {
+        ...editMode.orderItem,
+        number: e.target.value.trim(),
+      },
+    });
+  };
+
+  const handleChangeEditGender = (e) => {
+    setEditMode({
+      enabled: true,
+      orderItem: {
+        ...editMode.orderItem,
+        gender: e.target.value.trim(),
+      },
+    });
+  };
+
+  const handleEditOrderItem = () => {
+    const updatedOrderItem = editMode.orderItem;
+
+    const emptyItems = updatedOrderItem.clothingSettings.filter(
+      (item) => item.size === '' || item.quantity === 0,
+    );
+
+    if (emptyItems.length === updatedOrderItem.clothingSettings.length) {
+      // ALL ITEMS ARE EMPTY
+      addToast(
+        'Lista vazia! Você não pode editar a informação deixando vazia.',
+        {
+          appearance: 'error',
+          autoDismiss: true,
+        },
+      );
+
+      return;
+    }
+
+    console.log('UPDATING ORDER ITEM...');
+
+    // UPDATE LIST
+    const updatedOrderListItems = orderListItems.map((orderItem) => {
+      if (orderItem.id === updatedOrderItem.id) {
+        // ITEM FOUND, RECALCULATE PAYMENT VALUE
+        const paymentValue = Utils.CalculatePaymentValueToOrderItem(
+          currentClothingPrices,
+          updatedOrderItem.clothingSettings,
+        );
+
+        // RETURN UPDATED DATA
+        return {
+          ...updatedOrderItem,
+          payment: {
+            ...updatedOrderItem.payment,
+            value: paymentValue,
+          },
+        };
+      }
+
+      // RETURN ITEM WITHOUT CHANGES
+      return orderItem;
+    });
+
+    setModalClothesOpened(false);
+    setOrderListItems(updatedOrderListItems);
+
+    setEditMode({
+      enabled: false,
+      orderItem: null,
+    });
+  };
+
+  const handleDelete = (itemID) => {
+    const confirmDialog = window.confirm(
+      'Quer mesmo excluir esse item da lista de pedidos?',
+    );
+
+    console.log(confirmDialog);
+
+    if (confirmDialog) {
+      // USER CONFIRMED! DELETE
+      const updatedOrderListItems = orderListItems.filter(
+        (orderItem) => orderItem.id !== itemID,
+      );
+
+      setEditMode({
+        enabled: false,
+        orderItem: null,
+      });
+      setModalClothesOpened(false);
+      setOrderListItems(updatedOrderListItems);
+    }
+  };
+
+  const csGetSizeByID = (theID, orderItem) =>
+    orderItem.clothingSettings[theID - 1].size;
+
+  const csGetQuantityByID = (theID, orderItem) =>
+    orderItem.clothingSettings[theID - 1].quantity;
+
   return (
-    <Modal
-      show={modalClothesOpened}
-      onHide={() => setModalClothesOpened(false)}>
+    <Modal show={modalClothesOpened} onHide={handleOnHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Escolha as Roupas</Modal.Title>
+        <Modal.Title>
+          {!editMode.enabled ? 'Escolha as Roupas' : 'Modo de Edição'}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="d-block">{headerPhrase()}</div>
+        <div className={editMode.enabled ? 'd-none' : 'd-block'}>
+          {headerPhrase()}
+        </div>
         <div className="d-block">
           Valor dos itens:{' '}
           <strong>$ {calculatePriceForCurrentSelectedClothes()}</strong>.
         </div>
 
-        <div className="mt-4" style={{margin: '0 auto', maxWidth: '300px'}}>
+        <div className="mt-4" style={{margin: '0 auto', maxWidth: '350px'}}>
+          {editMode.enabled && (
+            <>
+              <Row>
+                <Col>
+                  <FormTextInput
+                    icon={faUser}
+                    label="Nome:"
+                    placeholder="Ex: Jhon Doe"
+                    value={editMode.orderItem.name}
+                    onChange={handleChangeEditName}
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormTextInput
+                    icon={faPen}
+                    label="Número:"
+                    placeholder="Ex: 256"
+                    value={editMode.orderItem.number}
+                    onChange={handleChangeEditNumber}
+                  />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <FormInputSelect
+                    label="Gênero"
+                    icon={faVenusMars}
+                    value={editMode.orderItem.gender}
+                    arrOptions={genderOptions}
+                    onChange={handleChangeEditGender}
+                  />
+                </Col>
+              </Row>
+            </>
+          )}
+
           <Row>
             <Col xs={2}>&nbsp;</Col>
             <Col xs={5}>Tamanho</Col>
@@ -160,13 +352,19 @@ export default function ModalChooseClothes() {
                 <img src={iconItem.icon} alt="clothe icon" />
               </Col>
 
+              {/* tempOrderItem.clothingSettings[iconItem.id - 1].size */}
+
               {/* SIZE */}
               <Col xs={5}>
                 <Form.Control
                   as="select"
                   className="my-1 mr-sm-2"
                   custom
-                  value={tempOrderItem.clothingSettings[iconItem.id - 1].size}
+                  value={
+                    editMode.enabled
+                      ? csGetSizeByID(iconItem.id, editMode.orderItem)
+                      : csGetSizeByID(iconItem.id, tempOrderItem)
+                  }
                   onChange={(e) => {
                     handleChangeClotingSettings(
                       e.target.value,
@@ -190,7 +388,9 @@ export default function ModalChooseClothes() {
                   className="my-1 mr-sm-2"
                   custom
                   value={
-                    tempOrderItem.clothingSettings[iconItem.id - 1].quantity
+                    !editMode.enabled
+                      ? csGetQuantityByID(iconItem.id, tempOrderItem)
+                      : csGetQuantityByID(iconItem.id, editMode.orderItem)
                   }
                   onChange={(e) => {
                     handleChangeClotingSettings(
@@ -215,12 +415,21 @@ export default function ModalChooseClothes() {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          variant="secondary"
-          onClick={() => setModalClothesOpened(false)}>
+        <Button variant="secondary" onClick={handleOnHide}>
           Fechar
         </Button>
-        <Button variant="primary" onClick={handleAddNewOrderItem}>
+        {editMode.enabled && (
+          <Button
+            variant="danger"
+            onClick={() => handleDelete(editMode.orderItem.id)}>
+            Excluir
+          </Button>
+        )}
+        <Button
+          variant="primary"
+          onClick={
+            !editMode.enabled ? handleAddNewOrderItem : handleEditOrderItem
+          }>
           Salvar alterações
         </Button>
       </Modal.Footer>
