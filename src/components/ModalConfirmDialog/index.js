@@ -8,6 +8,7 @@ export default function ModalConfirmDialog({
   textContent,
   handleConfirm,
   handleClose,
+  useDangerConfirm = false,
 }) {
   return (
     <Modal show={isOpen} onHide={handleClose}>
@@ -19,7 +20,9 @@ export default function ModalConfirmDialog({
         <Button variant="secondary" onClick={handleClose}>
           Fechar
         </Button>
-        <Button variant="primary" onClick={handleConfirm}>
+        <Button
+          variant={!useDangerConfirm ? 'primary' : 'danger'}
+          onClick={handleConfirm}>
           Confirmar
         </Button>
       </Modal.Footer>

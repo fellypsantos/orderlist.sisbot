@@ -23,6 +23,8 @@ const TableOrdersMenu = () => {
     setModalPricesOpened,
     setScreenshotMode,
     setOrderListItems,
+    orderListItems,
+    Translator,
   } = useContext(OrderListContext);
 
   const [confirmClearOrderItems, setConfirmClearOrderItems] = useState(false);
@@ -90,18 +92,76 @@ const TableOrdersMenu = () => {
       });
   };
 
+  const handleDownload = () => {
+    const sisbotGender = {
+      MALE: 'ma',
+      FEMALE: 'fe',
+      CHILDISH: 'c',
+    };
+
+    const sisbotClothingID = {
+      TSHIRT: 'CSVID_TSHIRT',
+      TSHIRTLONG: 'CSVID_TSHIRTLONG',
+      SHORTS: 'CSVID_SHORTS',
+      PANTS: 'CSVID_PANTS',
+      TANKTOP: 'CSVID_TANKTOP',
+      VEST: 'CSVID_VEST',
+    };
+
+    const csvFullData = [];
+
+    orderListItems.map((orderItem) => {
+      const csvDataToJoin = [];
+      const sisbotGenderTranslated = sisbotGender[orderItem.gender];
+      csvDataToJoin.push(sisbotGenderTranslated);
+      csvDataToJoin.push(orderItem.name);
+      csvDataToJoin.push(orderItem.number);
+
+      console.log('orderItem', orderItem);
+
+      orderItem.clothingSettings.map((theClothe) => {
+        csvDataToJoin.push(
+          `${Translator(sisbotClothingID[theClothe.name.toUpperCase()])}=${
+            theClothe.quantity > 0
+              ? `${theClothe.quantity}-${Translator(theClothe.size)}`
+              : ''
+          }`,
+        );
+        return theClothe;
+      });
+
+      const csvRow = csvDataToJoin.join(',');
+      csvFullData.push(csvRow);
+      return orderItem;
+    });
+
+    // ADD CSV HEADER
+    csvFullData.unshift(
+      'genero,nome,numero,manga_curta,manga_longa,short,calca,regata,colete',
+    );
+
+    // DOWNLOAD
+    Utils.DownloadTextFile('SAMPLE.CSV', csvFullData.join('\n'));
+  };
+
   return (
     <>
       <ModalConfirmDialog
+        useDangerConfirm
         isOpen={confirmClearOrderItems}
-        title="demo"
-        textContent="other"
+        title="Prossiga com Cuidado!"
+        textContent="Tem certeza que deseja limpar completamente a sua lista de pedidos? Isso não pode ser desfeito!"
         handleConfirm={() => handleClearAll(true)}
         handleClose={() => setConfirmClearOrderItems(false)}
       />
+
       <Row className="mt-4 mb-2">
         <Col className="d-flex justify-content-end">
-          <Button variant="secondary" className="mr-2" size="sm">
+          <Button
+            variant="secondary"
+            className="mr-2"
+            size="sm"
+            onClick={handleDownload}>
             <FontAwesomeIcon icon={faDownload} />
             <span className="ml-1 d-none d-md-inline-block">Download</span>
           </Button>

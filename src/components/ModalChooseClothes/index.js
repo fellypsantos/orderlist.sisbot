@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Accordion from 'react-bootstrap/Accordion';
 
 import {v4 as uuidv4} from 'uuid';
 import {faPen, faUser, faVenusMars} from '@fortawesome/free-solid-svg-icons';

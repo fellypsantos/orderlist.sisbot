@@ -9,5 +9,11 @@
   "T-GG": "GG",
   "T-2XG": "2XG",
   "T-3XG": "3XG",
-  "T-4XG": "4XG"
+  "T-4XG": "4XG",
+  "CSVID_TSHIRT": "camisa_curta",
+  "CSVID_TSHIRTLONG": "camisa_longa",
+  "CSVID_SHORTS": "short",
+  "CSVID_PANTS": "calca",
+  "CSVID_TANKTOP": "regata",
+  "CSVID_VEST": "colete"
 }
