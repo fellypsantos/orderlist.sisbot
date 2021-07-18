@@ -10,6 +10,7 @@ import {
   faDollarSign,
   faDownload,
   faEraser,
+  faSpinner,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import {useToasts} from 'react-toast-notifications';
@@ -17,10 +18,13 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 
 import ModalConfirmDialog from '../ModalConfirmDialog';
+import ModalTextInput from '../ModalTextInput';
+import FontAwesomeIconSpinner from '../FontAwesomeIconSpinner';
 
 const TableOrdersMenu = () => {
   const {
     setModalPricesOpened,
+    screenshotMode,
     setScreenshotMode,
     setOrderListItems,
     orderListItems,
@@ -28,6 +32,11 @@ const TableOrdersMenu = () => {
   } = useContext(OrderListContext);
 
   const [confirmClearOrderItems, setConfirmClearOrderItems] = useState(false);
+  const [showModalConfirmDownload, setShowModalConfirmDownload] = useState(
+    false,
+  );
+
+  const [csvFileNameToExport, setCSVFilenameToExport] = useState('');
 
   const {addToast} = useToasts();
 
@@ -92,7 +101,12 @@ const TableOrdersMenu = () => {
       });
   };
 
-  const handleDownload = () => {
+  const handleDownload = (confirmed = false) => {
+    if (!confirmed) {
+      setShowModalConfirmDownload(true);
+      return;
+    }
+
     const sisbotGender = {
       MALE: 'ma',
       FEMALE: 'fe',
@@ -141,11 +155,20 @@ const TableOrdersMenu = () => {
     );
 
     // DOWNLOAD
-    Utils.DownloadTextFile('SAMPLE.CSV', csvFullData.join('\n'));
+    const filename = csvFileNameToExport || 'HUEHUE';
+    Utils.DownloadTextFile(`${filename}.csv`, csvFullData.join('\n'));
+    setShowModalConfirmDownload(false);
+    setCSVFilenameToExport('');
+  };
+
+  const handleCLoseModalTextInput = () => {
+    setCSVFilenameToExport('');
+    setShowModalConfirmDownload(false);
   };
 
   return (
     <>
+      {/* DELETE ALL */}
       <ModalConfirmDialog
         useDangerConfirm
         isOpen={confirmClearOrderItems}
@@ -155,13 +178,23 @@ const TableOrdersMenu = () => {
         handleClose={() => setConfirmClearOrderItems(false)}
       />
 
+      {/* DOWNLOAD */}
+      <ModalTextInput
+        isOpen={showModalConfirmDownload}
+        title="Download da Lista"
+        inputTextContent={csvFileNameToExport}
+        handleChange={(e) => setCSVFilenameToExport(e.target.value)}
+        handleConfirm={() => handleDownload(true)}
+        handleClose={handleCLoseModalTextInput}
+      />
+
       <Row className="mt-4 mb-2">
         <Col className="d-flex justify-content-end">
           <Button
             variant="secondary"
             className="mr-2"
             size="sm"
-            onClick={handleDownload}>
+            onClick={() => handleDownload()}>
             <FontAwesomeIcon icon={faDownload} />
             <span className="ml-1 d-none d-md-inline-block">Download</span>
           </Button>
@@ -182,8 +215,14 @@ const TableOrdersMenu = () => {
             className="mr-2"
             size="sm"
             onClick={handleScreenshot}>
-            <FontAwesomeIcon icon={faCamera} />
-            <span className="ml-1 d-none d-md-inline-block">Capturar</span>
+            {!screenshotMode ? (
+              <FontAwesomeIcon icon={faCamera} />
+            ) : (
+              <FontAwesomeIconSpinner icon={faSpinner} />
+            )}
+            <span className="ml-1 d-none d-md-inline-block">
+              {!screenshotMode ? 'Capturar' : 'Capturando...'}
+            </span>
           </Button>
           <Button
             variant="secondary"
