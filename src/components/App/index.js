@@ -9,16 +9,13 @@ import 'flag-icon-css/css/flag-icon.min.css';
 import {NavbarContainer, MainContentContainer} from './styles';
 import NavbarLeftContent from '../NavbarLeftContent';
 import LanguageChanger from '../LanguageChanger';
-import TableOrdersMenu from '../TableOrdersMenu';
-import FormAddOrderItem from '../FormAddOrderItem';
-import DashboardReports from '../DashboardReports';
-import Title from '../Title';
-import Separator from '../Separator';
-import TableOrderList from '../TableOrderList';
 import ModalChooseClothes from '../ModalChooseClothes';
 import OrderListProvider from '../../contexts/OrderListContext';
 import GlobalStyle from '../../globalStyle';
 import ModalChoosePrices from '../ModalChoosePrices';
+
+import Main from '../../Pages/Main';
+import Report from '../../Pages/Report';
 
 const App = () => (
   <OrderListProvider>
@@ -35,12 +32,12 @@ const App = () => (
 
       <MainContentContainer>
         <Container>
-          <FormAddOrderItem />
-          <Separator />
-          <Title text="Lista de Pedidos" />
-          <DashboardReports />
-          <TableOrdersMenu />
-          <TableOrderList />
+          <BrowserRouter>
+            <Switch>
+              <Route exact path="/" component={Main} />
+              <Route path="/report" component={Report} />
+            </Switch>
+          </BrowserRouter>
         </Container>
       </MainContentContainer>
     </ToastProvider>

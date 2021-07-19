@@ -99,6 +99,8 @@ const OrderListProvider = ({children}) => {
 
   const [orderListItems, setOrderListItems] = useState([]);
 
+  const [orderListItemsNotes, setorderListItemsNotes] = useState('');
+
   const [editMode, setEditMode] = useState({
     enabled: false,
     orderItem: null,
@@ -264,6 +266,8 @@ const OrderListProvider = ({children}) => {
     setScreenshotMode,
     editMode,
     setEditMode,
+    orderListItemsNotes,
+    setorderListItemsNotes,
   };
 
   return (

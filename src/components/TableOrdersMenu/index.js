@@ -7,13 +7,16 @@ import html2canvas from 'html2canvas';
 
 import {
   faCamera,
+  faCommentAlt,
   faDollarSign,
   faDownload,
   faEraser,
   faSpinner,
+  faTable,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import {useToasts} from 'react-toast-notifications';
+import {useHistory} from 'react-router-dom';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 
@@ -29,6 +32,8 @@ const TableOrdersMenu = () => {
     setOrderListItems,
     orderListItems,
     Translator,
+    orderListItemsNotes,
+    setorderListItemsNotes,
   } = useContext(OrderListContext);
 
   const [confirmClearOrderItems, setConfirmClearOrderItems] = useState(false);
@@ -36,7 +41,11 @@ const TableOrdersMenu = () => {
     false,
   );
 
+  const [notesModalVisible, setNotesModalVisible] = useState(false);
+
   const [csvFileNameToExport, setCSVFilenameToExport] = useState('');
+
+  const history = useHistory();
 
   const {addToast} = useToasts();
 
@@ -166,6 +175,8 @@ const TableOrdersMenu = () => {
     setShowModalConfirmDownload(false);
   };
 
+  const handleCloseAnnotations = () => setNotesModalVisible(false);
+
   return (
     <>
       {/* DELETE ALL */}
@@ -183,9 +194,24 @@ const TableOrdersMenu = () => {
         isOpen={showModalConfirmDownload}
         title="Download da Lista"
         inputTextContent={csvFileNameToExport}
+        labelContent="Qual o nome para o arquivo?"
+        placeholderContent="SISBOT - Lista"
         handleChange={(e) => setCSVFilenameToExport(e.target.value)}
         handleConfirm={() => handleDownload(true)}
         handleClose={handleCLoseModalTextInput}
+      />
+
+      {/* ANNOTATIONS */}
+      <ModalTextInput
+        isOpen={notesModalVisible}
+        useTextarea
+        title="Notas para Produção"
+        inputTextContent={orderListItemsNotes}
+        labelContent="Descreva seus detalhes para produção."
+        placeholderContent="Digite aqui..."
+        handleChange={(e) => setorderListItemsNotes(e.target.value)}
+        handleConfirm={handleCloseAnnotations}
+        handleClose={handleCloseAnnotations}
       />
 
       <Row className="mt-4 mb-2">
@@ -198,10 +224,12 @@ const TableOrdersMenu = () => {
             <FontAwesomeIcon icon={faDownload} />
             <span className="ml-1 d-none d-md-inline-block">Download</span>
           </Button>
+
           <Button variant="secondary" className="mr-2" size="sm">
             <FontAwesomeIcon icon={faUpload} />
             <span className="ml-1 d-none d-md-inline-block">Upload</span>
           </Button>
+
           <Button
             variant="secondary"
             className="mr-2"
@@ -210,6 +238,7 @@ const TableOrdersMenu = () => {
             <FontAwesomeIcon icon={faEraser} />
             <span className="ml-1 d-none d-md-inline-block">Limpar</span>
           </Button>
+
           <Button
             variant="secondary"
             className="mr-2"
@@ -224,12 +253,31 @@ const TableOrdersMenu = () => {
               {!screenshotMode ? 'Capturar' : 'Capturando...'}
             </span>
           </Button>
+
           <Button
             variant="secondary"
+            className="mr-2"
             size="sm"
             onClick={() => setModalPricesOpened(true)}>
             <FontAwesomeIcon icon={faDollarSign} />
             <span className="ml-1 d-none d-md-inline-block">Preços</span>
+          </Button>
+
+          <Button
+            variant="secondary"
+            className="mr-2"
+            size="sm"
+            onClick={() => history.push('/report')}>
+            <FontAwesomeIcon icon={faTable} />
+            <span className="ml-1 d-none d-md-inline-block">Relatório</span>
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setNotesModalVisible(true)}>
+            <FontAwesomeIcon icon={faCommentAlt} />
+            <span className="ml-1 d-none d-md-inline-block">Notas</span>
           </Button>
         </Col>
       </Row>

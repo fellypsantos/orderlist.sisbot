@@ -5,7 +5,7 @@ export default function NavbarLeftContent(props) {
   const {children} = props;
   return (
     <NavbarCustom bg="primary" variant="dark">
-      <NavbarCustom.Brand href="#!" className="mr-auto">
+      <NavbarCustom.Brand href="/" className="mr-auto">
         SISBot
       </NavbarCustom.Brand>
 

@@ -6,10 +6,13 @@ import Form from 'react-bootstrap/Form';
 const ModalTextInput = ({
   title,
   inputTextContent,
+  labelContent,
+  placeholderContent,
   isOpen,
   handleChange,
   handleConfirm,
   handleClose,
+  useTextarea,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,14 +27,15 @@ const ModalTextInput = ({
       <Modal.Body>
         <form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
-            <Form.Label>Qual o nome para o arquivo?</Form.Label>
+            <Form.Label>{labelContent}</Form.Label>
             <Form.Control
-              type="text"
+              as={useTextarea ? 'textarea' : 'input'}
+              rows={5}
               value={inputTextContent}
               onChange={handleChange}
-              placeholder="SISBOT - Lista de Pedidos"
+              placeholder={placeholderContent}
             />
-            <Form.Text className="text-muted">
+            <Form.Text className={`text-muted ${useTextarea && 'd-none'}`}>
               {inputTextContent.length === 0
                 ? 'Você pode deixar o campo vazio, o nome padrão acima será usado.'
                 : 'Ótimo! Vamos salvar com esse nome.'}
