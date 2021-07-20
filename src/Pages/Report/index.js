@@ -6,6 +6,8 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 import ClothingIconsList from '../../clothinIcons';
 import TableContentCentered from '../../components/TableContentCentered';
 import {AnnotationContainer} from '../../components/AnnotationsBox/styles';
+import PenField from '../../components/PenField';
+import ReportHeader from '../../components/ReportHeader';
 
 const Report = () => {
   const {orderListItems, orderListItemsNotes} = useContext(OrderListContext);
@@ -15,10 +17,26 @@ const Report = () => {
 
   return (
     <>
-      <Row>
-        <Col>&nbsp;</Col>
+      <Row className="mt-5">
+        {/* LEFT SIDE */}
+        <Col xs="6">
+          <ReportHeader
+            title="SISBot"
+            subtitle="Relatório de Processamento"
+            date="10 de Janeiro de 2021 - 10h31"
+          />
+        </Col>
+
+        {/* RIGHT SIDE */}
+        <Col xs="6">
+          <PenField label="Cliente:" />
+          <PenField label="Data do Pedido:" />
+          <PenField label="Data de Entrega:" />
+          <PenField label="Responsável:" />
+        </Col>
       </Row>
-      <Row>
+
+      <Row className="mt-5">
         <Col xs="6">
           <h5>MASCULINO</h5>
           <TableContentCentered>

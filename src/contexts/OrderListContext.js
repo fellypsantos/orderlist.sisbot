@@ -169,11 +169,15 @@ const OrderListProvider = ({children}) => {
 
       // RESTORE PRICES LIST
       setCurrentClothingPrices(data.pricesList);
+
+      // RESTORE NOTES
+      setorderListItemsNotes(data.orderListItemsNotes);
     } else {
       console.log('INITIALIZE WITH DEFAULT EMPTY DATA.');
       localStorage.setItem(
         'sisbot',
         JSON.stringify({
+          orderListItemsNotes,
           orderListItems: [],
           pricesList: {},
         }),
@@ -195,6 +199,21 @@ const OrderListProvider = ({children}) => {
 
     console.log('[UPDATED] LocalStorage: orderListitems.');
   }, [orderListItems]);
+
+  // SAVE ORDER LIST NOTES
+  useEffect(() => {
+    const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
+
+    localStorage.setItem(
+      'sisbot',
+      JSON.stringify({
+        ...currentLocalStorage,
+        orderListItemsNotes,
+      }),
+    );
+
+    console.log('[UPDATED] LocalStorage: orderListItemsNotes.');
+  }, [orderListItemsNotes]);
 
   // SAVE PRICES
   useEffect(() => {
