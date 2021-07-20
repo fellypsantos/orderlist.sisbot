@@ -13,6 +13,12 @@ const GlobalStyle = createGlobalStyle`
   .paid {
     background-color: #c9f5d4 !important
   }
+
+  @media print {
+    .hide-on-print {
+      display: none;
+    }
+  }
 `;
 
 export default GlobalStyle;
