@@ -61,12 +61,12 @@ const OrderListProvider = ({children}) => {
   };
 
   const [clothingIcons] = useState([
-    {id: 1, icon: ClothingIconsList.tshirt},
-    {id: 2, icon: ClothingIconsList.tshirtLong},
-    {id: 3, icon: ClothingIconsList.shorts},
-    {id: 4, icon: ClothingIconsList.pants},
-    {id: 5, icon: ClothingIconsList.tanktop},
-    {id: 6, icon: ClothingIconsList.vest},
+    {id: 1, icon: ClothingIconsList.tshirt, name: 'tshirt'},
+    {id: 2, icon: ClothingIconsList.tshirtLong, name: 'tshirtLong'},
+    {id: 3, icon: ClothingIconsList.shorts, name: 'shorts'},
+    {id: 4, icon: ClothingIconsList.pants, name: 'pants'},
+    {id: 5, icon: ClothingIconsList.tanktop, name: 'tanktop'},
+    {id: 6, icon: ClothingIconsList.vest, name: 'vest'},
   ]);
 
   const [clothingSizes] = useState([
@@ -78,6 +78,14 @@ const OrderListProvider = ({children}) => {
     {id: 6, code: 'T-2XG'},
     {id: 7, code: 'T-3XG'},
     {id: 8, code: 'T-4XG'},
+    {id: 9, code: 'T-2A'},
+    {id: 10, code: 'T-4A'},
+    {id: 11, code: 'T-6A'},
+    {id: 12, code: 'T-8A'},
+    {id: 13, code: 'T-10A'},
+    {id: 14, code: 'T-12A'},
+    {id: 15, code: 'T-14A'},
+    {id: 16, code: 'T-16A'},
   ]);
 
   const [genderOptions] = useState([
