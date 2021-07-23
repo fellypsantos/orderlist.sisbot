@@ -16,6 +16,7 @@ const ModalChoosePrices = () => {
     setModalPricesOpened,
     orderListItems,
     setOrderListItems,
+    Translator,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -66,22 +67,19 @@ const ModalChoosePrices = () => {
     // CLOSE MODAL
     setModalPricesOpened(false);
 
-    addToast(
-      'Muito bem! Sua tabela de valores unitários foi salva com sucesso.',
-      {
-        appearance: 'success',
-        autoDismiss: true,
-      },
-    );
+    addToast(Translator('TOAST_PRICES_LIST_SAVED'), {
+      appearance: 'success',
+      autoDismiss: true,
+    });
   };
 
   return (
     <Modal show={modalPricesOpened} onHide={() => setModalPricesOpened(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>Preços das Roupas</Modal.Title>
+        <Modal.Title>{Translator('CLOTHING_PRICES')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="d-block">Configure o valor unitário de cada peça.</div>
+        <div className="d-block">{Translator('SETUP_UNIT_PRICE')}</div>
 
         <div className="mt-4" style={{margin: '0 auto', maxWidth: '200px'}}>
           {/* Clothing Row */}
@@ -112,10 +110,10 @@ const ModalChoosePrices = () => {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={() => setModalPricesOpened(false)}>
-          Fechar
+          {Translator('CLOSE')}
         </Button>
         <Button variant="primary" onClick={handleSaveChanges}>
-          Salvar alterações
+          {Translator('SAVE_CHANGES')}
         </Button>
       </Modal.Footer>
     </Modal>

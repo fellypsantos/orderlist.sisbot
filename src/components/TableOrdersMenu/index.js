@@ -61,7 +61,7 @@ const TableOrdersMenu = () => {
 
     setOrderListItems([]);
     setConfirmClearOrderItems(false);
-    addToast('Feito! Sua lista de pedidos está limpa.', {
+    addToast(Translator('TOAST_CLEARED_LIST'), {
       appearance: 'success',
       autoDismiss: true,
     });
@@ -112,7 +112,7 @@ const TableOrdersMenu = () => {
         // ENABLE SCROLL AGAIN
         document.body.style.overflow = 'unset';
 
-        addToast('Captura de tela foi salva na sua máquia.', {
+        addToast(Translator('TOAST_SCREENSHOT_FINISHED'), {
           appearance: 'success',
           autoDismiss: true,
         });
@@ -128,7 +128,7 @@ const TableOrdersMenu = () => {
     const zip = new JSZip();
 
     const safeFilename =
-      zipFileName === '' ? 'SISBOT - Lista de Pedidos' : zipFileName;
+      zipFileName === '' ? Translator('MAIN_TITLE') : zipFileName;
 
     const sisbotGender = {
       MALE: 'ma',
@@ -160,7 +160,7 @@ const TableOrdersMenu = () => {
         // ADJUST SIZE FOR CHILDISH (IT CAME WITH WORK ANOS|YEARS|ANÕS)
         const theSize =
           orderItem.gender === 'CHILDISH'
-            ? Translator(theClothe.size).replace(/ anos| aears| años/i, '')
+            ? Translator(theClothe.size).replace(/ anos| years| años/i, '')
             : Translator(theClothe.size);
 
         csvDataToJoin.push(
@@ -176,14 +176,23 @@ const TableOrdersMenu = () => {
       return orderItem;
     });
 
+    const csvHeader = [];
+    csvHeader.push(Translator('CSVID_GENDER'));
+    csvHeader.push(Translator('CSVID_NAME'));
+    csvHeader.push(Translator('CSVID_NUMBER'));
+    csvHeader.push(Translator('CSVID_TSHIRT'));
+    csvHeader.push(Translator('CSVID_TSHIRTLONG'));
+    csvHeader.push(Translator('CSVID_SHORTS'));
+    csvHeader.push(Translator('CSVID_PANTS'));
+    csvHeader.push(Translator('CSVID_TANKTOP'));
+    csvHeader.push(Translator('CSVID_VEST'));
+
     // ADD CSV HEADER
-    csvFullData.unshift(
-      'genero,nome,numero,manga_curta,manga_longa,short,calca,regata,colete',
-    );
+    csvFullData.unshift(csvHeader.join(','));
 
     // ADD FILES TO ZIP
-    zip.file('Lista de Pedidos.csv', csvFullData.join('\n'));
-    zip.file('Dashboard.bkp', btoa(localStorage.getItem('sisbot')));
+    zip.file(`${Translator('MAIN_TITLE')}.csv`, csvFullData.join('\n'));
+    zip.file('Melista.bkp', btoa(localStorage.getItem('sisbot')));
 
     // DOWNLOAD ZIP
     zip.generateAsync({type: 'blob'}).then((content) => {
@@ -193,7 +202,7 @@ const TableOrdersMenu = () => {
     setShowModalConfirmDownload(false);
     setZIPFileName('');
 
-    addToast('Pronto! O arquivo foi salvo som sucesso no seu computador.', {
+    addToast(Translator('TOAST_DOWNLOAD_COMPLETE'), {
       autoDismiss: true,
       appearance: 'success',
     });
@@ -206,7 +215,7 @@ const TableOrdersMenu = () => {
 
   const handleCloseAnnotations = () => {
     setNotesModalVisible(false);
-    addToast('Suas notas de produção foram atualizadas.', {
+    addToast(Translator('TOAST_NOTES_UPDATED'), {
       appearance: 'success',
       autoDismiss: true,
     });
@@ -218,7 +227,7 @@ const TableOrdersMenu = () => {
     setOrderListItems(backupData.orderListItems);
     setOrderListItemsNotes(backupData.orderListItemsNotes);
     setCurrentClothingPrices(backupData.pricesList);
-    addToast('Pronto! Todas as informações foram restauradas com sucesso.', {
+    addToast(Translator('TOAST_UPLOAD_COMPLETE'), {
       appearance: 'success',
       autoDismiss: true,
     });
@@ -253,8 +262,8 @@ const TableOrdersMenu = () => {
       <ModalConfirmDialog
         useDangerConfirm
         isOpen={confirmClearOrderItems}
-        title="Prossiga com Cuidado!"
-        textContent="Tem certeza que deseja limpar completamente a sua lista de pedidos? Isso não pode ser desfeito!"
+        title={Translator('PROCEED_WITH_CAUTION')}
+        textContent={Translator('CONFIRM_DELETE_ALL_ORDERITEMS')}
         handleConfirm={() => handleClearAll(true)}
         handleClose={() => setConfirmClearOrderItems(false)}
       />
@@ -262,10 +271,10 @@ const TableOrdersMenu = () => {
       {/* DOWNLOAD */}
       <ModalTextInput
         isOpen={showModalConfirmDownload}
-        title="Download da Lista"
+        title={Translator('DOWNLOAD_TITLE')}
         inputTextContent={zipFileName}
-        labelContent="Qual o nome para o arquivo?"
-        placeholderContent="SISBOT - Lista"
+        labelContent={Translator('ASK_FILENAME')}
+        placeholderContent={Translator('MAIN_TITLE')}
         handleChange={(e) => setZIPFileName(e.target.value)}
         handleConfirm={() => handleDownload(true)}
         handleClose={handleCLoseModalTextInput}
@@ -275,10 +284,10 @@ const TableOrdersMenu = () => {
       <ModalTextInput
         isOpen={notesModalVisible}
         useTextarea
-        title="Notas para Produção"
+        title={Translator('PRODUCTION_NOTES')}
         inputTextContent={orderListItemsNotes}
-        labelContent="Descreva seus detalhes para produção."
-        placeholderContent="Digite aqui..."
+        labelContent={Translator('PRODUCTION_NOTES_DESCRIPTION')}
+        placeholderContent={Translator('PRODUCTION_NOTES_PLACEHOLDER')}
         handleChange={(e) => setOrderListItemsNotes(e.target.value)}
         handleConfirm={handleCloseAnnotations}
         handleClose={handleCloseAnnotations}
@@ -292,7 +301,9 @@ const TableOrdersMenu = () => {
             size="sm"
             onClick={() => handleDownload()}>
             <FontAwesomeIcon icon={faDownload} />
-            <span className="ml-1 d-none d-md-inline-block">Download</span>
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('DOWNLOAD')}
+            </span>
           </Button>
 
           <Button
@@ -301,7 +312,9 @@ const TableOrdersMenu = () => {
             size="sm"
             onClick={handleUpload}>
             <FontAwesomeIcon icon={faUpload} />
-            <span className="ml-1 d-none d-md-inline-block">Upload</span>
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('UPLOAD')}
+            </span>
           </Button>
 
           <Button
@@ -310,7 +323,9 @@ const TableOrdersMenu = () => {
             size="sm"
             onClick={() => handleClearAll()}>
             <FontAwesomeIcon icon={faEraser} />
-            <span className="ml-1 d-none d-md-inline-block">Limpar</span>
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('CLEAR')}
+            </span>
           </Button>
 
           <Button
@@ -324,7 +339,9 @@ const TableOrdersMenu = () => {
               <FontAwesomeIconSpinner icon={faSpinner} />
             )}
             <span className="ml-1 d-none d-md-inline-block">
-              {!screenshotMode ? 'Capturar' : 'Capturando...'}
+              {!screenshotMode
+                ? Translator('TAKE_SCREENSHOT')
+                : Translator('TAKING_SCREENSHOT')}
             </span>
           </Button>
 
@@ -334,7 +351,9 @@ const TableOrdersMenu = () => {
             size="sm"
             onClick={() => setModalPricesOpened(true)}>
             <FontAwesomeIcon icon={faDollarSign} />
-            <span className="ml-1 d-none d-md-inline-block">Preços</span>
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('PRICES')}
+            </span>
           </Button>
 
           <Button
@@ -343,7 +362,9 @@ const TableOrdersMenu = () => {
             size="sm"
             onClick={() => history.push('/report')}>
             <FontAwesomeIcon icon={faTable} />
-            <span className="ml-1 d-none d-md-inline-block">Relatório</span>
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('REPORT')}
+            </span>
           </Button>
 
           <Button
@@ -354,7 +375,9 @@ const TableOrdersMenu = () => {
               icon={faCommentAlt}
               color={orderListItemsNotes.length > 0 ? '#f1c40f' : '#fff'}
             />
-            <span className="ml-1 d-none d-md-inline-block">Notas</span>
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('NOTES')}
+            </span>
           </Button>
         </Col>
       </Row>

@@ -24,6 +24,7 @@ const FormAddOrderItem = () => {
     tempOrderItem,
     setTempOrderItem,
     initialStateTempOrderItem,
+    Translator,
   } = useContext(OrderListContext);
 
   const handleChangeName = (e) => {
@@ -56,8 +57,10 @@ const FormAddOrderItem = () => {
       <Col xs="6" sm="6" md="6" lg="3" xl="3">
         <FormTextInput
           icon={faUser}
-          label="Nome:"
-          placeholder="Ex: Jhon Doe"
+          label={`${Translator('NAME')}:`}
+          placeholder={`${Translator('EXAMPLE_ABBREV')}${Translator(
+            'NAME_PLACEHOLDER',
+          )}`}
           value={tempOrderItem.name}
           onChange={handleChangeName}
         />
@@ -66,8 +69,8 @@ const FormAddOrderItem = () => {
       <Col xs="6" sm="6" md="6" lg="3" xl="3">
         <FormTextInput
           icon={faPen}
-          label="Número:"
-          placeholder="Ex: 256"
+          label={`${Translator('NUMBER')}:`}
+          placeholder={`${Translator('EXAMPLE_ABBREV')} 256`}
           value={tempOrderItem.number}
           onChange={handleChangeNumber}
         />
@@ -75,7 +78,7 @@ const FormAddOrderItem = () => {
 
       <Col xs="6" sm="6" md="6" lg="3" xl="3">
         <FormInputSelect
-          label="Gênero"
+          label={`${Translator('GENDER')}:`}
           value={tempOrderItem.gender}
           icon={faVenusMars}
           arrOptions={genderOptions}
@@ -85,18 +88,18 @@ const FormAddOrderItem = () => {
 
       <Col xs="6" sm="6" md="6" lg="3" xl="3">
         <Form.Group>
-          <Form.Label>Roupas:</Form.Label>
+          <Form.Label>{`${Translator('CLOTHES')}:`}</Form.Label>
           {/* Hide labels on mobile */}
           <ButtonGroup className="d-flex">
             <Button onClick={() => setModalClothesOpened(true)}>
               <FontAwesomeIcon icon={faPlus} />
-              <span className="d-none d-sm-inline"> Adicionar</span>
+              <span className="d-none d-sm-inline"> {Translator('ADD')}</span>
             </Button>
             <Button
               variant="outline-primary"
               onClick={handleClearTempOrderItem}>
               <FontAwesomeIcon icon={faEraser} />
-              <span className="d-none d-sm-inline"> Limpar</span>
+              <span className="d-none d-sm-inline"> {Translator('CLEAR')}</span>
             </Button>
           </ButtonGroup>
         </Form.Group>

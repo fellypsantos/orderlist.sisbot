@@ -18,7 +18,7 @@ const systemLanguages = [
 ];
 
 export default function LanguageChanger() {
-  const {updateLanguage} = useContext(OrderListContext);
+  const {updateLanguage, Translator} = useContext(OrderListContext);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const handleOnBlurDropdown = async () => {
@@ -37,7 +37,7 @@ export default function LanguageChanger() {
             icon={faGlobeAmericas}
             style={{marginRight: '5px'}}
           />
-          <span id="language-dropdown-label">Idioma</span>
+          <span id="language-dropdown-label">{Translator('LANGUAGE')}</span>
         </Button>
 
         <DropdownContent visible={dropdownVisible}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useHistory} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,9 +11,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import {OrderListContext} from '../../contexts/OrderListContext';
 
 const ReportMenu = () => {
   const history = useHistory();
+  const {Translator} = useContext(OrderListContext);
 
   const handleGeneratePDF = () => {
     html2canvas(document.getElementById('report')).then((canvas) => {
@@ -21,7 +23,7 @@ const ReportMenu = () => {
       const pdf = new jsPDF('portrait', 'mm', 'a4');
 
       pdf.addImage(imagedata, 'JPEG', 14, 25, 180, 235);
-      pdf.save('Relatório de Processamento.pdf');
+      pdf.save(`${Translator('PROCESSING_REPORT_TITLE')}.pdf`);
     });
   };
 
@@ -34,7 +36,9 @@ const ReportMenu = () => {
           size="sm"
           onClick={() => history.goBack()}>
           <FontAwesomeIcon icon={faArrowLeft} />
-          <span className="ml-1 d-none d-md-inline-block">Voltar</span>
+          <span className="ml-1 d-none d-md-inline-block">
+            {Translator('GOBACK')}
+          </span>
         </Button>
 
         <Button
@@ -43,7 +47,9 @@ const ReportMenu = () => {
           size="sm"
           onClick={() => window.print()}>
           <FontAwesomeIcon icon={faPrint} />
-          <span className="ml-1 d-none d-md-inline-block">Imprimir</span>
+          <span className="ml-1 d-none d-md-inline-block">
+            {Translator('PRINT')}
+          </span>
         </Button>
 
         <Button
@@ -52,7 +58,9 @@ const ReportMenu = () => {
           size="sm"
           onClick={handleGeneratePDF}>
           <FontAwesomeIcon icon={faFilePdf} />
-          <span className="ml-1 d-none d-md-inline-block"> Salvar PDF</span>
+          <span className="ml-1 d-none d-md-inline-block">
+            {Translator('SAVE_PDF')}
+          </span>
         </Button>
       </Col>
     </Row>

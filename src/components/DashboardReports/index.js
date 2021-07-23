@@ -13,13 +13,13 @@ import DashboardHeaderBlock from '../DashboardHeaderBlock';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 export default function DashboardReports() {
-  const {dashboardData} = useContext(OrderListContext);
+  const {dashboardData, Translator} = useContext(OrderListContext);
 
   return (
     <Row>
       <Col xs="6" sm="6" md="3" lg="3" xl="3">
         <DashboardHeaderBlock
-          label="Total Geral"
+          label={Translator('GRAND_TOTAL')}
           value={dashboardData.totalToReceive}
           icon={faCoins}
         />
@@ -27,7 +27,7 @@ export default function DashboardReports() {
 
       <Col xs="6" sm="6" md="3" lg="3" xl="3">
         <DashboardHeaderBlock
-          label="Total Recebido"
+          label={Translator('TOTAL_RECEIVED')}
           value={dashboardData.totalReceived}
           icon={faHandHoldingUsd}
         />
@@ -35,7 +35,7 @@ export default function DashboardReports() {
 
       <Col xs="6" sm="6" md="3" lg="3" xl="3">
         <DashboardHeaderBlock
-          label="Falta Receber"
+          label={Translator('NEED_RECEIVE')}
           value={dashboardData.needReceive}
           icon={faMoneyBillWave}
         />
@@ -43,7 +43,7 @@ export default function DashboardReports() {
 
       <Col xs="6" sm="6" md="3" lg="3" xl="3">
         <DashboardHeaderBlock
-          label="Progresso Total"
+          label={Translator('TOTAL_PROGRESS')}
           value={dashboardData.totalProgressAsPercentage}
           valueTextIcon="%"
           icon={faHourglassHalf}

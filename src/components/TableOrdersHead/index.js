@@ -11,25 +11,27 @@ import Utils from '../../Utils';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 export default function TableOrdersHead() {
-  const {clothingIcons, screenshotMode} = useContext(OrderListContext);
+  const {clothingIcons, screenshotMode, Translator} = useContext(
+    OrderListContext,
+  );
 
   return (
     <thead>
       <tr className={!screenshotMode ? 'd-none' : ''}>
         <td colSpan={10} className="text-center">
-          <strong>Lista de Pedidos</strong>
+          <strong>{Translator('MAIN_TITLE')}</strong>
         </td>
       </tr>
       <tr style={Utils.StyleHelper.TextAlign('center')}>
         <th style={{maxWidth: '50px'}}>
           {screenshotMode ? (
-            'Pago'
+            Translator('PAID')
           ) : (
             <FontAwesomeIcon icon={faHandHoldingUsd} />
           )}
         </th>
-        <th style={Utils.StyleHelper.TextAlign('left')}>Nome</th>
-        <th>Número</th>
+        <th className="text-left">{Translator('NAME')}</th>
+        <th>{Translator('NUMBER')}</th>
 
         {/* GENERATE ALL CLOTHING COLUMNS */}
         {clothingIcons.map((clothingIcon) => (
@@ -40,7 +42,13 @@ export default function TableOrdersHead() {
           </th>
         ))}
 
-        <th>{screenshotMode ? 'Preço' : <FontAwesomeIcon icon={faCoins} />}</th>
+        <th>
+          {screenshotMode ? (
+            Translator('PRICE')
+          ) : (
+            <FontAwesomeIcon icon={faCoins} />
+          )}
+        </th>
         <th className="d-table-cell d-md-none">
           <FontAwesomeIcon icon={faEye} />
         </th>

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import {OrderListContext} from '../../contexts/OrderListContext';
 
 export default function ModalConfirmDialog({
   isOpen = false,
@@ -10,6 +11,8 @@ export default function ModalConfirmDialog({
   handleClose,
   useDangerConfirm = false,
 }) {
+  const {Translator} = useContext(OrderListContext);
+
   return (
     <Modal show={isOpen} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -18,12 +21,12 @@ export default function ModalConfirmDialog({
       <Modal.Body>{textContent}</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Fechar
+          {Translator('CLOSE')}
         </Button>
         <Button
           variant={!useDangerConfirm ? 'primary' : 'danger'}
           onClick={handleConfirm}>
-          Confirmar
+          {Translator('CONFIRM')}
         </Button>
       </Modal.Footer>
     </Modal>

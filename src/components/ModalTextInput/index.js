@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import {OrderListContext} from '../../contexts/OrderListContext';
 
 const ModalTextInput = ({
   title,
@@ -14,6 +15,7 @@ const ModalTextInput = ({
   handleClose,
   useTextarea,
 }) => {
+  const {Translator} = useContext(OrderListContext);
   const handleSubmit = (e) => {
     e.preventDefault();
     handleConfirm(true);
@@ -37,18 +39,18 @@ const ModalTextInput = ({
             />
             <Form.Text className={`text-muted ${useTextarea && 'd-none'}`}>
               {inputTextContent.length === 0
-                ? 'Você pode deixar o campo vazio, o nome padrão acima será usado.'
-                : 'Ótimo! Vamos salvar com esse nome.'}
+                ? Translator('INFOR_TEXT_USING_DEFAULT')
+                : Translator('INFOR_TEXT_USING_CONTENT_ABOVE')}
             </Form.Text>
           </Form.Group>
         </form>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Fechar
+          {Translator('CLOSE')}
         </Button>
         <Button variant="primary" onClick={handleConfirm}>
-          Confirmar
+          {Translator('CONFIRM')}
         </Button>
       </Modal.Footer>
     </Modal>

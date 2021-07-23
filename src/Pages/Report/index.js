@@ -256,10 +256,6 @@ const Report = () => {
     });
   }, [orderListItems]);
 
-  useEffect(() => console.log('sortedOrderList', sortedOrderList), [
-    sortedOrderList,
-  ]);
-
   return (
     <div>
       <Row>
@@ -274,23 +270,23 @@ const Report = () => {
           <Col xs="6">
             <ReportHeader
               title="SISBot"
-              subtitle="Relatório de Processamento"
+              subtitle={Translator('PROCESSING_REPORT_TITLE')}
               date={moment().format('LLL')}
             />
           </Col>
 
           {/* RIGHT SIDE */}
           <Col xs="6">
-            <PenField label="Cliente:" />
-            <PenField label="Data do Pedido:" />
-            <PenField label="Data de Entrega:" />
-            <PenField label="Responsável:" />
+            <PenField label={Translator('CLIENT')} />
+            <PenField label={Translator('REQUEST_DATE')} />
+            <PenField label={Translator('DELIVERY_DATE')} />
+            <PenField label={Translator('REPONSIBLE')} />
           </Col>
         </Row>
 
         <Row className="mt-5">
           <Col xs="6">
-            <h5>MASCULINO</h5>
+            <h5>{Translator('MALE').toUpperCase()}</h5>
             <TableContentCentered>
               <thead>
                 <tr>
@@ -349,7 +345,7 @@ const Report = () => {
           </Col>
 
           <Col xs="6">
-            <h5>FEMININO</h5>
+            <h5>{Translator('FEMALE').toUpperCase()}</h5>
             <TableContentCentered>
               <thead>
                 <tr>
@@ -411,7 +407,7 @@ const Report = () => {
 
         <Row className="mt-4">
           <Col xs="6">
-            <h5>INFANTIL</h5>
+            <h5>{Translator('CHILDISH').toUpperCase()}</h5>
             <TableContentCentered>
               <thead>
                 <tr>
@@ -474,7 +470,7 @@ const Report = () => {
           </Col>
 
           <Col xs="6">
-            <h5>ANOTAÇÕES</h5>
+            <h5>{Translator('ANNOTATIONS').toUpperCase()}</h5>
             <AnnotationContainer>
               {orderListItemsNotes.split('\n').map((line) => (
                 <p key={btoa(line)}>{line}</p>

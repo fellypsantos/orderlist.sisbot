@@ -15,8 +15,6 @@ const TableOrdersBody = () => {
     dashboardData,
     setEditMode,
     setModalClothesOpened,
-    setTempOrderItem,
-    initialTempOrderItem,
   } = useContext(OrderListContext);
 
   const [confirmDeleteItem, setConfirmDeleteItem] = useState({});
@@ -91,8 +89,8 @@ const TableOrdersBody = () => {
       {/* CONFIRM DELETE ITEM FROM LIST */}
       <ModalConfirmDialog
         isOpen={confirmDeleteItem.isOpen}
-        title="Lista de Pedidos"
-        textContent="Deseja mesmo excluir o item selecionado?"
+        title={Translator('MAIN_TITLE')}
+        textContent={Translator('CONFIRM_DELETE_ITEM_MODAL')}
         handleConfirm={() => handleDelete(confirmDeleteItem.itemID, true)}
         handleClose={handleCloseDeleteDialog}
       />
@@ -169,7 +167,7 @@ const TableOrdersBody = () => {
               colSpan={Utils.GetTotalColumnsTableOrderListItems(
                 document.getElementById('tableOrderListItems'),
               )}>
-              Nenhum item até o momento.
+              {Translator('LIST_EMPTY')}
             </TableCell>
           </TableRow>
         )}
@@ -178,7 +176,7 @@ const TableOrdersBody = () => {
       <tfoot className={!screenshotMode ? 'd-none' : ''}>
         <tr>
           <td colSpan={9} className="text-right">
-            <strong>Valor Final</strong>
+            <strong>{Translator('FINAL_VALUE')}</strong>
           </td>
           <td className="text-center">
             <strong>$ {dashboardData.totalToReceive}</strong>

@@ -7,7 +7,7 @@ export default function NavbarLeftContent({children}) {
   return (
     <NavbarCustom bg="primary" variant="dark">
       <NavbarCustom.Brand href="/" className="mr-auto">
-        <img src={MeLista} height="36px" alt="hue" />
+        <img src={MeLista} height="36px" alt="Logo" />
       </NavbarCustom.Brand>
 
       {/* Dropdown to change langhage */}

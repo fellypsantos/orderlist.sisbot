@@ -40,9 +40,6 @@ export default function ModalChooseClothes() {
     clotheIndex,
     propertyToChange,
   ) => {
-    // DEFINE WITH CLOTHE SETTINGS TO USE
-    // tempOrderItem -> FOR NEW ORDER ITEM
-    // editMode.orderItem -> FOR UPDATES
     const targetClothingSettings = editMode.enabled
       ? editMode.orderItem.clothingSettings
       : tempOrderItem.clothingSettings;
@@ -87,7 +84,7 @@ export default function ModalChooseClothes() {
 
     if (emptyItems.length === tempOrderItem.clothingSettings.length) {
       // ALL ITEMS ARE EMPTY
-      addToast('Lista vazia! Não há nada para adicionar até o momento.', {
+      addToast(Translator('TOAST_EMPTY_LIST'), {
         appearance: 'error',
         autoDismiss: true,
       });
@@ -119,7 +116,7 @@ export default function ModalChooseClothes() {
 
     setModalClothesOpened(false);
 
-    addToast('Feito! Novo item adicionado na sua lista de pedidos.', {
+    addToast(Translator('TOAST_ITEM_ADDED'), {
       appearance: 'success',
       autoDismiss: true,
     });
@@ -128,10 +125,11 @@ export default function ModalChooseClothes() {
   const headerPhrase = () => {
     const phrase =
       tempOrderItem.name === '' ? (
-        <span>Selecione o que precisa para essa nova ordem.</span>
+        <span>{Translator('HEADER_PHRASE_NO_NAME')}</span>
       ) : (
         <span>
-          Selecione o que precisa para <strong>{tempOrderItem.name}</strong>.
+          {Translator('HEADER_PHRASE_WITH_NAME')}
+          <strong>{tempOrderItem.name}</strong>.
         </span>
       );
 
@@ -207,13 +205,10 @@ export default function ModalChooseClothes() {
 
     if (emptyItems.length === updatedOrderItem.clothingSettings.length) {
       // ALL ITEMS ARE EMPTY
-      addToast(
-        'Lista vazia! Você não pode editar a informação deixando vazia.',
-        {
-          appearance: 'error',
-          autoDismiss: true,
-        },
-      );
+      addToast(Translator('TOAST_EMPTY_LIST_ON_UPDATE'), {
+        appearance: 'error',
+        autoDismiss: true,
+      });
 
       return;
     }
@@ -253,9 +248,7 @@ export default function ModalChooseClothes() {
   };
 
   const handleDelete = (itemID) => {
-    const confirmDialog = window.confirm(
-      'Quer mesmo excluir esse item da lista de pedidos?',
-    );
+    const confirmDialog = window.confirm(Translator('CONFIRM_DELETE_ITEM'));
 
     if (confirmDialog) {
       // USER CONFIRMED! DELETE
@@ -293,7 +286,9 @@ export default function ModalChooseClothes() {
     <Modal show={modalClothesOpened} onHide={handleOnHide}>
       <Modal.Header closeButton>
         <Modal.Title>
-          {!editMode.enabled ? 'Escolha as Roupas' : 'Modo de Edição'}
+          {!editMode.enabled
+            ? Translator('CHOOSE_CLOTHES_ADD')
+            : Translator('CHOOSE_CLOTHES_EDIT')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -301,7 +296,7 @@ export default function ModalChooseClothes() {
           {headerPhrase()}
         </div>
         <div className="d-block">
-          Valor dos itens:{' '}
+          {Translator('CHOOSE_CLOTHES_VALUE')}
           <strong>$ {calculatePriceForCurrentSelectedClothes()}</strong>.
         </div>
 
@@ -312,8 +307,8 @@ export default function ModalChooseClothes() {
                 <Col>
                   <FormTextInput
                     icon={faUser}
-                    label="Nome:"
-                    placeholder="Ex: Jhon Doe"
+                    label={`${Translator('NAME')}:`}
+                    placeholder={`${Translator('NAME_PLACEHOLDER')}:`}
                     value={editMode.orderItem.name}
                     onChange={handleChangeEditName}
                   />
@@ -324,8 +319,8 @@ export default function ModalChooseClothes() {
                 <Col>
                   <FormTextInput
                     icon={faPen}
-                    label="Número:"
-                    placeholder="Ex: 256"
+                    label={`${Translator('NUMBER')}:`}
+                    placeholder={`${Translator('EXAMPLE_ABBREV')}256`}
                     value={editMode.orderItem.number}
                     onChange={handleChangeEditNumber}
                   />
@@ -335,7 +330,7 @@ export default function ModalChooseClothes() {
               <Row>
                 <Col>
                   <FormInputSelect
-                    label="Gênero"
+                    label={`${Translator('GENDER')}:`}
                     icon={faVenusMars}
                     value={editMode.orderItem.gender}
                     arrOptions={genderOptions}
@@ -348,8 +343,8 @@ export default function ModalChooseClothes() {
 
           <Row>
             <Col xs={2}>&nbsp;</Col>
-            <Col xs={5}>Tamanho</Col>
-            <Col xs={5}>Quantidade</Col>
+            <Col xs={5}>{Translator('SIZE')}</Col>
+            <Col xs={5}>{Translator('QUANTITY')}</Col>
           </Row>
 
           {/* Clothing Row */}
@@ -377,7 +372,7 @@ export default function ModalChooseClothes() {
                       'size',
                     );
                   }}>
-                  <option value="">Nenhum</option>
+                  <option value="">{Translator('NONE')}</option>
 
                   {clothingSizes.map((size) => {
                     if (
@@ -421,12 +416,15 @@ export default function ModalChooseClothes() {
                       'quantity',
                     );
                   }}>
-                  <option value={0}>0 Peças</option>
+                  <option value={0}>0 {Translator('PIECES')}</option>
                   {maxQuantityPerPiece.map((quantity) => {
                     const trueQuantity = quantity + 1;
                     return (
                       <option key={trueQuantity} value={trueQuantity}>
-                        {trueQuantity} {trueQuantity === 1 ? 'Peça' : 'Peças'}
+                        {trueQuantity}{' '}
+                        {trueQuantity === 1
+                          ? Translator('PIECE')
+                          : Translator('PIECES')}
                       </option>
                     );
                   })}
@@ -438,13 +436,13 @@ export default function ModalChooseClothes() {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleOnHide}>
-          Fechar
+          {Translator('CLOSE')}
         </Button>
         {editMode.enabled && (
           <Button
             variant="danger"
             onClick={() => handleDelete(editMode.orderItem.id)}>
-            Excluir
+            {Translator('DELETE')}
           </Button>
         )}
         <Button
@@ -452,7 +450,7 @@ export default function ModalChooseClothes() {
           onClick={
             !editMode.enabled ? handleAddNewOrderItem : handleEditOrderItem
           }>
-          Salvar alterações
+          {Translator('SAVE_CHANGES')}
         </Button>
       </Modal.Footer>
     </Modal>
