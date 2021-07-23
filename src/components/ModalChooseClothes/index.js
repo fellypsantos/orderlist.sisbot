@@ -272,11 +272,22 @@ export default function ModalChooseClothes() {
     }
   };
 
-  const csGetSizeByID = (theID, orderItem) =>
-    orderItem.clothingSettings[theID - 1].size;
+  const csGetSizeByID = (theID, orderItem) => {
+    console.log('csGetSizeByID', theID, orderItem);
+
+    return orderItem.clothingSettings[theID - 1].size;
+  };
 
   const csGetQuantityByID = (theID, orderItem) =>
     orderItem.clothingSettings[theID - 1].quantity;
+
+  const getTargetOrderItemToManipulate = () => {
+    console.log(
+      'Checking correct orderItem to use...',
+      editMode.enabled ? 'edit' : 'new',
+    );
+    return editMode.enabled ? editMode.orderItem : tempOrderItem;
+  };
 
   return (
     <Modal show={modalClothesOpened} onHide={handleOnHide}>
@@ -349,19 +360,16 @@ export default function ModalChooseClothes() {
                 <img src={iconItem.icon} alt="clothe icon" />
               </Col>
 
-              {/* tempOrderItem.clothingSettings[iconItem.id - 1].size */}
-
               {/* SIZE */}
               <Col xs={5}>
                 <Form.Control
                   as="select"
                   className="my-1 mr-sm-2"
                   custom
-                  value={
-                    editMode.enabled
-                      ? csGetSizeByID(iconItem.id, editMode.orderItem)
-                      : csGetSizeByID(iconItem.id, tempOrderItem)
-                  }
+                  value={csGetSizeByID(
+                    iconItem.id,
+                    getTargetOrderItemToManipulate(),
+                  )}
                   onChange={(e) => {
                     handleChangeClotingSettings(
                       e.target.value,
@@ -370,11 +378,29 @@ export default function ModalChooseClothes() {
                     );
                   }}>
                   <option value="">Nenhum</option>
-                  {clothingSizes.map((size) => (
-                    <option key={size.id} value={size.code} data-id={size.id}>
-                      {Translator(size.code)}
-                    </option>
-                  ))}
+
+                  {clothingSizes.map((size) => {
+                    if (
+                      getTargetOrderItemToManipulate().gender === 'CHILDISH'
+                    ) {
+                      // RENDER ONLY CHILDISH SIZES
+                      if (size.id < 9) return false;
+                    }
+
+                    if (
+                      getTargetOrderItemToManipulate().gender === 'MALE' ||
+                      getTargetOrderItemToManipulate().gender === 'FEMALE'
+                    ) {
+                      // RENDER ONLY ADULT SIZES
+                      if (size.id >= 9) return false;
+                    }
+
+                    return (
+                      <option key={size.id} value={size.code} data-id={size.id}>
+                        {Translator(size.code)}
+                      </option>
+                    );
+                  })}
                 </Form.Control>
               </Col>
 
@@ -384,11 +410,10 @@ export default function ModalChooseClothes() {
                   as="select"
                   className="my-1 mr-sm-2"
                   custom
-                  value={
-                    !editMode.enabled
-                      ? csGetQuantityByID(iconItem.id, tempOrderItem)
-                      : csGetQuantityByID(iconItem.id, editMode.orderItem)
-                  }
+                  value={csGetQuantityByID(
+                    iconItem.id,
+                    getTargetOrderItemToManipulate(),
+                  )}
                   onChange={(e) => {
                     handleChangeClotingSettings(
                       parseInt(e.target.value),

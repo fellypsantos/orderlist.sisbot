@@ -16,6 +16,7 @@ import ModalChoosePrices from '../ModalChoosePrices';
 
 import Main from '../../Pages/Main';
 import Report from '../../Pages/Report';
+import RedEyeOneFormes from '../RedEyeOneFormes';
 
 const App = () => (
   <OrderListProvider>
@@ -26,6 +27,7 @@ const App = () => (
 
       <NavbarContainer className="bg-primary">
         <NavbarLeftContent>
+          <RedEyeOneFormes />
           <LanguageChanger />
         </NavbarLeftContent>
       </NavbarContainer>

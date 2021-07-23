@@ -1,12 +1,13 @@
 import React from 'react';
 import {NavbarCustom} from './styles';
 
-export default function NavbarLeftContent(props) {
-  const {children} = props;
+import MeLista from '../../images/icons/melista.logo.svg';
+
+export default function NavbarLeftContent({children}) {
   return (
     <NavbarCustom bg="primary" variant="dark">
       <NavbarCustom.Brand href="/" className="mr-auto">
-        SISBot
+        <img src={MeLista} height="36px" alt="hue" />
       </NavbarCustom.Brand>
 
       {/* Dropdown to change langhage */}

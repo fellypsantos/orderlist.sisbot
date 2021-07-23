@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import html2canvas from 'html2canvas';
+import JSZip from 'jszip';
 
 import {
   faCamera,
@@ -17,6 +18,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {useToasts} from 'react-toast-notifications';
 import {useHistory} from 'react-router-dom';
+
+import saveAs from '../../../node_modules/jszip/vendor/FileSaver';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 
@@ -33,7 +36,8 @@ const TableOrdersMenu = () => {
     orderListItems,
     Translator,
     orderListItemsNotes,
-    setorderListItemsNotes,
+    setOrderListItemsNotes,
+    setCurrentClothingPrices,
   } = useContext(OrderListContext);
 
   const [confirmClearOrderItems, setConfirmClearOrderItems] = useState(false);
@@ -43,7 +47,7 @@ const TableOrdersMenu = () => {
 
   const [notesModalVisible, setNotesModalVisible] = useState(false);
 
-  const [csvFileNameToExport, setCSVFilenameToExport] = useState('');
+  const [zipFileName, setZIPFileName] = useState('');
 
   const history = useHistory();
 
@@ -107,6 +111,11 @@ const TableOrdersMenu = () => {
 
         // ENABLE SCROLL AGAIN
         document.body.style.overflow = 'unset';
+
+        addToast('Captura de tela foi salva na sua máquia.', {
+          appearance: 'success',
+          autoDismiss: true,
+        });
       });
   };
 
@@ -115,6 +124,11 @@ const TableOrdersMenu = () => {
       setShowModalConfirmDownload(true);
       return;
     }
+
+    const zip = new JSZip();
+
+    const safeFilename =
+      zipFileName === '' ? 'SISBOT - Lista de Pedidos' : zipFileName;
 
     const sisbotGender = {
       MALE: 'ma',
@@ -143,11 +157,15 @@ const TableOrdersMenu = () => {
       console.log('orderItem', orderItem);
 
       orderItem.clothingSettings.map((theClothe) => {
+        // ADJUST SIZE FOR CHILDISH (IT CAME WITH WORK ANOS|YEARS|ANÕS)
+        const theSize =
+          orderItem.gender === 'CHILDISH'
+            ? Translator(theClothe.size).replace(/ anos| aears| años/i, '')
+            : Translator(theClothe.size);
+
         csvDataToJoin.push(
           `${Translator(sisbotClothingID[theClothe.name.toUpperCase()])}=${
-            theClothe.quantity > 0
-              ? `${theClothe.quantity}-${Translator(theClothe.size)}`
-              : ''
+            theClothe.quantity > 0 ? `${theClothe.quantity}-${theSize}` : ''
           }`,
         );
         return theClothe;
@@ -163,19 +181,71 @@ const TableOrdersMenu = () => {
       'genero,nome,numero,manga_curta,manga_longa,short,calca,regata,colete',
     );
 
-    // DOWNLOAD
-    const filename = csvFileNameToExport || 'HUEHUE';
-    Utils.DownloadTextFile(`${filename}.csv`, csvFullData.join('\n'));
+    // ADD FILES TO ZIP
+    zip.file('Lista de Pedidos.csv', csvFullData.join('\n'));
+    zip.file('Dashboard.bkp', btoa(localStorage.getItem('sisbot')));
+
+    // DOWNLOAD ZIP
+    zip.generateAsync({type: 'blob'}).then((content) => {
+      saveAs(content, `${safeFilename}.zip`);
+    });
+
     setShowModalConfirmDownload(false);
-    setCSVFilenameToExport('');
+    setZIPFileName('');
+
+    addToast('Pronto! O arquivo foi salvo som sucesso no seu computador.', {
+      autoDismiss: true,
+      appearance: 'success',
+    });
   };
 
   const handleCLoseModalTextInput = () => {
-    setCSVFilenameToExport('');
+    setZIPFileName('');
     setShowModalConfirmDownload(false);
   };
 
-  const handleCloseAnnotations = () => setNotesModalVisible(false);
+  const handleCloseAnnotations = () => {
+    setNotesModalVisible(false);
+    addToast('Suas notas de produção foram atualizadas.', {
+      appearance: 'success',
+      autoDismiss: true,
+    });
+  };
+
+  const handleRestoreBackup = (data) => {
+    // PARSE THE RESULT
+    const backupData = JSON.parse(atob(data));
+    setOrderListItems(backupData.orderListItems);
+    setOrderListItemsNotes(backupData.orderListItemsNotes);
+    setCurrentClothingPrices(backupData.pricesList);
+    addToast('Pronto! Todas as informações foram restauradas com sucesso.', {
+      appearance: 'success',
+      autoDismiss: true,
+    });
+  };
+
+  const handleUpload = () => {
+    const inputFileChooser = document.createElement('input');
+    inputFileChooser.setAttribute('type', 'file');
+    inputFileChooser.setAttribute('accept', '.bkp');
+    inputFileChooser.setAttribute('className', 'd-none');
+    inputFileChooser.onchange = (e) => {
+      // READ CONTENT
+      const fileReader = new FileReader();
+      const {files} = e.target;
+
+      if (files && files[0]) {
+        fileReader.onload = (el) => {
+          const {result} = el.target;
+          handleRestoreBackup(result);
+        };
+
+        fileReader.readAsText(e.target.files[0]);
+      }
+    };
+
+    inputFileChooser.click();
+  };
 
   return (
     <>
@@ -193,10 +263,10 @@ const TableOrdersMenu = () => {
       <ModalTextInput
         isOpen={showModalConfirmDownload}
         title="Download da Lista"
-        inputTextContent={csvFileNameToExport}
+        inputTextContent={zipFileName}
         labelContent="Qual o nome para o arquivo?"
         placeholderContent="SISBOT - Lista"
-        handleChange={(e) => setCSVFilenameToExport(e.target.value)}
+        handleChange={(e) => setZIPFileName(e.target.value)}
         handleConfirm={() => handleDownload(true)}
         handleClose={handleCLoseModalTextInput}
       />
@@ -209,7 +279,7 @@ const TableOrdersMenu = () => {
         inputTextContent={orderListItemsNotes}
         labelContent="Descreva seus detalhes para produção."
         placeholderContent="Digite aqui..."
-        handleChange={(e) => setorderListItemsNotes(e.target.value)}
+        handleChange={(e) => setOrderListItemsNotes(e.target.value)}
         handleConfirm={handleCloseAnnotations}
         handleClose={handleCloseAnnotations}
       />
@@ -225,7 +295,11 @@ const TableOrdersMenu = () => {
             <span className="ml-1 d-none d-md-inline-block">Download</span>
           </Button>
 
-          <Button variant="secondary" className="mr-2" size="sm">
+          <Button
+            variant="secondary"
+            className="mr-2"
+            size="sm"
+            onClick={handleUpload}>
             <FontAwesomeIcon icon={faUpload} />
             <span className="ml-1 d-none d-md-inline-block">Upload</span>
           </Button>
@@ -276,7 +350,10 @@ const TableOrdersMenu = () => {
             variant="secondary"
             size="sm"
             onClick={() => setNotesModalVisible(true)}>
-            <FontAwesomeIcon icon={faCommentAlt} />
+            <FontAwesomeIcon
+              icon={faCommentAlt}
+              color={orderListItemsNotes.length > 0 ? '#f1c40f' : '#fff'}
+            />
             <span className="ml-1 d-none d-md-inline-block">Notas</span>
           </Button>
         </Col>

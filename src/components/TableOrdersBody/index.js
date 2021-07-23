@@ -15,6 +15,8 @@ const TableOrdersBody = () => {
     dashboardData,
     setEditMode,
     setModalClothesOpened,
+    setTempOrderItem,
+    initialTempOrderItem,
   } = useContext(OrderListContext);
 
   const [confirmDeleteItem, setConfirmDeleteItem] = useState({});
@@ -75,6 +77,7 @@ const TableOrdersBody = () => {
 
   const handleEdit = (orderItem) => {
     console.log('Editing: ', orderItem);
+
     setEditMode({
       enabled: true,
       orderItem,

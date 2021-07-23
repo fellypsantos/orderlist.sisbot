@@ -107,7 +107,7 @@ const OrderListProvider = ({children}) => {
 
   const [orderListItems, setOrderListItems] = useState([]);
 
-  const [orderListItemsNotes, setorderListItemsNotes] = useState('');
+  const [orderListItemsNotes, setOrderListItemsNotes] = useState('');
 
   const [editMode, setEditMode] = useState({
     enabled: false,
@@ -179,7 +179,7 @@ const OrderListProvider = ({children}) => {
       setCurrentClothingPrices(data.pricesList);
 
       // RESTORE NOTES
-      setorderListItemsNotes(data.orderListItemsNotes);
+      setOrderListItemsNotes(data.orderListItemsNotes);
     } else {
       console.log('INITIALIZE WITH DEFAULT EMPTY DATA.');
       localStorage.setItem(
@@ -294,7 +294,7 @@ const OrderListProvider = ({children}) => {
     editMode,
     setEditMode,
     orderListItemsNotes,
-    setorderListItemsNotes,
+    setOrderListItemsNotes,
   };
 
   return (
