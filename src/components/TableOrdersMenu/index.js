@@ -94,7 +94,7 @@ const TableOrdersMenu = () => {
         // CREATE LINK DO ACTIVE IMAGE DOWNLOAD
         const a = document.createElement('a');
         a.href = targetCanvas.toDataURL();
-        a.download = 'Lista-2021-07-13.png';
+        a.download = `${Translator('MAIN_TITLE')}.png`;
         document.body.appendChild(a);
         a.click();
 
@@ -160,7 +160,7 @@ const TableOrdersMenu = () => {
         // ADJUST SIZE FOR CHILDISH (IT CAME WITH WORK ANOS|YEARS|ANÕS)
         const theSize =
           orderItem.gender === 'CHILDISH'
-            ? Translator(theClothe.size).replace(/ anos| years| años/i, '')
+            ? Translator(theClothe.size).replace(/ anos| years old| años/i, '')
             : Translator(theClothe.size);
 
         csvDataToJoin.push(
