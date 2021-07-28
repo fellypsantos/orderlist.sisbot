@@ -9,6 +9,11 @@ import Utils from '../Utils';
 
 export const OrderListContext = createContext();
 
+const translationPath =
+  !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+    ? ''
+    : '/melista';
+
 i18n
   .use(initReactI18next)
   .use(LanguageDetector)
@@ -20,7 +25,7 @@ i18n
       caches: ['cookie'],
     },
     backend: {
-      loadPath: '/assets/locales/{{lng}}/translation.json',
+      loadPath: `${translationPath}/assets/locales/{{lng}}/translation.json`,
     },
     react: {useSuspense: false},
   });

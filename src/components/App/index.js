@@ -34,7 +34,7 @@ const App = () => (
 
       <MainContentContainer>
         <Container>
-          <BrowserRouter>
+          <BrowserRouter basename="/melista">
             <Switch>
               <Route exact path="/" component={Main} />
               <Route path="/report" component={Report} />

@@ -274,13 +274,8 @@ export default function ModalChooseClothes() {
   const csGetQuantityByID = (theID, orderItem) =>
     orderItem.clothingSettings[theID - 1].quantity;
 
-  const getTargetOrderItemToManipulate = () => {
-    console.log(
-      'Checking correct orderItem to use...',
-      editMode.enabled ? 'edit' : 'new',
-    );
-    return editMode.enabled ? editMode.orderItem : tempOrderItem;
-  };
+  const getTargetOrderItemToManipulate = () =>
+    editMode.enabled ? editMode.orderItem : tempOrderItem;
 
   return (
     <Modal show={modalClothesOpened} onHide={handleOnHide}>
