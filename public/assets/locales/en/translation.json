@@ -33,6 +33,7 @@
   "MAIN_TITLE": "Order List",
   "DOWNLOAD_TITLE": "List Download",
   "LANGUAGE": "Language",
+  "INSTRUCTIONS_FILENAME": "Instructions",
 
   "PROCESSING_REPORT_TITLE": "Processing Report",
   "CLIENT": "Client:",
@@ -110,5 +111,7 @@
   "TOAST_SCREENSHOT_FINISHED": "Screenshot was downloaded to your computer.",
   "TOAST_DOWNLOAD_COMPLETE": "Nice! The file was successfully saved in your computer.",
   "TOAST_UPLOAD_COMPLETE": "Great! All your data was successfully restored.",
-  "TOAST_NOTES_UPDATED": "Your production notes were updated."
+  "TOAST_NOTES_UPDATED": "Your production notes were updated.",
+
+  "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at oneformes.com/melista to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
 }

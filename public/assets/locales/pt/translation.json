@@ -33,6 +33,7 @@
   "MAIN_TITLE": "Lista de Pedidos",
   "DOWNLOAD_TITLE": "Download da Lista",
   "LANGUAGE": "Idioma",
+  "INSTRUCTIONS_FILENAME": "Instruções",
 
   "PROCESSING_REPORT_TITLE": "Relatório de Processamento",
   "CLIENT": "Cliente:",
@@ -110,5 +111,7 @@
   "TOAST_SCREENSHOT_FINISHED": "Captura de tela foi salva na sua máquina.",
   "TOAST_DOWNLOAD_COMPLETE": "Pronto! O arquivo foi salvo som sucesso no seu computador.",
   "TOAST_UPLOAD_COMPLETE": "Pronto! Todas as informações foram restauradas com sucesso.",
-  "TOAST_NOTES_UPDATED": "Suas notas de produção foram atualizadas."
+  "TOAST_NOTES_UPDATED": "Suas notas de produção foram atualizadas.",
+
+  "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site oneformes.com/melista\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

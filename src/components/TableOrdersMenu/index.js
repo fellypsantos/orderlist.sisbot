@@ -193,6 +193,10 @@ const TableOrdersMenu = () => {
     // ADD FILES TO ZIP
     zip.file(`${Translator('MAIN_TITLE')}.csv`, csvFullData.join('\n'));
     zip.file('Melista.bkp', btoa(localStorage.getItem('sisbot')));
+    zip.file(
+      `${Translator('INSTRUCTIONS_FILENAME')}.txt`,
+      `${Translator('INSTRUCTIONS_CONTENT')}`,
+    );
 
     // DOWNLOAD ZIP
     zip.generateAsync({type: 'blob'}).then((content) => {
