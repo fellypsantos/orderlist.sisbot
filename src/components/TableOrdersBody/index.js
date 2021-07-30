@@ -84,7 +84,7 @@ const TableOrdersBody = () => {
     setModalClothesOpened(true);
   };
 
-  const getCustomTShirtName = (item) =>
+  const getCustomTShirtName = (item, clothe) =>
     item.gender === 'FEMALE' && clothe.name === 'tshirt' ? '-BL' : '';
 
   return (
@@ -128,6 +128,7 @@ const TableOrdersBody = () => {
                     ? '-'
                     : `${clothe.quantity}${getCustomTShirtName(
                         item,
+                        clothe,
                       )}-${Translator(clothe.size)}`}
                 </TableCell>
               ))}
