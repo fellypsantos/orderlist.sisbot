@@ -31,6 +31,8 @@
   "CSVID_VEST": "chaleco",
 
   "MAIN_TITLE": "Lista de orden",
+  "DASHBOARD_BUTTON_HIDE": "Esconder",
+  "DASHBOARD_BUTTON_SHOW": "Mostrar",
   "DOWNLOAD_TITLE": "Descargar lista",
   "LANGUAGE": "Idioma",
   "INSTRUCTIONS_FILENAME": "Instrucciones",

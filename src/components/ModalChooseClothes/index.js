@@ -213,7 +213,7 @@ export default function ModalChooseClothes() {
       return;
     }
 
-    console.log('UPDATING ORDER ITEM...');
+    // console.log('UPDATING ORDER ITEM...');
 
     // UPDATE LIST
     const updatedOrderListItems = orderListItems.map((orderItem) => {
@@ -265,11 +265,8 @@ export default function ModalChooseClothes() {
     }
   };
 
-  const csGetSizeByID = (theID, orderItem) => {
-    console.log('csGetSizeByID', theID, orderItem);
-
-    return orderItem.clothingSettings[theID - 1].size;
-  };
+  const csGetSizeByID = (theID, orderItem) =>
+    orderItem.clothingSettings[theID - 1].size;
 
   const csGetQuantityByID = (theID, orderItem) =>
     orderItem.clothingSettings[theID - 1].quantity;

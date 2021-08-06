@@ -1,4 +1,8 @@
 import React, {useContext} from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
+import Button from 'react-bootstrap/Button';
+
 import TableOrdersMenu from '../../components/TableOrdersMenu';
 import FormAddOrderItem from '../../components/FormAddOrderItem';
 import DashboardReports from '../../components/DashboardReports';
@@ -8,14 +12,34 @@ import TableOrderList from '../../components/TableOrderList';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 const Main = () => {
-  const {Translator} = useContext(OrderListContext);
+  const {Translator, showDashboard, setShowDashboard} = useContext(
+    OrderListContext,
+  );
 
   return (
     <>
       <FormAddOrderItem />
       <Separator />
-      <Title text={Translator('MAIN_TITLE')} />
-      <DashboardReports />
+      <div
+        className="d-flex"
+        style={{justifyContent: 'space-between', alignItems: 'center'}}>
+        <Title text={Translator('MAIN_TITLE')} />
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setShowDashboard(!showDashboard)}>
+          <FontAwesomeIcon
+            icon={showDashboard ? faEyeSlash : faEye}
+            size={35}
+          />
+          <span className="ml-1 d-none d-md-inline-block">
+            {showDashboard
+              ? Translator('DASHBOARD_BUTTON_HIDE')
+              : Translator('DASHBOARD_BUTTON_SHOW')}
+          </span>
+        </Button>
+      </div>
+      <DashboardReports isVisible={showDashboard} />
       <TableOrdersMenu />
       <TableOrderList />
     </>

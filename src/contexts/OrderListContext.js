@@ -62,7 +62,6 @@ const OrderListProvider = ({children}) => {
 
   const updateLanguage = (countryCode) => {
     i18n.changeLanguage(countryCode);
-    console.log('New language is: ', countryCode);
   };
 
   const [clothingIcons] = useState([
@@ -127,6 +126,8 @@ const OrderListProvider = ({children}) => {
     totalProgressAsPercentage: 0,
   });
 
+  const [showDashboard, setShowDashboard] = useState(true);
+
   // HELPER FUNCTIONS TO UPDATE DASHBOARD
   const calculateTotalToReceive = () => {
     let totalPaymentValue = 0;
@@ -170,12 +171,12 @@ const OrderListProvider = ({children}) => {
 
   // LOAD SETTINGS
   useEffect(() => {
-    console.log('LOAD SETTINGS');
+    // console.log('LOAD SETTINGS');
     const currentLocalStorageData = localStorage.getItem('sisbot');
 
     // FIRST RUN, NO LOCALSTORAGE DATA
     if (currentLocalStorageData !== null) {
-      console.log('RESTORING PREVIEWS SAVED DATA.');
+      // console.log('RESTORING PREVIEWS SAVED DATA.');
       const data = JSON.parse(currentLocalStorageData);
 
       // RESTORE ORDER ITEMS LIST
@@ -187,7 +188,7 @@ const OrderListProvider = ({children}) => {
       // RESTORE NOTES
       setOrderListItemsNotes(data.orderListItemsNotes);
     } else {
-      console.log('INITIALIZE WITH DEFAULT EMPTY DATA.');
+      // console.log('INITIALIZE WITH DEFAULT EMPTY DATA.');
       localStorage.setItem(
         'sisbot',
         JSON.stringify({
@@ -211,7 +212,7 @@ const OrderListProvider = ({children}) => {
       }),
     );
 
-    console.log('[UPDATED] LocalStorage: orderListitems.');
+    // console.log('[UPDATED] LocalStorage: orderListitems.');
   }, [orderListItems]);
 
   // SAVE ORDER LIST NOTES
@@ -226,7 +227,7 @@ const OrderListProvider = ({children}) => {
       }),
     );
 
-    console.log('[UPDATED] LocalStorage: orderListItemsNotes.');
+    // console.log('[UPDATED] LocalStorage: orderListItemsNotes.');
   }, [orderListItemsNotes]);
 
   // SAVE PRICES
@@ -241,12 +242,12 @@ const OrderListProvider = ({children}) => {
       }),
     );
 
-    console.log('[UPDATED] LocalStorage: pricesList.');
+    // console.log('[UPDATED] LocalStorage: pricesList.');
   }, [currentClothingPrices]);
 
   // KEEP DASHBOARD UPDATED
   useEffect(() => {
-    console.log('UPDATE DASHBOARD');
+    // console.log('UPDATE DASHBOARD');
 
     const totalToReceive = calculateTotalToReceive();
     const totalReceived = calculateTotalReceived();
@@ -301,6 +302,8 @@ const OrderListProvider = ({children}) => {
     setEditMode,
     orderListItemsNotes,
     setOrderListItemsNotes,
+    showDashboard,
+    setShowDashboard,
   };
 
   return (

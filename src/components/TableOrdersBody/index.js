@@ -43,7 +43,6 @@ const TableOrdersBody = () => {
   };
 
   const handleDelete = (itemID, confirmed = false) => {
-    console.log('confirmed', confirmed);
     if (!confirmed) {
       setConfirmDeleteItem({
         isOpen: true,
@@ -74,8 +73,6 @@ const TableOrdersBody = () => {
   };
 
   const handleEdit = (orderItem) => {
-    console.log('Editing: ', orderItem);
-
     setEditMode({
       enabled: true,
       orderItem,

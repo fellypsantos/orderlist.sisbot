@@ -39,7 +39,7 @@ const ModalChoosePrices = () => {
   };
 
   const handleSaveChanges = () => {
-    console.log('PERSISTIR EM LOGALSTORAGE');
+    // console.log('PERSISTIR EM LOGALSTORAGE');
 
     // RECALCULATE THE TOTAL PRICE OF EACH ORDER ITEM
     const recalculatedOrderItems = orderListItems.map((orderItem) => {

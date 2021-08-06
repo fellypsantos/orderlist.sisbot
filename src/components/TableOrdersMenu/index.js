@@ -154,8 +154,6 @@ const TableOrdersMenu = () => {
       csvDataToJoin.push(orderItem.name);
       csvDataToJoin.push(orderItem.number);
 
-      console.log('orderItem', orderItem);
-
       orderItem.clothingSettings.map((theClothe) => {
         // ADJUST SIZE FOR CHILDISH (IT CAME WITH WORK ANOS|YEARS|ANÕS)
         const theSize =
