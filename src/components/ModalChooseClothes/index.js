@@ -371,7 +371,8 @@ export default function ModalChooseClothes() {
                       getTargetOrderItemToManipulate().gender === 'CHILDISH'
                     ) {
                       // RENDER ONLY CHILDISH SIZES
-                      if (size.id < 10) return false;
+                      // if (size.id < 10) return false;
+                      if (size.target === 'ADULT') return false;
                     }
 
                     if (
@@ -379,7 +380,7 @@ export default function ModalChooseClothes() {
                       getTargetOrderItemToManipulate().gender === 'FEMALE'
                     ) {
                       // RENDER ONLY ADULT SIZES
-                      if (size.id >= 10) return false;
+                      if (size.target === 'TEEN') return false;
                     }
 
                     return (

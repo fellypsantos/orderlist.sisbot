@@ -16,6 +16,8 @@ import ModalChoosePrices from '../ModalChoosePrices';
 
 import Main from '../../Pages/Main';
 import Report from '../../Pages/Report';
+import BussinessPricing from '../../Pages/BussinessPricing';
+
 import RedEyeOneFormes from '../RedEyeOneFormes';
 
 const App = () => (
@@ -38,6 +40,7 @@ const App = () => (
             <Switch>
               <Route exact path="/" component={Main} />
               <Route path="/report" component={Report} />
+              <Route path="/bussiness/pricing" component={BussinessPricing} />
             </Switch>
           </BrowserRouter>
         </Container>
