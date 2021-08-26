@@ -33,11 +33,11 @@ const Main = () => {
         <div>
           <ButtonGroup aria-label="Basic example" size="sm" className="mr-1">
             <Button variant="secondary" style={{width: 35}}>
-              <FontAwesomeIcon icon={faMale} size={35} />
+              <FontAwesomeIcon icon={faMale} width={35} />
             </Button>
 
             <Button variant="secondary" style={{width: 35}}>
-              <FontAwesomeIcon icon={faBicycle} size={35} />
+              <FontAwesomeIcon icon={faBicycle} width={35} />
             </Button>
           </ButtonGroup>
           <Button
@@ -46,7 +46,7 @@ const Main = () => {
             onClick={() => setShowDashboard(!showDashboard)}>
             <FontAwesomeIcon
               icon={showDashboard ? faEyeSlash : faEye}
-              size={35}
+              width={35}
             />
             <span className="ml-1 d-none d-md-inline-block">
               {showDashboard

@@ -1,19 +1,24 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import hash from 'object-hash';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import {faDownload} from '@fortawesome/free-solid-svg-icons';
+import {faDownload, faUpload} from '@fortawesome/free-solid-svg-icons';
 
-import Title from '../../components/Title';
 import TableCellAsInput from '../../components/TableCellAsInput';
 import {OrderListContext} from '../../contexts/OrderListContext';
+import {CustomInputAsHeaderText} from './styles';
+
+const LS_PRICES_ID = 'sisbot.bussiness.prices';
 
 const BussinessPricing = () => {
   const {clothingIcons, clothingSizes, Translator} = useContext(
     OrderListContext,
   );
+
+  const [projectName, setProjectName] = useState('');
 
   const [priceTableMale, setPriceTableMale] = useState({
     tshirt: [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -42,6 +47,61 @@ const BussinessPricing = () => {
     vest: [0, 0, 0, 0, 0, 0, 0, 0],
   });
 
+  // LOAD DATA FROM LOCALSTORAGE
+  useEffect(() => {
+    const localStorageBussinessPrices = localStorage.getItem(LS_PRICES_ID);
+
+    if (localStorageBussinessPrices !== null) {
+      // ALREADY EXISTS DATA
+      console.log('ALREADY EXISTS DATA, RESTORE IT');
+      const data = JSON.parse(localStorageBussinessPrices);
+
+      console.log('data to restore', data);
+
+      // RESTORE PROJECT NAME
+      setProjectName(data.projectName);
+
+      // RESTORE MALE PRICES IF ARE DIFFERENT
+      if (hash(priceTableMale) !== hash(data.priceTableMale)) {
+        setPriceTableMale(data.priceTableMale);
+      }
+
+      // RESTORE FEMALE PRICES
+      if (hash(priceTableFemale) !== hash(data.priceTableFemale)) {
+        setPriceTableFemale(data.priceTableFemale);
+      }
+
+      // RESTORE CHILDISH PRICES
+      if (hash(priceTableChildish) !== hash(data.priceTableChildish)) {
+        setPriceTableChildish(data.priceTableChildish);
+      }
+    } else {
+      // SETTING DEFAULT EMPTY DATA
+      localStorage.setItem(
+        LS_PRICES_ID,
+        JSON.stringify({
+          projectName: '',
+          priceTableMale,
+          priceTableFemale,
+          priceTableChildish,
+        }),
+      );
+      console.log('EMPTY DATA SETTED');
+    }
+  }, []);
+
+  // SAVE CHANGES TO LOCALSTORAGE
+  useEffect(() => {
+    localStorage.setItem(
+      LS_PRICES_ID,
+      JSON.stringify({
+        priceTableMale,
+        priceTableFemale,
+        priceTableChildish,
+      }),
+    );
+  }, [priceTableMale, priceTableFemale, priceTableChildish]);
+
   const handleUpdatePriceTable = (
     thePriceTableID,
     theClotheName,
@@ -66,8 +126,6 @@ const BussinessPricing = () => {
     }
 
     const updated = selectedPriceTable[theClotheName].map((item, index) => {
-      // console.log(item, index, newPrice);
-
       if (index === indexPrice) {
         return parseInt(newPrice.replace('$ ', '')) || 0;
       }
@@ -98,17 +156,61 @@ const BussinessPricing = () => {
     }
   };
 
+  const handleUploadPricesTables = () => {};
+
+  const handleDownloadPricesTables = () => {
+    const jsonContent = encodeURIComponent(
+      JSON.stringify({
+        priceTableMale,
+        priceTableFemale,
+        priceTableChildish,
+      }),
+    );
+
+    const anchor = document.createElement('a');
+    anchor.setAttribute('href', `data:text/plain;charset=utf-8,${jsonContent}`);
+    anchor.setAttribute('download', 'MyPriceTable.json');
+    anchor.click();
+    anchor.remove();
+  };
+
+  const handleChangeFileNameToExport = (element) => {
+    setProjectName(element.target.value);
+  };
+
   return (
     <div>
       <div
         className="d-flex"
         style={{justifyContent: 'space-between', alignItems: 'center'}}>
-        <Title text="Tabela de Preços" />
+        <CustomInputAsHeaderText
+          type="text"
+          value={projectName}
+          placeholder="Orçamento sem título"
+          onChange={handleChangeFileNameToExport}
+        />
+
         <div>
-          <Button variant="secondary" size="sm" onClick={() => null}>
+          {/* DOWNLOAD */}
+          <Button
+            className="mr-2"
+            variant="secondary"
+            size="sm"
+            onClick={handleDownloadPricesTables}>
             <FontAwesomeIcon icon={faDownload} />
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('DOWNLOAD')}
+            </span>
+          </Button>
+
+          {/* UPLOAD */}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleUploadPricesTables}>
+            <FontAwesomeIcon icon={faUpload} />
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('UPLOAD')}
             </span>
           </Button>
         </div>
@@ -136,10 +238,12 @@ const BussinessPricing = () => {
                   </td>
                   {clothingSizes.map((theSize, index) => {
                     if (theSize.target === 'TEEN') return false;
+                    const itemPrice = priceTableMale[theIcon.name][index];
+
                     return (
                       <td key={theSize.id}>
                         <TableCellAsInput
-                          value={priceTableMale[theIcon.name][index]}
+                          value={itemPrice > 0 ? itemPrice : ''}
                           handleBlur={({target}) => {
                             handleUpdatePriceTable(
                               'MALE',
@@ -179,11 +283,12 @@ const BussinessPricing = () => {
                   </td>
                   {clothingSizes.map((theSize, index) => {
                     if (theSize.target === 'TEEN') return false;
+                    const itemPrice = priceTableFemale[theIcon.name][index];
 
                     return (
                       <td key={theSize.id}>
                         <TableCellAsInput
-                          value={priceTableFemale[theIcon.name][index]}
+                          value={itemPrice > 0 ? itemPrice : ''}
                           handleBlur={({target}) => {
                             handleUpdatePriceTable(
                               'FEMALE',
@@ -226,11 +331,13 @@ const BussinessPricing = () => {
                     if (theSize.target === 'ADULT') return false;
                     // TEENS START IN HIGHER INDEX ON LIST, SUBTRACT TO CONSIDER ZERO
                     const customIndex = index - 9;
+                    const itemPrice =
+                      priceTableChildish[theIcon.name][customIndex];
 
                     return (
                       <td key={theSize.id}>
                         <TableCellAsInput
-                          value={priceTableChildish[theIcon.name][customIndex]}
+                          value={itemPrice > 0 ? itemPrice : ''}
                           handleBlur={({target}) => {
                             handleUpdatePriceTable(
                               'CHILDISH',
