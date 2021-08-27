@@ -236,26 +236,9 @@ const TableOrdersMenu = () => {
   };
 
   const handleUpload = () => {
-    const inputFileChooser = document.createElement('input');
-    inputFileChooser.setAttribute('type', 'file');
-    inputFileChooser.setAttribute('accept', '.bkp');
-    inputFileChooser.setAttribute('className', 'd-none');
-    inputFileChooser.onchange = (e) => {
-      // READ CONTENT
-      const fileReader = new FileReader();
-      const {files} = e.target;
-
-      if (files && files[0]) {
-        fileReader.onload = (el) => {
-          const {result} = el.target;
-          handleRestoreBackup(result);
-        };
-
-        fileReader.readAsText(e.target.files[0]);
-      }
-    };
-
-    inputFileChooser.click();
+    Utils.HandleUploadFile('.bkp', (content) => {
+      handleRestoreBackup(content);
+    });
   };
 
   return (

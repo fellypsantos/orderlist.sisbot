@@ -7,7 +7,6 @@ import {
   faTrash,
   faEye,
 } from '@fortawesome/free-solid-svg-icons';
-import Utils from '../../Utils';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 export default function TableOrdersHead() {
@@ -22,7 +21,7 @@ export default function TableOrdersHead() {
           <strong>{Translator('MAIN_TITLE')}</strong>
         </td>
       </tr>
-      <tr style={Utils.StyleHelper.TextAlign('center')}>
+      <tr className="text-center">
         <th style={{maxWidth: '50px'}}>
           {screenshotMode ? (
             Translator('PAID')

@@ -6,10 +6,12 @@ import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import {faDownload, faUpload} from '@fortawesome/free-solid-svg-icons';
+import {useToasts} from 'react-toast-notifications';
 
 import TableCellAsInput from '../../components/TableCellAsInput';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import {CustomInputAsHeaderText} from './styles';
+import Utils from '../../Utils';
 
 const LS_PRICES_ID = 'sisbot.bussiness.prices';
 
@@ -47,6 +49,21 @@ const BussinessPricing = () => {
     vest: [0, 0, 0, 0, 0, 0, 0, 0],
   });
 
+  const {addToast} = useToasts();
+
+  const saveToLocalStorage = (paraProjectName = '') => {
+    // SETTING DEFAULT EMPTY DATA
+    localStorage.setItem(
+      LS_PRICES_ID,
+      JSON.stringify({
+        projectName: paraProjectName,
+        priceTableMale,
+        priceTableFemale,
+        priceTableChildish,
+      }),
+    );
+  };
+
   // LOAD DATA FROM LOCALSTORAGE
   useEffect(() => {
     const localStorageBussinessPrices = localStorage.getItem(LS_PRICES_ID);
@@ -55,8 +72,6 @@ const BussinessPricing = () => {
       // ALREADY EXISTS DATA
       console.log('ALREADY EXISTS DATA, RESTORE IT');
       const data = JSON.parse(localStorageBussinessPrices);
-
-      console.log('data to restore', data);
 
       // RESTORE PROJECT NAME
       setProjectName(data.projectName);
@@ -76,31 +91,16 @@ const BussinessPricing = () => {
         setPriceTableChildish(data.priceTableChildish);
       }
     } else {
-      // SETTING DEFAULT EMPTY DATA
-      localStorage.setItem(
-        LS_PRICES_ID,
-        JSON.stringify({
-          projectName: '',
-          priceTableMale,
-          priceTableFemale,
-          priceTableChildish,
-        }),
-      );
+      // DEFAULT DATA
+      saveToLocalStorage();
       console.log('EMPTY DATA SETTED');
     }
   }, []);
 
   // SAVE CHANGES TO LOCALSTORAGE
   useEffect(() => {
-    localStorage.setItem(
-      LS_PRICES_ID,
-      JSON.stringify({
-        priceTableMale,
-        priceTableFemale,
-        priceTableChildish,
-      }),
-    );
-  }, [priceTableMale, priceTableFemale, priceTableChildish]);
+    saveToLocalStorage(projectName);
+  }, [projectName, priceTableMale, priceTableFemale, priceTableChildish]);
 
   const handleUpdatePriceTable = (
     thePriceTableID,
@@ -156,11 +156,40 @@ const BussinessPricing = () => {
     }
   };
 
-  const handleUploadPricesTables = () => {};
+  const isValidJsonFileForPrices = (object) => {
+    if (
+      object.projectName !== undefined &&
+      object.priceTableMale !== undefined &&
+      object.priceTableFemale !== undefined &&
+      object.priceTableChildish !== undefined
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const handleUploadPricesTables = () => {
+    Utils.HandleUploadFile('.json', (content) => {
+      const uploaded = JSON.parse(content);
+      if (isValidJsonFileForPrices(uploaded)) {
+        setProjectName(uploaded.projectName);
+        setPriceTableMale(uploaded.priceTableMale);
+        setPriceTableFemale(uploaded.priceTableFemale);
+        setPriceTableChildish(uploaded.priceTableChildish);
+
+        addToast(Translator('TOAST_UPLOAD_COMPLETE'), {
+          appearance: 'success',
+          autoDismiss: true,
+        });
+      }
+    });
+  };
 
   const handleDownloadPricesTables = () => {
     const jsonContent = encodeURIComponent(
       JSON.stringify({
+        projectName,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
@@ -169,9 +198,14 @@ const BussinessPricing = () => {
 
     const anchor = document.createElement('a');
     anchor.setAttribute('href', `data:text/plain;charset=utf-8,${jsonContent}`);
-    anchor.setAttribute('download', 'MyPriceTable.json');
+    anchor.setAttribute('download', `${projectName || 'Untitled'}.json`);
     anchor.click();
     anchor.remove();
+
+    addToast(Translator('TOAST_DOWNLOAD_COMPLETE'), {
+      appearance: 'success',
+      autoDismiss: true,
+    });
   };
 
   const handleChangeFileNameToExport = (element) => {

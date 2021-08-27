@@ -46,8 +46,26 @@ export default {
 
   Sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 
-  StyleHelper: {
-    TextAlign: (value) => ({textAlign: `${value}`}),
-    MaxWidthinPixels: (value) => ({maxWidth: `${value}px`}),
+  HandleUploadFile: (fileExtension, callback) => {
+    const inputFileChooser = document.createElement('input');
+    inputFileChooser.setAttribute('type', 'file');
+    inputFileChooser.setAttribute('accept', fileExtension);
+    inputFileChooser.setAttribute('className', 'd-none');
+    inputFileChooser.onchange = (e) => {
+      // READ CONTENT
+      const fileReader = new FileReader();
+      const {files} = e.target;
+
+      if (files && files[0]) {
+        fileReader.onload = (el) => {
+          const {result} = el.target;
+          callback(result);
+        };
+
+        fileReader.readAsText(e.target.files[0]);
+      }
+    };
+
+    inputFileChooser.click();
   },
 };
