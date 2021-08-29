@@ -10,7 +10,7 @@ import {
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 export default function TableOrdersHead() {
-  const {clothingIcons, screenshotMode, Translator} = useContext(
+  const {clothingIcons, screenshotMode, Translator, isCycling} = useContext(
     OrderListContext,
   );
 
@@ -32,14 +32,23 @@ export default function TableOrdersHead() {
         <th className="text-left">{Translator('NAME')}</th>
         <th>{Translator('NUMBER')}</th>
 
-        {/* GENERATE ALL CLOTHING COLUMNS */}
-        {clothingIcons.map((clothingIcon) => (
-          <th
-            key={clothingIcon.id}
-            className={`${!screenshotMode ? 'd-none d-md-table-cell' : ''}`}>
-            <img src={clothingIcon.icon} alt="icon" height={25} />
-          </th>
-        ))}
+        {Object.keys(clothingIcons)
+          .filter((key) => {
+            // Always return no variant clothes
+            if (clothingIcons[key].isCycling === undefined) return true;
+
+            // Only return bike or normal clothes, never both;
+            if (clothingIcons[key].isCycling !== isCycling) return false;
+
+            return true;
+          })
+          .map((key) => (
+            <th
+              key={key}
+              className={`${!screenshotMode ? 'd-none d-md-table-cell' : ''}`}>
+              <img src={clothingIcons[key].icon} alt="icon" height={25} />
+            </th>
+          ))}
 
         <th>
           {screenshotMode ? (

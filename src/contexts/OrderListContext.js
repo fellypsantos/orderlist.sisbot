@@ -9,10 +9,7 @@ import Utils from '../Utils';
 
 export const OrderListContext = createContext();
 
-const translationPath =
-  !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
-    ? ''
-    : '/melista';
+const translationPath = Utils.GetBaseName('', '/melista');
 
 i18n
   .use(initReactI18next)
@@ -40,22 +37,17 @@ const initialTempOrderItem = {
   },
   clothingSettings: [
     {id: 1, name: 'tshirt', size: '', quantity: 0},
+    {id: 1, name: 'tshirtCycling', size: '', quantity: 0},
     {id: 2, name: 'tshirtLong', size: '', quantity: 0},
+    {id: 2, name: 'tshirtLongCycling', size: '', quantity: 0},
     {id: 3, name: 'shorts', size: '', quantity: 0},
+    {id: 3, name: 'shortsCycling', size: '', quantity: 0},
     {id: 4, name: 'pants', size: '', quantity: 0},
+    {id: 4, name: 'pantsCycling', size: '', quantity: 0},
     {id: 5, name: 'tanktop', size: '', quantity: 0},
     {id: 6, name: 'vest', size: '', quantity: 0},
   ],
 };
-
-const initialClothingPrices = [
-  {id: 1, icon: ClothingIconsList.tshirt, price: ''},
-  {id: 2, icon: ClothingIconsList.tshirtLong, price: ''},
-  {id: 3, icon: ClothingIconsList.shorts, price: ''},
-  {id: 4, icon: ClothingIconsList.pants, price: ''},
-  {id: 5, icon: ClothingIconsList.tanktop, price: ''},
-  {id: 6, icon: ClothingIconsList.vest, price: ''},
-];
 
 const OrderListProvider = ({children}) => {
   const {t: Translator} = useTranslation();
@@ -64,14 +56,45 @@ const OrderListProvider = ({children}) => {
     i18n.changeLanguage(countryCode);
   };
 
-  const [clothingIcons] = useState([
-    {id: 1, icon: ClothingIconsList.tshirt, name: 'tshirt'},
-    {id: 2, icon: ClothingIconsList.tshirtLong, name: 'tshirtLong'},
-    {id: 3, icon: ClothingIconsList.shorts, name: 'shorts'},
-    {id: 4, icon: ClothingIconsList.pants, name: 'pants'},
-    {id: 5, icon: ClothingIconsList.tanktop, name: 'tanktop'},
-    {id: 6, icon: ClothingIconsList.vest, name: 'vest'},
-  ]);
+  const [isCycling, setIsCycling] = useState(false);
+
+  const [clothingIcons] = useState({
+    tshirt: {id: 1, icon: ClothingIconsList.tshirt, isCycling: false},
+
+    tshirtCycling: {
+      id: 1,
+      icon: ClothingIconsList.tshirtCycling,
+      isCycling: true,
+    },
+
+    tshirtLong: {id: 2, icon: ClothingIconsList.tshirtLong, isCycling: false},
+
+    tshirtLongCycling: {
+      id: 2,
+      icon: ClothingIconsList.tshirtLongCycling,
+      isCycling: true,
+    },
+
+    shorts: {id: 3, icon: ClothingIconsList.shorts, isCycling: false},
+
+    shortsCycling: {
+      id: 3,
+      icon: ClothingIconsList.shortsCycling,
+      isCycling: true,
+    },
+
+    pants: {id: 4, icon: ClothingIconsList.pants, isCycling: false},
+
+    pantsCycling: {
+      id: 4,
+      icon: ClothingIconsList.pantsCycling,
+      isCycling: true,
+    },
+
+    tanktop: {id: 5, icon: ClothingIconsList.tanktop},
+
+    vest: {id: 6, icon: ClothingIconsList.vest},
+  });
 
   const [clothingSizes] = useState([
     {id: 1, code: 'T-PP', target: 'ADULT'},
@@ -100,11 +123,8 @@ const OrderListProvider = ({children}) => {
   ]);
 
   const [initialStateTempOrderItem] = useState(initialTempOrderItem);
-  const [initialStateClothingPrices] = useState(initialClothingPrices);
 
-  const [currentClothingPrices, setCurrentClothingPrices] = useState(
-    initialClothingPrices,
-  );
+  const [currentClothingPrices, setCurrentClothingPrices] = useState(null);
 
   const [screenshotMode, setScreenshotMode] = useState(false);
 
@@ -136,7 +156,9 @@ const OrderListProvider = ({children}) => {
       // CALCULATE
       totalPaymentValue += Utils.CalculatePaymentValueToOrderItem(
         currentClothingPrices,
+        clothingSizes,
         orderItem.clothingSettings,
+        orderItem.gender,
       );
       return orderItem;
     });
@@ -155,7 +177,9 @@ const OrderListProvider = ({children}) => {
     paidOrderItem.map((orderItem) => {
       totalToReceive += Utils.CalculatePaymentValueToOrderItem(
         currentClothingPrices,
+        clothingSizes,
         orderItem.clothingSettings,
+        orderItem.gender,
       );
       return orderItem;
     });
@@ -166,13 +190,18 @@ const OrderListProvider = ({children}) => {
   // Control modal with list of clothes
   const [modalClothesOpened, setModalClothesOpened] = useState(false);
 
-  // Control modal with prices
-  const [modalPricesOpened, setModalPricesOpened] = useState(false);
-
   // LOAD SETTINGS
   useEffect(() => {
     // console.log('LOAD SETTINGS');
     const currentLocalStorageData = localStorage.getItem('sisbot');
+    const currentLocalStorageBussinessPrices = localStorage.getItem(
+      'sisbot.bussiness.prices',
+    );
+
+    if (currentLocalStorageBussinessPrices !== null) {
+      const data = JSON.parse(currentLocalStorageBussinessPrices);
+      setCurrentClothingPrices(data);
+    }
 
     // FIRST RUN, NO LOCALSTORAGE DATA
     if (currentLocalStorageData !== null) {
@@ -183,10 +212,13 @@ const OrderListProvider = ({children}) => {
       setOrderListItems(data.orderListItems);
 
       // RESTORE PRICES LIST
-      setCurrentClothingPrices(data.pricesList);
+      // setCurrentClothingPrices(data.pricesList);
 
       // RESTORE NOTES
       setOrderListItemsNotes(data.orderListItemsNotes);
+
+      // RESTORE CYCLING FLAG
+      setIsCycling(data.isCycling);
     } else {
       // console.log('INITIALIZE WITH DEFAULT EMPTY DATA.');
       localStorage.setItem(
@@ -230,7 +262,7 @@ const OrderListProvider = ({children}) => {
     // console.log('[UPDATED] LocalStorage: orderListItemsNotes.');
   }, [orderListItemsNotes]);
 
-  // SAVE PRICES
+  // SAVE CYCLING FLAG
   useEffect(() => {
     const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
 
@@ -238,12 +270,12 @@ const OrderListProvider = ({children}) => {
       'sisbot',
       JSON.stringify({
         ...currentLocalStorage,
-        pricesList: currentClothingPrices,
+        isCycling,
       }),
     );
 
-    // console.log('[UPDATED] LocalStorage: pricesList.');
-  }, [currentClothingPrices]);
+    console.log('Cycling flag updated on localstorage');
+  }, [isCycling]);
 
   // KEEP DASHBOARD UPDATED
   useEffect(() => {
@@ -289,11 +321,8 @@ const OrderListProvider = ({children}) => {
     setTempOrderItem,
     orderListItems,
     setOrderListItems,
-    initialStateClothingPrices,
     currentClothingPrices,
     setCurrentClothingPrices,
-    modalPricesOpened,
-    setModalPricesOpened,
     dashboardData,
     setDashboardData,
     screenshotMode,
@@ -304,6 +333,8 @@ const OrderListProvider = ({children}) => {
     setOrderListItemsNotes,
     showDashboard,
     setShowDashboard,
+    isCycling,
+    setIsCycling,
   };
 
   return (

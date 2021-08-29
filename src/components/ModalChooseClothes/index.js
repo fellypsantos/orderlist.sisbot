@@ -15,7 +15,7 @@ import FormInputSelect from '../FormInputSelect';
 
 const maxQuantityPerPiece = [...Array(50).keys()];
 
-export default function ModalChooseClothes() {
+const ModalChooseClothes = () => {
   const {
     clothingIcons,
     clothingSizes,
@@ -31,6 +31,7 @@ export default function ModalChooseClothes() {
     editMode,
     setEditMode,
     genderOptions,
+    isCycling,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -45,21 +46,32 @@ export default function ModalChooseClothes() {
       : tempOrderItem.clothingSettings;
 
     // update clothing settins
-    const updatedClothingSettings = targetClothingSettings.map((item) => {
-      if (item.id === clotheIndex) {
-        // found the clothe to update
-        return {
-          ...item,
-          size: propertyToChange === 'size' ? newValue : item.size,
-          quantity: propertyToChange === 'quantity' ? newValue : item.quantity,
-        };
-      }
+    const updatedClothingSettings = targetClothingSettings
+      .filter((item) => {
+        // console.log('targetClothingSettings filter', item);
+        // Always return no variant clothes, index 4 = Tanktop | index 5 = vest
+        if (item.id > 4) return true;
 
-      return item;
-    });
+        // Only return bike or normal clothes, never both;
+        if (item.name.includes('Cycling') !== isCycling) return false;
+
+        return true;
+      })
+      .map((item) => {
+        if (item.id === clotheIndex) {
+          // found the clothe to update
+          return {
+            ...item,
+            size: propertyToChange === 'size' ? newValue : item.size,
+            quantity:
+              propertyToChange === 'quantity' ? newValue : item.quantity,
+          };
+        }
+
+        return item;
+      });
 
     // update global state
-
     // NEW ORDER ITEM
     if (!editMode.enabled) {
       setTempOrderItem({
@@ -78,6 +90,7 @@ export default function ModalChooseClothes() {
   };
 
   const handleAddNewOrderItem = () => {
+    console.log('handleAddNewOrderItem');
     const emptyItems = tempOrderItem.clothingSettings.filter(
       (item) => item.size === '' || item.quantity === 0,
     );
@@ -95,8 +108,12 @@ export default function ModalChooseClothes() {
     // CALCULATE PAYMENT VALUE BASED IN PRICES DATA
     const paymentPriceForNewOrderItem = Utils.CalculatePaymentValueToOrderItem(
       currentClothingPrices,
+      clothingSizes,
       tempOrderItem.clothingSettings,
+      tempOrderItem.gender,
     );
+
+    console.log('paymentPriceForNewOrderItem', paymentPriceForNewOrderItem);
 
     // UPDATE MAIN LIST
     setOrderListItems([
@@ -149,7 +166,9 @@ export default function ModalChooseClothes() {
 
     const currentValue = Utils.CalculatePaymentValueToOrderItem(
       currentClothingPrices,
+      clothingSizes,
       noEmptyClothes,
+      tempOrderItem.gender,
     );
 
     return currentValue;
@@ -221,7 +240,9 @@ export default function ModalChooseClothes() {
         // ITEM FOUND, RECALCULATE PAYMENT VALUE
         const paymentValue = Utils.CalculatePaymentValueToOrderItem(
           currentClothingPrices,
+          clothingSizes,
           updatedOrderItem.clothingSettings,
+          updatedOrderItem.gender,
         );
 
         // RETURN UPDATED DATA
@@ -265,8 +286,12 @@ export default function ModalChooseClothes() {
     }
   };
 
-  const csGetSizeByID = (theID, orderItem) =>
-    orderItem.clothingSettings[theID - 1].size;
+  const csGetSizeByID = (theID, orderItem) => {
+    // console.log('theID', theID);
+    // console.log('orderItem', orderItem);
+    console.log('csGetSizeByID');
+    return orderItem.clothingSettings[theID - 1].size;
+  };
 
   const csGetQuantityByID = (theID, orderItem) =>
     orderItem.clothingSettings[theID - 1].quantity;
@@ -339,92 +364,104 @@ export default function ModalChooseClothes() {
             <Col xs={5}>{Translator('QUANTITY')}</Col>
           </Row>
 
-          {/* Clothing Row */}
-          {clothingIcons.map((iconItem) => (
-            <Row key={iconItem.id} className="align-items-center">
-              {/* ICON */}
-              <Col xs={2}>
-                <img src={iconItem.icon} alt="clothe icon" />
-              </Col>
+          {Object.keys(clothingIcons)
+            .filter((key) => {
+              // Always return no variant clothes
+              if (clothingIcons[key].isCycling === undefined) return true;
 
-              {/* SIZE */}
-              <Col xs={5}>
-                <Form.Control
-                  as="select"
-                  className="my-1 mr-sm-2"
-                  custom
-                  value={csGetSizeByID(
-                    iconItem.id,
-                    getTargetOrderItemToManipulate(),
-                  )}
-                  onChange={(e) => {
-                    handleChangeClotingSettings(
-                      e.target.value,
-                      iconItem.id,
-                      'size',
-                    );
-                  }}>
-                  <option value="">{Translator('NONE')}</option>
+              // Only return bike or normal clothes, never both;
+              if (clothingIcons[key].isCycling !== isCycling) return false;
 
-                  {clothingSizes.map((size) => {
-                    if (
-                      getTargetOrderItemToManipulate().gender === 'CHILDISH'
-                    ) {
-                      // RENDER ONLY CHILDISH SIZES
-                      // if (size.id < 10) return false;
-                      if (size.target === 'ADULT') return false;
-                    }
+              return true;
+            })
+            .map((key) => (
+              <Row className="align-items-center" key={key}>
+                {/* ICON */}
+                <Col xs={2}>
+                  <img src={clothingIcons[key].icon} alt="clothe icon" />
+                </Col>
 
-                    if (
-                      getTargetOrderItemToManipulate().gender === 'MALE' ||
-                      getTargetOrderItemToManipulate().gender === 'FEMALE'
-                    ) {
-                      // RENDER ONLY ADULT SIZES
-                      if (size.target === 'TEEN') return false;
-                    }
+                {/* SIZE */}
+                <Col xs={5}>
+                  <Form.Control
+                    as="select"
+                    className="my-1 mr-sm-2"
+                    custom
+                    value={csGetSizeByID(
+                      clothingIcons[key].id,
+                      getTargetOrderItemToManipulate(),
+                    )}
+                    onChange={(e) => {
+                      handleChangeClotingSettings(
+                        e.target.value,
+                        clothingIcons[key].id,
+                        'size',
+                      );
+                    }}>
+                    <option value="">{Translator('NONE')}</option>
 
-                    return (
-                      <option key={size.id} value={size.code} data-id={size.id}>
-                        {Translator(size.code)}
-                      </option>
-                    );
-                  })}
-                </Form.Control>
-              </Col>
+                    {clothingSizes.map((size) => {
+                      if (
+                        getTargetOrderItemToManipulate().gender === 'CHILDISH'
+                      ) {
+                        // RENDER ONLY CHILDISH SIZES
+                        // if (size.id < 10) return false;
+                        if (size.target === 'ADULT') return false;
+                      }
 
-              {/* QUANTITY */}
-              <Col xs={5}>
-                <Form.Control
-                  as="select"
-                  className="my-1 mr-sm-2"
-                  custom
-                  value={csGetQuantityByID(
-                    iconItem.id,
-                    getTargetOrderItemToManipulate(),
-                  )}
-                  onChange={(e) => {
-                    handleChangeClotingSettings(
-                      parseInt(e.target.value),
-                      iconItem.id,
-                      'quantity',
-                    );
-                  }}>
-                  <option value={0}>0 {Translator('PIECES')}</option>
-                  {maxQuantityPerPiece.map((quantity) => {
-                    const trueQuantity = quantity + 1;
-                    return (
-                      <option key={trueQuantity} value={trueQuantity}>
-                        {trueQuantity}{' '}
-                        {trueQuantity === 1
-                          ? Translator('PIECE')
-                          : Translator('PIECES')}
-                      </option>
-                    );
-                  })}
-                </Form.Control>
-              </Col>
-            </Row>
-          ))}
+                      if (
+                        getTargetOrderItemToManipulate().gender === 'MALE' ||
+                        getTargetOrderItemToManipulate().gender === 'FEMALE'
+                      ) {
+                        // RENDER ONLY ADULT SIZES
+                        if (size.target === 'TEEN') return false;
+                      }
+
+                      return (
+                        <option
+                          key={size.id}
+                          value={size.code}
+                          data-id={size.id}>
+                          {Translator(size.code)}
+                        </option>
+                      );
+                    })}
+                  </Form.Control>
+                </Col>
+
+                {/* QUANTITY */}
+                <Col xs={5}>
+                  <Form.Control
+                    as="select"
+                    className="my-1 mr-sm-2"
+                    custom
+                    value={csGetQuantityByID(
+                      clothingIcons[key].id,
+                      getTargetOrderItemToManipulate(),
+                    )}
+                    onChange={(e) => {
+                      handleChangeClotingSettings(
+                        parseInt(e.target.value),
+                        clothingIcons[key].id,
+                        'quantity',
+                      );
+                    }}>
+                    <option value={0}>0 {Translator('PIECES')}</option>
+                    {maxQuantityPerPiece.map((quantity) => {
+                      const trueQuantity = quantity + 1;
+                      return (
+                        <option key={trueQuantity} value={trueQuantity}>
+                          {trueQuantity}{' '}
+                          {trueQuantity === 1
+                            ? Translator('PIECE')
+                            : Translator('PIECES')}
+                        </option>
+                      );
+                    })}
+                  </Form.Control>
+                </Col>
+              </Row>
+            ))}
         </div>
       </Modal.Body>
       <Modal.Footer>
@@ -448,4 +485,6 @@ export default function ModalChooseClothes() {
       </Modal.Footer>
     </Modal>
   );
-}
+};
+
+export default ModalChooseClothes;

@@ -29,7 +29,6 @@ import FontAwesomeIconSpinner from '../FontAwesomeIconSpinner';
 
 const TableOrdersMenu = () => {
   const {
-    setModalPricesOpened,
     screenshotMode,
     setScreenshotMode,
     setOrderListItems,
@@ -334,7 +333,7 @@ const TableOrdersMenu = () => {
             variant="secondary"
             className="mr-2"
             size="sm"
-            onClick={() => setModalPricesOpened(true)}>
+            onClick={() => history.push('bussiness/pricing')}>
             <FontAwesomeIcon icon={faDollarSign} />
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('PRICES')}

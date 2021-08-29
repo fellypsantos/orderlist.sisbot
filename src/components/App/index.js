@@ -12,31 +12,28 @@ import LanguageChanger from '../LanguageChanger';
 import ModalChooseClothes from '../ModalChooseClothes';
 import OrderListProvider from '../../contexts/OrderListContext';
 import GlobalStyle from '../../globalStyle';
-import ModalChoosePrices from '../ModalChoosePrices';
 
 import Main from '../../Pages/Main';
 import Report from '../../Pages/Report';
 import BussinessPricing from '../../Pages/BussinessPricing';
 
 import RedEyeOneFormes from '../RedEyeOneFormes';
+import Utils from '../../Utils';
 
 const App = () => (
   <OrderListProvider>
     <GlobalStyle />
     <ToastProvider>
       <ModalChooseClothes />
-      <ModalChoosePrices />
-
       <NavbarContainer className="bg-primary">
         <NavbarLeftContent>
           <RedEyeOneFormes />
           <LanguageChanger />
         </NavbarLeftContent>
       </NavbarContainer>
-
       <MainContentContainer>
         <Container>
-          <BrowserRouter basename="/melista">
+          <BrowserRouter basename={Utils.GetBaseName('', '/melista')}>
             <Switch>
               <Route exact path="/" component={Main} />
               <Route path="/report" component={Report} />

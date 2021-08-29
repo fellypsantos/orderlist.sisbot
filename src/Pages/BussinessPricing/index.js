@@ -1,26 +1,37 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {useHistory} from 'react-router-dom';
 import hash from 'object-hash';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
-import {faDownload, faUpload} from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowLeft,
+  faDownload,
+  faUpload,
+} from '@fortawesome/free-solid-svg-icons';
 import {useToasts} from 'react-toast-notifications';
 
 import TableCellAsInput from '../../components/TableCellAsInput';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import {CustomInputAsHeaderText} from './styles';
 import Utils from '../../Utils';
+import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcons';
 
 const LS_PRICES_ID = 'sisbot.bussiness.prices';
 
 const BussinessPricing = () => {
-  const {clothingIcons, clothingSizes, Translator} = useContext(
-    OrderListContext,
-  );
+  const {
+    clothingIcons,
+    clothingSizes,
+    Translator,
+    isCycling,
+    setCurrentClothingPrices,
+  } = useContext(OrderListContext);
 
   const [projectName, setProjectName] = useState('');
+  const history = useHistory();
 
   const [priceTableMale, setPriceTableMale] = useState({
     tshirt: [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -108,8 +119,6 @@ const BussinessPricing = () => {
     newPrice,
     indexPrice,
   ) => {
-    console.log(thePriceTableID, theClotheName, newPrice, indexPrice);
-
     let selectedPriceTable = null;
 
     switch (thePriceTableID) {
@@ -154,6 +163,13 @@ const BussinessPricing = () => {
         break;
       default:
     }
+
+    setCurrentClothingPrices({
+      projectName,
+      priceTableMale,
+      priceTableFemale,
+      priceTableChildish,
+    });
   };
 
   const isValidJsonFileForPrices = (object) => {
@@ -225,6 +241,18 @@ const BussinessPricing = () => {
         />
 
         <div>
+          {/* BACK */}
+          <Button
+            className="mr-2"
+            variant="secondary"
+            size="sm"
+            onClick={() => history.goBack()}>
+            <FontAwesomeIcon icon={faArrowLeft} />
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('GOBACK')}
+            </span>
+          </Button>
+
           {/* DOWNLOAD */}
           <Button
             className="mr-2"
@@ -239,6 +267,7 @@ const BussinessPricing = () => {
 
           {/* UPLOAD */}
           <Button
+            className="mr-2"
             variant="secondary"
             size="sm"
             onClick={handleUploadPricesTables}>
@@ -247,6 +276,8 @@ const BussinessPricing = () => {
               {Translator('UPLOAD')}
             </span>
           </Button>
+
+          <ButtonToggleClothignIcons />
         </div>
       </div>
 
@@ -265,33 +296,48 @@ const BussinessPricing = () => {
             </thead>
             <tbody>
               {/* DRAW ROWS */}
-              {clothingIcons.map((theIcon) => (
-                <tr className="text-center" key={theIcon.id}>
-                  <td>
-                    <img src={theIcon.icon} alt="icon" height={25} />
-                  </td>
-                  {clothingSizes.map((theSize, index) => {
-                    if (theSize.target === 'TEEN') return false;
-                    const itemPrice = priceTableMale[theIcon.name][index];
+              {Object.keys(clothingIcons)
+                .filter((key) => {
+                  // Always return no variant clothes
+                  if (clothingIcons[key].isCycling === undefined) return true;
 
-                    return (
-                      <td key={theSize.id}>
-                        <TableCellAsInput
-                          value={itemPrice > 0 ? itemPrice : ''}
-                          handleBlur={({target}) => {
-                            handleUpdatePriceTable(
-                              'MALE',
-                              theIcon.name,
-                              target.value,
-                              index,
-                            );
-                          }}
-                        />
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                  // Only return bike or normal clothes, never both;
+                  if (clothingIcons[key].isCycling !== isCycling) return false;
+
+                  return true;
+                })
+                .map((key) => (
+                  <tr className="text-center" key={key}>
+                    <td>
+                      <img
+                        src={clothingIcons[key].icon}
+                        alt="icon"
+                        height={25}
+                      />
+                    </td>
+                    {clothingSizes.map((theSize, index) => {
+                      if (theSize.target === 'TEEN') return false;
+                      const genericKey = key.replace('Cycling', '');
+                      const itemPrice = priceTableMale[genericKey][index];
+
+                      return (
+                        <td key={theSize.id}>
+                          <TableCellAsInput
+                            value={itemPrice > 0 ? itemPrice : ''}
+                            handleBlur={({target}) => {
+                              handleUpdatePriceTable(
+                                'MALE',
+                                genericKey,
+                                target.value,
+                                index,
+                              );
+                            }}
+                          />
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </Tab>
@@ -310,33 +356,48 @@ const BussinessPricing = () => {
             </thead>
             <tbody>
               {/* DRAW ROWS */}
-              {clothingIcons.map((theIcon) => (
-                <tr className="text-center" key={theIcon.id}>
-                  <td>
-                    <img src={theIcon.icon} alt="icon" height={25} />
-                  </td>
-                  {clothingSizes.map((theSize, index) => {
-                    if (theSize.target === 'TEEN') return false;
-                    const itemPrice = priceTableFemale[theIcon.name][index];
+              {Object.keys(clothingIcons)
+                .filter((key) => {
+                  // Always return no variant clothes
+                  if (clothingIcons[key].isCycling === undefined) return true;
 
-                    return (
-                      <td key={theSize.id}>
-                        <TableCellAsInput
-                          value={itemPrice > 0 ? itemPrice : ''}
-                          handleBlur={({target}) => {
-                            handleUpdatePriceTable(
-                              'FEMALE',
-                              theIcon.name,
-                              target.value,
-                              index,
-                            );
-                          }}
-                        />
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                  // Only return bike or normal clothes, never both;
+                  if (clothingIcons[key].isCycling !== isCycling) return false;
+
+                  return true;
+                })
+                .map((key) => (
+                  <tr className="text-center" key={key}>
+                    <td>
+                      <img
+                        src={clothingIcons[key].icon}
+                        alt="icon"
+                        height={25}
+                      />
+                    </td>
+                    {clothingSizes.map((theSize, index) => {
+                      if (theSize.target === 'TEEN') return false;
+                      const genericKey = key.replace('Cycling', '');
+                      const itemPrice = priceTableFemale[genericKey][index];
+
+                      return (
+                        <td key={theSize.id}>
+                          <TableCellAsInput
+                            value={itemPrice > 0 ? itemPrice : ''}
+                            handleBlur={({target}) => {
+                              handleUpdatePriceTable(
+                                'FEMALE',
+                                genericKey,
+                                target.value,
+                                index,
+                              );
+                            }}
+                          />
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </Tab>
@@ -356,36 +417,51 @@ const BussinessPricing = () => {
             </thead>
             <tbody>
               {/* DRAW ROWS */}
-              {clothingIcons.map((theIcon) => (
-                <tr className="text-center" key={theIcon.id}>
-                  <td>
-                    <img src={theIcon.icon} alt="icon" height={25} />
-                  </td>
-                  {clothingSizes.map((theSize, index) => {
-                    if (theSize.target === 'ADULT') return false;
-                    // TEENS START IN HIGHER INDEX ON LIST, SUBTRACT TO CONSIDER ZERO
-                    const customIndex = index - 9;
-                    const itemPrice =
-                      priceTableChildish[theIcon.name][customIndex];
+              {Object.keys(clothingIcons)
+                .filter((key) => {
+                  // Always return no variant clothes
+                  if (clothingIcons[key].isCycling === undefined) return true;
 
-                    return (
-                      <td key={theSize.id}>
-                        <TableCellAsInput
-                          value={itemPrice > 0 ? itemPrice : ''}
-                          handleBlur={({target}) => {
-                            handleUpdatePriceTable(
-                              'CHILDISH',
-                              theIcon.name,
-                              target.value,
-                              customIndex,
-                            );
-                          }}
-                        />
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                  // Only return bike or normal clothes, never both;
+                  if (clothingIcons[key].isCycling !== isCycling) return false;
+
+                  return true;
+                })
+                .map((key) => (
+                  <tr className="text-center" key={key}>
+                    <td>
+                      <img
+                        src={clothingIcons[key].icon}
+                        alt="icon"
+                        height={25}
+                      />
+                    </td>
+                    {clothingSizes.map((theSize, index) => {
+                      if (theSize.target === 'ADULT') return false;
+                      // TEENS START IN HIGHER INDEX ON LIST, SUBTRACT TO CONSIDER ZERO
+                      const genericKey = key.replace('Cycling', '');
+                      const customIndex = index - 9;
+                      const itemPrice =
+                        priceTableChildish[genericKey][customIndex];
+
+                      return (
+                        <td key={theSize.id}>
+                          <TableCellAsInput
+                            value={itemPrice > 0 ? itemPrice : ''}
+                            handleBlur={({target}) => {
+                              handleUpdatePriceTable(
+                                'CHILDISH',
+                                genericKey,
+                                target.value,
+                                customIndex,
+                              );
+                            }}
+                          />
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </Tab>

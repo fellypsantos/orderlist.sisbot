@@ -14,21 +14,61 @@ export default {
 
   CalculatePaymentValueToOrderItem: (
     currentPrices,
+    clothingSizes,
     orderItemClothingSettings,
+    genderPriceTable,
   ) => {
-    // CONTERT PRICES TO ARRAY
-    const pricesList = [
-      ...currentPrices.map((priceItem) => {
-        const thePrice = priceItem.price === '' ? 0 : parseInt(priceItem.price);
-        return thePrice;
-      }),
-    ];
+    if (currentPrices === null) return false;
+
+    let targetPriceTable;
+
+    console.warn('* * * CONFERÊNCIA * * *');
+    console.log('currentPrices', currentPrices);
+    console.log('clothingSizes', clothingSizes);
+    console.log('orderItemClothingSettings', orderItemClothingSettings);
+    console.log('genderPriceTable', genderPriceTable);
+    console.warn('* * * CONFERÊNCIA FINALIZADA * * *');
+
+    switch (genderPriceTable) {
+      case 'MALE':
+        console.log('selected: priceTableMale');
+        targetPriceTable = currentPrices.priceTableMale;
+        break;
+      case 'FEMALE':
+        console.log('selected: priceTableFemale');
+        targetPriceTable = currentPrices.priceTableFemale;
+        break;
+      case 'CHILDISH':
+        console.log('selected: priceTableChildish');
+        targetPriceTable = currentPrices.priceTableChildish;
+        break;
+      default:
+    }
+
+    // CONVERT PRICES TO ARRAY
+    const pricesList = Object.keys(targetPriceTable).map(
+      (clothePriceListItem) => targetPriceTable[clothePriceListItem],
+    );
 
     let totalPrice = 0;
 
+    console.log('orderItemClothingSettings', orderItemClothingSettings);
+    console.log('clothingSizes', clothingSizes);
+
     // SUM THE PRICES
     orderItemClothingSettings.map((item) => {
-      totalPrice += item.quantity * pricesList[item.id - 1];
+      const result =
+        clothingSizes.find((theSize) => theSize.code === item.size) || null;
+
+      if (result === null) return false;
+      console.log('result of find -> ', result);
+
+      const clotheID = item.id - 1;
+      const selectedPriceList = pricesList[clotheID];
+      const pricePerSize = selectedPriceList[result.id - 1];
+
+      console.log('pricePerSize', pricePerSize);
+      totalPrice += pricePerSize * item.quantity;
       return item;
     });
 
@@ -41,10 +81,15 @@ export default {
       return columnCount;
     }
 
-    return 0;
+    return 13; // default
   },
 
   Sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+
+  GetBaseName: (whileInDev, whileInProd) =>
+    !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+      ? whileInDev
+      : whileInProd,
 
   HandleUploadFile: (fileExtension, callback) => {
     const inputFileChooser = document.createElement('input');
