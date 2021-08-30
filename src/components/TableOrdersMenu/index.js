@@ -36,7 +36,6 @@ const TableOrdersMenu = () => {
     Translator,
     orderListItemsNotes,
     setOrderListItemsNotes,
-    setCurrentClothingPrices,
   } = useContext(OrderListContext);
 
   const [confirmClearOrderItems, setConfirmClearOrderItems] = useState(false);
@@ -227,7 +226,6 @@ const TableOrdersMenu = () => {
     const backupData = JSON.parse(atob(data));
     setOrderListItems(backupData.orderListItems);
     setOrderListItemsNotes(backupData.orderListItemsNotes);
-    setCurrentClothingPrices(backupData.pricesList);
     addToast(Translator('TOAST_UPLOAD_COMPLETE'), {
       appearance: 'success',
       autoDismiss: true,

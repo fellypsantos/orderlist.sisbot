@@ -211,9 +211,6 @@ const OrderListProvider = ({children}) => {
       // RESTORE ORDER ITEMS LIST
       setOrderListItems(data.orderListItems);
 
-      // RESTORE PRICES LIST
-      // setCurrentClothingPrices(data.pricesList);
-
       // RESTORE NOTES
       setOrderListItemsNotes(data.orderListItemsNotes);
 
@@ -226,26 +223,34 @@ const OrderListProvider = ({children}) => {
         JSON.stringify({
           orderListItemsNotes,
           orderListItems: [],
-          pricesList: {},
         }),
       );
     }
   }, []);
 
-  // SAVE ORDER LIST
+  // UPDATE TABLE ROWS WHEN PRICE CHANGES
   useEffect(() => {
-    const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
+    // RECALCULATE EACH LINE
+    const updatedTableRows = orderListItems.map((orderItem) => {
+      // CALCULATE PAYMENT VALUE BASED IN BUSSINESS PRICES DATA
+      const updatedPaymentValue = Utils.CalculatePaymentValueToOrderItem(
+        currentClothingPrices,
+        clothingSizes,
+        orderItem.clothingSettings,
+        orderItem.gender,
+      );
 
-    localStorage.setItem(
-      'sisbot',
-      JSON.stringify({
-        ...currentLocalStorage,
-        orderListItems,
-      }),
-    );
+      return {
+        ...orderItem,
+        payment: {
+          ...orderItem.payment,
+          value: updatedPaymentValue,
+        },
+      };
+    });
 
-    // console.log('[UPDATED] LocalStorage: orderListitems.');
-  }, [orderListItems]);
+    setOrderListItems(updatedTableRows);
+  }, [currentClothingPrices]);
 
   // SAVE ORDER LIST NOTES
   useEffect(() => {
@@ -273,14 +278,21 @@ const OrderListProvider = ({children}) => {
         isCycling,
       }),
     );
-
-    console.log('Cycling flag updated on localstorage');
   }, [isCycling]);
 
-  // KEEP DASHBOARD UPDATED
   useEffect(() => {
-    // console.log('UPDATE DASHBOARD');
+    // KEEP LOCALSTORAGE UPDATED
+    const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
 
+    localStorage.setItem(
+      'sisbot',
+      JSON.stringify({
+        ...currentLocalStorage,
+        orderListItems,
+      }),
+    );
+
+    // KEEP DASHBOARD UPDATED
     const totalToReceive = calculateTotalToReceive();
     const totalReceived = calculateTotalReceived();
     const needReceive = totalToReceive - totalReceived;

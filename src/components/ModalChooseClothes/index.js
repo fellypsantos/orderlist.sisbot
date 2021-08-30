@@ -48,7 +48,6 @@ const ModalChooseClothes = () => {
     // update clothing settins
     const updatedClothingSettings = targetClothingSettings
       .filter((item) => {
-        // console.log('targetClothingSettings filter', item);
         // Always return no variant clothes, index 4 = Tanktop | index 5 = vest
         if (item.id > 4) return true;
 
@@ -90,7 +89,6 @@ const ModalChooseClothes = () => {
   };
 
   const handleAddNewOrderItem = () => {
-    console.log('handleAddNewOrderItem');
     const emptyItems = tempOrderItem.clothingSettings.filter(
       (item) => item.size === '' || item.quantity === 0,
     );
@@ -286,12 +284,8 @@ const ModalChooseClothes = () => {
     }
   };
 
-  const csGetSizeByID = (theID, orderItem) => {
-    // console.log('theID', theID);
-    // console.log('orderItem', orderItem);
-    console.log('csGetSizeByID');
-    return orderItem.clothingSettings[theID - 1].size;
-  };
+  const csGetSizeByID = (theID, orderItem) =>
+    orderItem.clothingSettings[theID - 1].size;
 
   const csGetQuantityByID = (theID, orderItem) =>
     orderItem.clothingSettings[theID - 1].quantity;

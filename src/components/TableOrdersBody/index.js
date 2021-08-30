@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faEye, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {TableCell, TableRow} from './styles';
@@ -97,6 +97,7 @@ const TableOrdersBody = () => {
 
       <tbody id="tableOrderListItems">
         {orderListItems.length > 0 ? (
+          // RENDER ALL ITES
           orderListItems.map((item) => (
             <TableRow key={item.id} className={item.payment.paid && 'paid'}>
               {/* PAID */}
@@ -165,6 +166,7 @@ const TableOrdersBody = () => {
             </TableRow>
           ))
         ) : (
+          // EMPTY LIST
           <TableRow>
             <TableCell
               colSpan={Utils.GetTotalColumnsTableOrderListItems(

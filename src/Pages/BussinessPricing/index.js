@@ -28,6 +28,8 @@ const BussinessPricing = () => {
     Translator,
     isCycling,
     setCurrentClothingPrices,
+    orderListItems,
+    setOrderListItems,
   } = useContext(OrderListContext);
 
   const [projectName, setProjectName] = useState('');
@@ -111,6 +113,21 @@ const BussinessPricing = () => {
   // SAVE CHANGES TO LOCALSTORAGE
   useEffect(() => {
     saveToLocalStorage(projectName);
+
+    // UPDATE CONTEXT TO REFLECT CHANGES IN MAIN PAGE PRICES
+    setCurrentClothingPrices({
+      projectName,
+      priceTableMale,
+      priceTableFemale,
+      priceTableChildish,
+    });
+
+    console.log('setCurrentClothingPrices UPDATED');
+
+    // FORCE RE-RENDER TABLE TO UPDATE TOTAL PRICE OF EACH ROW
+    console.log('orderListItems', orderListItems);
+    setOrderListItems([...orderListItems]);
+    console.log('FORCED RE-RENDER TABLE');
   }, [projectName, priceTableMale, priceTableFemale, priceTableChildish]);
 
   const handleUpdatePriceTable = (

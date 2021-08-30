@@ -22,24 +22,24 @@ export default {
 
     let targetPriceTable;
 
-    console.warn('* * * CONFERÊNCIA * * *');
-    console.log('currentPrices', currentPrices);
-    console.log('clothingSizes', clothingSizes);
-    console.log('orderItemClothingSettings', orderItemClothingSettings);
-    console.log('genderPriceTable', genderPriceTable);
-    console.warn('* * * CONFERÊNCIA FINALIZADA * * *');
+    // console.warn('* * * CONFERÊNCIA * * *');
+    // console.log('currentPrices', currentPrices);
+    // console.log('clothingSizes', clothingSizes);
+    // console.log('orderItemClothingSettings', orderItemClothingSettings);
+    // console.log('genderPriceTable', genderPriceTable);
+    // console.warn('* * * CONFERÊNCIA FINALIZADA * * *');
 
     switch (genderPriceTable) {
       case 'MALE':
-        console.log('selected: priceTableMale');
+        // console.log('selected: priceTableMale');
         targetPriceTable = currentPrices.priceTableMale;
         break;
       case 'FEMALE':
-        console.log('selected: priceTableFemale');
+        // console.log('selected: priceTableFemale');
         targetPriceTable = currentPrices.priceTableFemale;
         break;
       case 'CHILDISH':
-        console.log('selected: priceTableChildish');
+        // console.log('selected: priceTableChildish');
         targetPriceTable = currentPrices.priceTableChildish;
         break;
       default:
@@ -52,22 +52,17 @@ export default {
 
     let totalPrice = 0;
 
-    console.log('orderItemClothingSettings', orderItemClothingSettings);
-    console.log('clothingSizes', clothingSizes);
-
     // SUM THE PRICES
     orderItemClothingSettings.map((item) => {
       const result =
         clothingSizes.find((theSize) => theSize.code === item.size) || null;
 
       if (result === null) return false;
-      console.log('result of find -> ', result);
 
       const clotheID = item.id - 1;
       const selectedPriceList = pricesList[clotheID];
       const pricePerSize = selectedPriceList[result.id - 1];
 
-      console.log('pricePerSize', pricePerSize);
       totalPrice += pricePerSize * item.quantity;
       return item;
     });

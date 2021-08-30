@@ -18,6 +18,7 @@ const Report = () => {
     clothingIcons,
     clothingSizes,
     Translator,
+    isCycling,
   } = useContext(OrderListContext);
 
   const [sortedOrderList, setSortedOrderList] = useState({
@@ -222,6 +223,8 @@ const Report = () => {
   });
 
   const isEmptyClothingSettings = (clothingSettings) => {
+    if (clothingSettings === undefined) return false;
+
     let totalPieces = 0;
     Object.keys(clothingSettings).map((key) => {
       totalPieces += clothingSettings[key];
@@ -257,10 +260,12 @@ const Report = () => {
       orderItem.clothingSettings.map((theClothe) => {
         if (theClothe.quantity > 0 && theClothe.size !== '') {
           const tempSortedOrderList = {...sortedOrderList};
-          tempSortedOrderList[orderItem.gender.toLowerCase()][theClothe.name][
-            theClothe.size
-          ] += theClothe.quantity;
+          const tempGender = orderItem.gender.toLowerCase();
+          const clotheName = theClothe.name.replace('Cycling', '');
+          const clotheSize = theClothe.size;
+          const clotheQty = theClothe.quantity;
 
+          tempSortedOrderList[tempGender][clotheName][clotheSize] += clotheQty;
           setSortedOrderList(tempSortedOrderList);
         }
         return theClothe;
@@ -304,19 +309,46 @@ const Report = () => {
               <thead>
                 <tr>
                   <th>-</th>
-                  {clothingIcons.map((clothingIcon) => (
-                    <th
-                      key={clothingIcon.id}
-                      className={
-                        isEmptyClothingSettings(
-                          sortedOrderList.male[clothingIcon.name],
-                        )
-                          ? 'd-none'
-                          : ''
-                      }>
-                      <img src={clothingIcon.icon} alt="clothing" height={25} />
-                    </th>
-                  ))}
+                  {Object.keys(clothingIcons)
+                    .filter((key) => {
+                      // Always return no variant clothes
+                      if (clothingIcons[key].isCycling === undefined) {
+                        return true;
+                      }
+
+                      // Only return bike or normal clothes, never both;
+                      if (clothingIcons[key].isCycling !== isCycling) {
+                        return false;
+                      }
+
+                      return true;
+                    })
+                    .map((clothingIcon) => {
+                      const genericName = clothingIcon.replace('Cycling', '');
+                      const empty = isEmptyClothingSettings(
+                        sortedOrderList.male[genericName],
+                      );
+
+                      if (empty) return false;
+
+                      return (
+                        <th
+                          key={clothingIcon}
+                          className={
+                            isEmptyClothingSettings(
+                              sortedOrderList.male[clothingIcon],
+                            )
+                              ? 'd-none'
+                              : ''
+                          }>
+                          <img
+                            src={clothingIcons[clothingIcon].icon}
+                            alt="clothing"
+                            height={25}
+                          />
+                        </th>
+                      );
+                    })}
                 </tr>
               </thead>
               <tbody>
@@ -329,20 +361,35 @@ const Report = () => {
                         : ''
                     }>
                     <td>{Translator(size.code)}</td>
-                    {clothingIcons.map((clothingIcon) => {
-                      const settings = sortedOrderList.male[clothingIcon.name];
-                      const quantityForTheSize = settings[size.code];
+                    {Object.keys(clothingIcons)
+                      .filter((key) => {
+                        // Always return no variant clothes
+                        if (clothingIcons[key].isCycling === undefined) {
+                          return true;
+                        }
 
-                      return (
-                        <td
-                          key={clothingIcon.id}
-                          className={
-                            isEmptyClothingSettings(settings) ? 'd-none' : ''
-                          }>
-                          {quantityForTheSize > 0 ? quantityForTheSize : ''}
-                        </td>
-                      );
-                    })}
+                        // Only return bike or normal clothes, never both;
+                        if (clothingIcons[key].isCycling !== isCycling) {
+                          return false;
+                        }
+
+                        return true;
+                      })
+                      .map((clothingIcon) => {
+                        const genericName = clothingIcon.replace('Cycling', '');
+                        const settings = sortedOrderList.male[genericName];
+                        const quantityForTheSize = settings[size.code];
+
+                        return (
+                          <td
+                            key={clothingIcon}
+                            className={
+                              isEmptyClothingSettings(settings) ? 'd-none' : ''
+                            }>
+                            {quantityForTheSize > 0 ? quantityForTheSize : ''}
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
               </tbody>
@@ -355,19 +402,46 @@ const Report = () => {
               <thead>
                 <tr>
                   <th>-</th>
-                  {clothingIcons.map((clothingIcon) => (
-                    <th
-                      key={clothingIcon.id}
-                      className={
-                        isEmptyClothingSettings(
-                          sortedOrderList.female[clothingIcon.name],
-                        )
-                          ? 'd-none'
-                          : ''
-                      }>
-                      <img src={clothingIcon.icon} alt="clothing" height={25} />
-                    </th>
-                  ))}
+                  {Object.keys(clothingIcons)
+                    .filter((key) => {
+                      // Always return no variant clothes
+                      if (clothingIcons[key].isCycling === undefined) {
+                        return true;
+                      }
+
+                      // Only return bike or normal clothes, never both;
+                      if (clothingIcons[key].isCycling !== isCycling) {
+                        return false;
+                      }
+
+                      return true;
+                    })
+                    .map((clothingIcon) => {
+                      const genericName = clothingIcon.replace('Cycling', '');
+                      const empty = isEmptyClothingSettings(
+                        sortedOrderList.female[genericName],
+                      );
+
+                      if (empty) return false;
+
+                      return (
+                        <th
+                          key={clothingIcon}
+                          className={
+                            isEmptyClothingSettings(
+                              sortedOrderList.female[clothingIcon],
+                            )
+                              ? 'd-none'
+                              : ''
+                          }>
+                          <img
+                            src={clothingIcons[clothingIcon].icon}
+                            alt="clothing"
+                            height={25}
+                          />
+                        </th>
+                      );
+                    })}
                 </tr>
               </thead>
               <tbody>
@@ -380,21 +454,35 @@ const Report = () => {
                         : ''
                     }>
                     <td>{Translator(size.code)}</td>
-                    {clothingIcons.map((clothingIcon) => {
-                      const settings =
-                        sortedOrderList.female[clothingIcon.name];
-                      const quantityForTheSize = settings[size.code];
+                    {Object.keys(clothingIcons)
+                      .filter((key) => {
+                        // Always return no variant clothes
+                        if (clothingIcons[key].isCycling === undefined) {
+                          return true;
+                        }
 
-                      return (
-                        <td
-                          key={clothingIcon.id}
-                          className={
-                            isEmptyClothingSettings(settings) ? 'd-none' : ''
-                          }>
-                          {quantityForTheSize > 0 ? quantityForTheSize : ''}
-                        </td>
-                      );
-                    })}
+                        // Only return bike or normal clothes, never both;
+                        if (clothingIcons[key].isCycling !== isCycling) {
+                          return false;
+                        }
+
+                        return true;
+                      })
+                      .map((clothingIcon) => {
+                        const genericName = clothingIcon.replace('Cycling', '');
+                        const settings = sortedOrderList.female[genericName];
+                        const quantityForTheSize = settings[size.code];
+
+                        return (
+                          <td
+                            key={clothingIcon}
+                            className={
+                              isEmptyClothingSettings(settings) ? 'd-none' : ''
+                            }>
+                            {quantityForTheSize > 0 ? quantityForTheSize : ''}
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
               </tbody>
@@ -409,19 +497,46 @@ const Report = () => {
               <thead>
                 <tr>
                   <th>-</th>
-                  {clothingIcons.map((clothingIcon) => (
-                    <th
-                      key={clothingIcon.id}
-                      className={
-                        isEmptyClothingSettings(
-                          sortedOrderList.childish[clothingIcon.name],
-                        )
-                          ? 'd-none'
-                          : ''
-                      }>
-                      <img src={clothingIcon.icon} alt="clothing" height={25} />
-                    </th>
-                  ))}
+                  {Object.keys(clothingIcons)
+                    .filter((key) => {
+                      // Always return no variant clothes
+                      if (clothingIcons[key].isCycling === undefined) {
+                        return true;
+                      }
+
+                      // Only return bike or normal clothes, never both;
+                      if (clothingIcons[key].isCycling !== isCycling) {
+                        return false;
+                      }
+
+                      return true;
+                    })
+                    .map((clothingIcon) => {
+                      const genericName = clothingIcon.replace('Cycling', '');
+                      const empty = isEmptyClothingSettings(
+                        sortedOrderList.childish[genericName],
+                      );
+
+                      if (empty) return false;
+
+                      return (
+                        <th
+                          key={clothingIcon}
+                          className={
+                            isEmptyClothingSettings(
+                              sortedOrderList.childish[clothingIcon],
+                            )
+                              ? 'd-none'
+                              : ''
+                          }>
+                          <img
+                            src={clothingIcons[clothingIcon].icon}
+                            alt="clothing"
+                            height={25}
+                          />
+                        </th>
+                      );
+                    })}
                 </tr>
               </thead>
               <tbody>
@@ -437,21 +552,35 @@ const Report = () => {
                         : ''
                     }>
                     <td>{Translator(size.code)}</td>
-                    {clothingIcons.map((clothingIcon) => {
-                      const settings =
-                        sortedOrderList.childish[clothingIcon.name];
-                      const quantityForTheSize = settings[size.code];
+                    {Object.keys(clothingIcons)
+                      .filter((key) => {
+                        // Always return no variant clothes
+                        if (clothingIcons[key].isCycling === undefined) {
+                          return true;
+                        }
 
-                      return (
-                        <td
-                          key={clothingIcon.id}
-                          className={
-                            isEmptyClothingSettings(settings) ? 'd-none' : ''
-                          }>
-                          {quantityForTheSize > 0 ? quantityForTheSize : ''}
-                        </td>
-                      );
-                    })}
+                        // Only return bike or normal clothes, never both;
+                        if (clothingIcons[key].isCycling !== isCycling) {
+                          return false;
+                        }
+
+                        return true;
+                      })
+                      .map((clothingIcon) => {
+                        const genericName = clothingIcon.replace('Cycling', '');
+                        const settings = sortedOrderList.childish[genericName];
+                        const quantityForTheSize = settings[size.code];
+
+                        return (
+                          <td
+                            key={clothingIcon}
+                            className={
+                              isEmptyClothingSettings(settings) ? 'd-none' : ''
+                            }>
+                            {quantityForTheSize > 0 ? quantityForTheSize : ''}
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
               </tbody>
