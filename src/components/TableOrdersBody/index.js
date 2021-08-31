@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faEye, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {TableCell, TableRow} from './styles';

@@ -3,6 +3,7 @@ import React, {createContext, useEffect, useState} from 'react';
 import i18n from 'i18next';
 import {useTranslation, initReactI18next} from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+
 import HttpApi from 'i18next-http-backend';
 import ClothingIconsList from '../clothinIcons';
 import Utils from '../Utils';
@@ -11,14 +12,16 @@ export const OrderListContext = createContext();
 
 const translationPath = Utils.GetBaseName('', '/melista');
 
+console.log('detectBrowserLanguage');
+
 i18n
-  .use(initReactI18next)
-  .use(LanguageDetector)
   .use(HttpApi)
+  .use(LanguageDetector)
+  .use(initReactI18next)
   .init({
-    fallbackLng: 'pt',
+    fallbackLng: 'en',
     detection: {
-      order: ['cookie', 'localStorage', 'htmlTag', 'path'],
+      order: ['navigator', 'cookie', 'localStorage', 'htmlTag', 'path'],
       caches: ['cookie'],
     },
     backend: {
@@ -26,6 +29,8 @@ i18n
     },
     react: {useSuspense: false},
   });
+
+i18n.changeLanguage();
 
 const initialTempOrderItem = {
   name: '',

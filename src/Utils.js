@@ -108,4 +108,23 @@ export default {
 
     inputFileChooser.click();
   },
+
+  GetPriceTableByGender: (priceTables, gender) => {
+    let targetPriceTable = null;
+
+    switch (gender) {
+      case 'MALE':
+        targetPriceTable = priceTables.priceTableMale;
+        break;
+      case 'FEMALE':
+        targetPriceTable = priceTables.priceTableFemale;
+        break;
+      case 'CHILDISH':
+        targetPriceTable = priceTables.priceTableChildish;
+        break;
+      default:
+    }
+
+    return targetPriceTable;
+  },
 };

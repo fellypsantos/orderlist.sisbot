@@ -359,6 +359,7 @@ const ModalChooseClothes = () => {
           </Row>
 
           {Object.keys(clothingIcons)
+            // FILTER BY ICONS
             .filter((key) => {
               // Always return no variant clothes
               if (clothingIcons[key].isCycling === undefined) return true;
@@ -367,6 +368,24 @@ const ModalChooseClothes = () => {
               if (clothingIcons[key].isCycling !== isCycling) return false;
 
               return true;
+            })
+            // FILTER BY EMPTY PRICES
+            .filter((key) => {
+              if (currentClothingPrices === null) return false;
+
+              const theGender = tempOrderItem.gender;
+              const targetPriceTable = Utils.GetPriceTableByGender(
+                currentClothingPrices,
+                theGender,
+              );
+
+              let totalValueOfCurrentClothe = 0;
+              targetPriceTable[key].map((price) => {
+                totalValueOfCurrentClothe += price;
+                return price;
+              });
+
+              return totalValueOfCurrentClothe > 0;
             })
             .map((key) => (
               <Row className="align-items-center" key={key}>
@@ -394,32 +413,44 @@ const ModalChooseClothes = () => {
                     }}>
                     <option value="">{Translator('NONE')}</option>
 
-                    {clothingSizes.map((size) => {
-                      if (
-                        getTargetOrderItemToManipulate().gender === 'CHILDISH'
-                      ) {
-                        // RENDER ONLY CHILDISH SIZES
-                        // if (size.id < 10) return false;
-                        if (size.target === 'ADULT') return false;
-                      }
+                    {clothingSizes
+                      .filter((size, index) => {
+                        if (currentClothingPrices === null) return false;
 
-                      if (
-                        getTargetOrderItemToManipulate().gender === 'MALE' ||
-                        getTargetOrderItemToManipulate().gender === 'FEMALE'
-                      ) {
-                        // RENDER ONLY ADULT SIZES
-                        if (size.target === 'TEEN') return false;
-                      }
+                        const theGender = tempOrderItem.gender;
+                        const targetPriceTable = Utils.GetPriceTableByGender(
+                          currentClothingPrices,
+                          theGender,
+                        );
 
-                      return (
-                        <option
-                          key={size.id}
-                          value={size.code}
-                          data-id={size.id}>
-                          {Translator(size.code)}
-                        </option>
-                      );
-                    })}
+                        return targetPriceTable[key][index] > 0 || false;
+                      })
+                      .map((size) => {
+                        if (
+                          getTargetOrderItemToManipulate().gender === 'CHILDISH'
+                        ) {
+                          // RENDER ONLY CHILDISH SIZES
+                          // if (size.id < 10) return false;
+                          if (size.target === 'ADULT') return false;
+                        }
+
+                        if (
+                          getTargetOrderItemToManipulate().gender === 'MALE' ||
+                          getTargetOrderItemToManipulate().gender === 'FEMALE'
+                        ) {
+                          // RENDER ONLY ADULT SIZES
+                          if (size.target === 'TEEN') return false;
+                        }
+
+                        return (
+                          <option
+                            key={size.id}
+                            value={size.code}
+                            data-id={size.id}>
+                            {Translator(size.code)}
+                          </option>
+                        );
+                      })}
                   </Form.Control>
                 </Col>
 

@@ -31,6 +31,6 @@
     "no-unreachable": "warn",
     "no-unused-vars": "warn",
     "prefer-template": "warn",
-    "indent": "warn"
+    "indent": "off"
   }
 }
