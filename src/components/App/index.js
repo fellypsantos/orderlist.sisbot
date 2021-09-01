@@ -19,15 +19,19 @@ import BussinessPricing from '../../Pages/BussinessPricing';
 
 import RedEyeOneFormes from '../RedEyeOneFormes';
 import Utils from '../../Utils';
+import ModalSettings from '../ModalSettings';
+import SettingsButtonNavbar from '../SettingsButtonNavbar';
 
 const App = () => (
   <OrderListProvider>
     <GlobalStyle />
     <ToastProvider>
       <ModalChooseClothes />
+      <ModalSettings />
       <NavbarContainer className="bg-primary">
         <NavbarLeftContent>
           <RedEyeOneFormes />
+          <SettingsButtonNavbar />
           <LanguageChanger />
         </NavbarLeftContent>
       </NavbarContainer>

@@ -12,8 +12,6 @@ export const OrderListContext = createContext();
 
 const translationPath = Utils.GetBaseName('', '/melista');
 
-console.log('detectBrowserLanguage');
-
 i18n
   .use(HttpApi)
   .use(LanguageDetector)
@@ -62,6 +60,12 @@ const OrderListProvider = ({children}) => {
   };
 
   const [isCycling, setIsCycling] = useState(false);
+  const [isSettingsOpen, setSettingsOpen] = useState(false);
+
+  const [settings, setSettings] = useState({
+    coinPrefix: '$',
+    maxQuantityPerClothe: 100,
+  });
 
   const [clothingIcons] = useState({
     tshirt: {id: 1, icon: ClothingIconsList.tshirt, isCycling: false},
@@ -195,20 +199,35 @@ const OrderListProvider = ({children}) => {
   // Control modal with list of clothes
   const [modalClothesOpened, setModalClothesOpened] = useState(false);
 
-  // LOAD SETTINGS
+  // * * * * * * * * * * * * * * * * * * * * * * *
+  // * * * * * * * LOAD SETTINGS * * * * * * * * *
   useEffect(() => {
-    // console.log('LOAD SETTINGS');
     const currentLocalStorageData = localStorage.getItem('sisbot');
+    const currentLocalStorageSettings = localStorage.getItem('sisbot.settings');
     const currentLocalStorageBussinessPrices = localStorage.getItem(
       'sisbot.bussiness.prices',
     );
+
+    // LOAD ENVIROMENT SETTINGS
+    if (currentLocalStorageSettings !== null) {
+      const data = JSON.parse(currentLocalStorageSettings);
+      setSettings(data);
+    } else {
+      // DEFAULT SETTINGS
+      localStorage.setItem(
+        'sisbot.settings',
+        JSON.stringify({
+          coinPrefix: '$',
+          maxQuantityPerClothe: 100,
+        }),
+      );
+    }
 
     if (currentLocalStorageBussinessPrices !== null) {
       const data = JSON.parse(currentLocalStorageBussinessPrices);
       setCurrentClothingPrices(data);
     }
 
-    // FIRST RUN, NO LOCALSTORAGE DATA
     if (currentLocalStorageData !== null) {
       // console.log('RESTORING PREVIEWS SAVED DATA.');
       const data = JSON.parse(currentLocalStorageData);
@@ -285,6 +304,16 @@ const OrderListProvider = ({children}) => {
     );
   }, [isCycling]);
 
+  // SAVE SETTINGS
+  useEffect(() => {
+    localStorage.setItem(
+      'sisbot.settings',
+      JSON.stringify({
+        ...settings,
+      }),
+    );
+  }, [settings]);
+
   useEffect(() => {
     // KEEP LOCALSTORAGE UPDATED
     const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
@@ -352,6 +381,10 @@ const OrderListProvider = ({children}) => {
     setShowDashboard,
     isCycling,
     setIsCycling,
+    isSettingsOpen,
+    setSettingsOpen,
+    settings,
+    setSettings,
   };
 
   return (

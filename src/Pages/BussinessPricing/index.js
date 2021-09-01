@@ -30,6 +30,7 @@ const BussinessPricing = () => {
     setCurrentClothingPrices,
     orderListItems,
     setOrderListItems,
+    settings,
   } = useContext(OrderListContext);
 
   const [projectName, setProjectName] = useState('');
@@ -153,7 +154,7 @@ const BussinessPricing = () => {
 
     const updated = selectedPriceTable[theClotheName].map((item, index) => {
       if (index === indexPrice) {
-        return parseInt(newPrice.replace('$ ', '')) || 0;
+        return parseInt(newPrice.replace(settings.coinPrefix, '')) || 0;
       }
 
       return item;

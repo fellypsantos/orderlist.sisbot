@@ -15,6 +15,7 @@ const TableOrdersBody = () => {
     dashboardData,
     setEditMode,
     setModalClothesOpened,
+    settings,
   } = useContext(OrderListContext);
 
   const [confirmDeleteItem, setConfirmDeleteItem] = useState({});
@@ -132,7 +133,9 @@ const TableOrdersBody = () => {
               ))}
 
               {/* PAYMENT VALUE */}
-              <TableCell>$ {item.payment.value}</TableCell>
+              <TableCell>
+                {settings.coinPrefix} {item.payment.value}
+              </TableCell>
 
               {/* EYE ICON */}
               <TableCell className="d-table-cell d-md-none">

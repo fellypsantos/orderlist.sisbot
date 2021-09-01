@@ -13,8 +13,6 @@ import Utils from '../../Utils';
 import FormTextInput from '../FormTextInput';
 import FormInputSelect from '../FormInputSelect';
 
-const maxQuantityPerPiece = [...Array(50).keys()];
-
 const ModalChooseClothes = () => {
   const {
     clothingIcons,
@@ -32,6 +30,7 @@ const ModalChooseClothes = () => {
     setEditMode,
     genderOptions,
     isCycling,
+    settings,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -308,7 +307,10 @@ const ModalChooseClothes = () => {
         </div>
         <div className="d-block">
           {Translator('CHOOSE_CLOTHES_VALUE')}
-          <strong>$ {calculatePriceForCurrentSelectedClothes()}</strong>.
+          <strong>
+            {settings.coinPrefix} {calculatePriceForCurrentSelectedClothes()}
+          </strong>
+          .
         </div>
 
         <div className="mt-4" style={{margin: '0 auto', maxWidth: '350px'}}>
@@ -430,7 +432,6 @@ const ModalChooseClothes = () => {
                           getTargetOrderItemToManipulate().gender === 'CHILDISH'
                         ) {
                           // RENDER ONLY CHILDISH SIZES
-                          // if (size.id < 10) return false;
                           if (size.target === 'ADULT') return false;
                         }
 
@@ -472,17 +473,19 @@ const ModalChooseClothes = () => {
                       );
                     }}>
                     <option value={0}>0 {Translator('PIECES')}</option>
-                    {maxQuantityPerPiece.map((quantity) => {
-                      const trueQuantity = quantity + 1;
-                      return (
-                        <option key={trueQuantity} value={trueQuantity}>
-                          {trueQuantity}{' '}
-                          {trueQuantity === 1
-                            ? Translator('PIECE')
-                            : Translator('PIECES')}
-                        </option>
-                      );
-                    })}
+                    {[...Array(settings.maxQuantityPerClothe).keys()].map(
+                      (quantity) => {
+                        const trueQuantity = quantity + 1;
+                        return (
+                          <option key={trueQuantity} value={trueQuantity}>
+                            {trueQuantity}{' '}
+                            {trueQuantity === 1
+                              ? Translator('PIECE')
+                              : Translator('PIECES')}
+                          </option>
+                        );
+                      },
+                    )}
                   </Form.Control>
                 </Col>
               </Row>
