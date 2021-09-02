@@ -30,6 +30,7 @@ const BussinessPricing = () => {
     setCurrentClothingPrices,
     orderListItems,
     setOrderListItems,
+    setSettings,
     settings,
   } = useContext(OrderListContext);
 
@@ -123,8 +124,6 @@ const BussinessPricing = () => {
       priceTableChildish,
     });
 
-    console.log('setCurrentClothingPrices UPDATED');
-
     // FORCE RE-RENDER TABLE TO UPDATE TOTAL PRICE OF EACH ROW
     console.log('orderListItems', orderListItems);
     setOrderListItems([...orderListItems]);
@@ -211,6 +210,7 @@ const BussinessPricing = () => {
         setPriceTableMale(uploaded.priceTableMale);
         setPriceTableFemale(uploaded.priceTableFemale);
         setPriceTableChildish(uploaded.priceTableChildish);
+        setSettings(uploaded.settings);
 
         addToast(Translator('TOAST_UPLOAD_COMPLETE'), {
           appearance: 'success',
@@ -227,6 +227,7 @@ const BussinessPricing = () => {
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        settings,
       }),
     );
 
