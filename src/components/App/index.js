@@ -11,6 +11,7 @@ import NavbarLeftContent from '../NavbarLeftContent';
 import LanguageChanger from '../LanguageChanger';
 import ModalChooseClothes from '../ModalChooseClothes';
 import OrderListProvider from '../../contexts/OrderListContext';
+import ReportProvider from '../../contexts/ReportContext';
 import GlobalStyle from '../../globalStyle';
 
 import Main from '../../Pages/Main';
@@ -21,6 +22,12 @@ import RedEyeOneFormes from '../RedEyeOneFormes';
 import Utils from '../../Utils';
 import ModalSettings from '../ModalSettings';
 import SettingsButtonNavbar from '../SettingsButtonNavbar';
+
+const ReportWithContext = () => (
+  <ReportProvider>
+    <Report />
+  </ReportProvider>
+);
 
 const App = () => (
   <OrderListProvider>
@@ -40,7 +47,7 @@ const App = () => (
           <BrowserRouter basename={Utils.GetBaseName('', '/melista')}>
             <Switch>
               <Route exact path="/" component={Main} />
-              <Route path="/report" component={Report} />
+              <Route path="/report" component={ReportWithContext} />
               <Route path="/bussiness/pricing" component={BussinessPricing} />
             </Switch>
           </BrowserRouter>

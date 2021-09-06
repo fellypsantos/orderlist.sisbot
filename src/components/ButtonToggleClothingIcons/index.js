@@ -14,9 +14,9 @@ const ButtonToggleClothignIcons = () => {
   const updateCyclingFlag = (newState) => {
     if (newState !== isCycling) {
       setIsCycling(newState);
-      const currentClothe = newState === true ? 'Ciclismo' : 'Normal';
+      const currentClothe = newState === true ? 'Ciclismo' : 'Padrão';
 
-      addToast(`Utilizando roupas no estilo ${currentClothe}`, {
+      addToast(`Modo ${currentClothe}`, {
         appearance: 'success',
         autoDismiss: true,
       });

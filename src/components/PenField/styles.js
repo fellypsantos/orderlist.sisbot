@@ -8,9 +8,12 @@ export const TheLabel = styled.div`
   white-space: nowrap;
 `;
 
-export const TheLine = styled.div`
+export const TheLine = styled.input`
+  border: none;
   border-bottom: 1px solid #666;
   width: 100%;
-  height: 1px;
-  margin: 20px 0 10px 10px;
+  background-color: #fff;
+  margin-bottom: 5px;
+  margin-top: -2px;
+  margin-left: 10px;
 `;

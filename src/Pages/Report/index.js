@@ -10,6 +10,8 @@ import {AnnotationContainer} from '../../components/AnnotationsBox/styles';
 import PenField from '../../components/PenField';
 import ReportHeader from '../../components/ReportHeader';
 import ReportMenu from '../../components/ReportMenu';
+import ModalEditReportHeader from '../../components/ModalEditReportHeader';
+import {ReportContext} from '../../contexts/ReportContext';
 
 const Report = () => {
   const {
@@ -20,6 +22,8 @@ const Report = () => {
     Translator,
     isCycling,
   } = useContext(OrderListContext);
+
+  const {headerReportData} = useContext(ReportContext);
 
   const [sortedOrderList, setSortedOrderList] = useState({
     male: {
@@ -274,8 +278,12 @@ const Report = () => {
     });
   }, [orderListItems]);
 
+  console.log('-->> ', headerReportData.orderDate);
+
   return (
     <div>
+      <ModalEditReportHeader />
+
       <Row>
         <Col>
           <ReportMenu />
@@ -295,10 +303,30 @@ const Report = () => {
 
           {/* RIGHT SIDE */}
           <Col xs="6">
-            <PenField label={Translator('CLIENT')} />
-            <PenField label={Translator('REQUEST_DATE')} />
-            <PenField label={Translator('DELIVERY_DATE')} />
-            <PenField label={Translator('REPONSIBLE')} />
+            <PenField
+              label={Translator('CLIENT')}
+              value={headerReportData.clientName}
+            />
+            <PenField
+              label={Translator('REPONSIBLE')}
+              value={headerReportData.responsableName}
+            />
+            <PenField
+              label={Translator('REQUEST_DATE')}
+              value={
+                headerReportData.deliveryDate !== null
+                  ? moment(headerReportData.orderDate).format('LL')
+                  : ''
+              }
+            />
+            <PenField
+              label={Translator('DELIVERY_DATE')}
+              value={
+                headerReportData.orderDate !== null
+                  ? moment(headerReportData.deliveryDate).format('LL')
+                  : ''
+              }
+            />
           </Col>
         </Row>
 
