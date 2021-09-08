@@ -61,7 +61,8 @@ export default {
 
       const clotheID = item.id - 1;
       const selectedPriceList = pricesList[clotheID];
-      const pricePerSize = selectedPriceList[result.id - 1];
+      const subtractionValue = result.target === 'TEEN' ? 10 : 1;
+      const pricePerSize = selectedPriceList[result.id - subtractionValue];
 
       totalPrice += pricePerSize * item.quantity;
       return item;

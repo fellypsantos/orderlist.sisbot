@@ -311,8 +311,6 @@ const OrderListProvider = ({children}) => {
   }, []);
 
   useEffect(() => {
-    console.log('orderListItems changed', orderListItems);
-
     // KEEP LOCALSTORAGE UPDATED
     const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
 

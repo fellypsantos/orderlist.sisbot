@@ -42,6 +42,14 @@ const Report = () => {
   const [croppedArea, setCroppedArea] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageDimensions, setImageDimensions] = useState(null);
+  const [consolidatedCounting, setConsolidatedCounting] = useState({
+    tshirt: 0,
+    tshirtLong: 0,
+    shorts: 0,
+    pants: 0,
+    tanktop: 0,
+    vest: 0,
+  });
 
   const [sortedOrderList, setSortedOrderList] = useState({
     male: {
@@ -275,7 +283,7 @@ const Report = () => {
   // TRANSLATE MOMENTJS FORMAT
   moment.locale(Translator('MOMENTJS'));
 
-  // CALCULATE DATA DO FILL TABLES
+  // CALCULATE DATA TO FILL TABLES
   useEffect(() => {
     orderListItems.map((orderItem) => {
       // PROCESS THE CLOTHES
@@ -286,6 +294,12 @@ const Report = () => {
           const clotheName = theClothe.name.replace('Cycling', '');
           const clotheSize = theClothe.size;
           const clotheQty = theClothe.quantity;
+
+          // CALCULATE CONSOLIDATED QUANTITIES
+          setConsolidatedCounting({
+            ...consolidatedCounting,
+            [clotheName]: (consolidatedCounting[clotheName] += clotheQty),
+          });
 
           tempSortedOrderList[tempGender][clotheName][clotheSize] += clotheQty;
           setSortedOrderList(tempSortedOrderList);
@@ -364,6 +378,8 @@ const Report = () => {
       ? imageDimensions.width / imageDimensions.height
       : 4 / 3;
 
+  console.log('consolidatedCounting', consolidatedCounting);
+
   return (
     <div>
       <ModalEditReportHeader />
@@ -419,8 +435,6 @@ const Report = () => {
               </Row>
             </Col>
           </Row>
-
-          {/* <canvas id="myCanvas" width="450" height="400" /> */}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
@@ -808,14 +822,28 @@ const Report = () => {
             <h5>Contagem de Peças</h5>
             <TableContentCentered>
               <tbody>
-                <tr>
-                  <td>-</td>
-                  <td>1</td>
-                </tr>
-                <tr>
-                  <td>-</td>
-                  <td>2</td>
-                </tr>
+                {Object.keys(clothingIcons)
+                  .filter((key) => {
+                    // Always return no variant clothes
+                    if (clothingIcons[key].isCycling === undefined) {
+                      return true;
+                    }
+
+                    // Only return bike or normal clothes, never both;
+                    if (clothingIcons[key].isCycling !== isCycling) {
+                      return false;
+                    }
+
+                    return true;
+                  })
+                  .map((item) => (
+                    <tr>
+                      <td>
+                        <img src={clothingIcons[item].icon} alt="Icon" />
+                      </td>
+                      <td>1</td>
+                    </tr>
+                  ))}
               </tbody>
             </TableContentCentered>
           </Col>

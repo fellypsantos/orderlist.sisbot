@@ -227,8 +227,6 @@ const ModalChooseClothes = () => {
       return;
     }
 
-    // console.log('UPDATING ORDER ITEM...');
-
     // UPDATE LIST
     const updatedOrderListItems = orderListItems.map((orderItem) => {
       if (orderItem.id === updatedOrderItem.id) {
@@ -413,47 +411,56 @@ const ModalChooseClothes = () => {
                     }}>
                     <option value="">{Translator('NONE')}</option>
 
-                    {clothingSizes
-                      .filter((size, index) => {
-                        if (currentClothingPrices === null) return false;
+                    {clothingSizes.map((size, index) => {
+                      const adjustedKey = key.replace('Cycling', '');
+                      const currentGender = getTargetOrderItemToManipulate()
+                        .gender;
 
-                        const theGender = tempOrderItem.gender;
-                        const targetPriceTable = Utils.GetPriceTableByGender(
-                          currentClothingPrices,
-                          theGender,
-                        );
+                      if (currentGender === 'CHILDISH') {
+                        // RENDER ONLY CHILDISH SIZES
+                        // console.log('render only childish sizes');
+                        if (size.target === 'ADULT') return false;
+                      }
 
-                        return (
-                          targetPriceTable[key.replace('Cycling', '')][index] >
-                            0 || false
-                        );
-                      })
-                      .map((size) => {
-                        if (
-                          getTargetOrderItemToManipulate().gender === 'CHILDISH'
-                        ) {
-                          // RENDER ONLY CHILDISH SIZES
-                          console.log('render only childish sizes');
-                          if (size.target === 'ADULT') return false;
-                        }
+                      if (
+                        currentGender === 'MALE' ||
+                        currentGender === 'FEMALE'
+                      ) {
+                        // RENDER ONLY ADULT SIZES
+                        if (size.target === 'TEEN') return false;
+                      }
 
-                        if (
-                          getTargetOrderItemToManipulate().gender === 'MALE' ||
-                          getTargetOrderItemToManipulate().gender === 'FEMALE'
-                        ) {
-                          // RENDER ONLY ADULT SIZES
-                          if (size.target === 'TEEN') return false;
-                        }
+                      // CHECK EMPTY PRICE
+                      const targetPriceTable = Utils.GetPriceTableByGender(
+                        currentClothingPrices,
+                        currentGender,
+                      );
 
-                        return (
-                          <option
-                            key={size.id}
-                            value={size.code}
-                            data-id={size.id}>
-                            {Translator(size.code)}
-                          </option>
-                        );
-                      })}
+                      const returnSchema = targetPriceTable[adjustedKey].map(
+                        (priceItem) => priceItem > 0,
+                      );
+
+                      // INDEX WILL CHANGE ACCORDING TO GENDER
+                      // CHILDISH STARTS AT INDEX 9 AND NOT 0 AS DEFAULT
+                      // SO NEED SUBTRACT THIS NUMBER TO GET INDEX 0
+                      const ajustedIndex =
+                        currentGender === 'CHILDISH' ? index - 9 : index;
+
+                      // NOT RENDER EMPTY PRICES
+                      const shouldRender = returnSchema[ajustedIndex];
+                      console.log('shouldRender', shouldRender);
+                      if (!shouldRender) return;
+
+                      // RENDER THE <OPTION>
+                      return (
+                        <option
+                          key={size.id}
+                          value={size.code}
+                          data-id={size.id}>
+                          {Translator(size.code)}
+                        </option>
+                      );
+                    })}
                   </Form.Control>
                 </Col>
 
