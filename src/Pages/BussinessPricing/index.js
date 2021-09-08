@@ -125,9 +125,7 @@ const BussinessPricing = () => {
     });
 
     // FORCE RE-RENDER TABLE TO UPDATE TOTAL PRICE OF EACH ROW
-    console.log('orderListItems', orderListItems);
     setOrderListItems([...orderListItems]);
-    console.log('FORCED RE-RENDER TABLE');
   }, [projectName, priceTableMale, priceTableFemale, priceTableChildish]);
 
   const handleUpdatePriceTable = (

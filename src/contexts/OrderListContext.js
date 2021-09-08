@@ -157,6 +157,38 @@ const OrderListProvider = ({children}) => {
 
   const [showDashboard, setShowDashboard] = useState(true);
 
+  // * * * * * * * * * * * * * * * *
+  // CONTROL PRICES FOR EACH GENDER
+  // * * * * * * * * * * * * * * * *
+  const [projectName] = useState('');
+
+  const [priceTableMale] = useState({
+    tshirt: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    tshirtLong: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    shorts: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  });
+
+  const [priceTableFemale] = useState({
+    tshirt: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    tshirtLong: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    shorts: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  });
+
+  const [priceTableChildish] = useState({
+    tshirt: [0, 0, 0, 0, 0, 0, 0, 0],
+    tshirtLong: [0, 0, 0, 0, 0, 0, 0, 0],
+    shorts: [0, 0, 0, 0, 0, 0, 0, 0],
+    pants: [0, 0, 0, 0, 0, 0, 0, 0],
+    tanktop: [0, 0, 0, 0, 0, 0, 0, 0],
+    vest: [0, 0, 0, 0, 0, 0, 0, 0],
+  });
+
   // HELPER FUNCTIONS TO UPDATE DASHBOARD
   const calculateTotalToReceive = () => {
     let totalPaymentValue = 0;
@@ -199,19 +231,47 @@ const OrderListProvider = ({children}) => {
   // Control modal with list of clothes
   const [modalClothesOpened, setModalClothesOpened] = useState(false);
 
+  const loadMainSettings = (data = null) => {
+    if (data !== null) {
+      // RESTORE ORDER ITEMS LIST
+      setOrderListItems(data.orderListItems);
+      console.log('✅ Loaded order list.');
+
+      // RESTORE NOTES
+      setOrderListItemsNotes(data.orderListItemsNotes);
+      console.log('✅ Loaded order list notes.');
+
+      // RESTORE CYCLING FLAG
+      setIsCycling(data.isCycling);
+      console.log('✅ Loaded cycling flag.');
+    } else {
+      console.log('💙 Main informations set to default.');
+      localStorage.setItem(
+        'sisbot',
+        JSON.stringify({
+          orderListItemsNotes,
+          orderListItems: [],
+          isCycling: false,
+        }),
+      );
+    }
+  };
+
   // * * * * * * * * * * * * * * * * * * * * * * *
   // * * * * * * * LOAD SETTINGS * * * * * * * * *
+  // * * * * * * * * * * * * * * * * * * * * * * *
   useEffect(() => {
-    const currentLocalStorageData = localStorage.getItem('sisbot');
-    const currentLocalStorageSettings = localStorage.getItem('sisbot.settings');
-    const currentLocalStorageBussinessPrices = localStorage.getItem(
-      'sisbot.bussiness.prices',
-    );
+    console.log('🔥 LOADING SETTINGS 🔥');
+
+    const clsData = localStorage.getItem('sisbot');
+    const clsSettings = localStorage.getItem('sisbot.settings');
+    const clsBussinessPrices = localStorage.getItem('sisbot.bussiness.prices');
 
     // LOAD ENVIROMENT SETTINGS
-    if (currentLocalStorageSettings !== null) {
-      const data = JSON.parse(currentLocalStorageSettings);
+    if (clsSettings !== null) {
+      const data = JSON.parse(clsSettings);
       setSettings(data);
+      console.log('✅ Loaded price settings.');
     } else {
       // DEFAULT SETTINGS
       localStorage.setItem(
@@ -223,98 +283,36 @@ const OrderListProvider = ({children}) => {
       );
     }
 
-    if (currentLocalStorageBussinessPrices !== null) {
-      const data = JSON.parse(currentLocalStorageBussinessPrices);
+    if (clsBussinessPrices !== null) {
+      // ALREADY EXISTS DATA
+      const data = JSON.parse(clsBussinessPrices);
       setCurrentClothingPrices(data);
-    }
-
-    if (currentLocalStorageData !== null) {
-      // console.log('RESTORING PREVIEWS SAVED DATA.');
-      const data = JSON.parse(currentLocalStorageData);
-
-      // RESTORE ORDER ITEMS LIST
-      setOrderListItems(data.orderListItems);
-
-      // RESTORE NOTES
-      setOrderListItemsNotes(data.orderListItemsNotes);
-
-      // RESTORE CYCLING FLAG
-      setIsCycling(data.isCycling);
     } else {
-      // console.log('INITIALIZE WITH DEFAULT EMPTY DATA.');
+      // DEFAULT DATA
       localStorage.setItem(
-        'sisbot',
+        'sisbot.bussiness.prices',
         JSON.stringify({
-          orderListItemsNotes,
-          orderListItems: [],
+          projectName: projectName,
+          priceTableMale,
+          priceTableFemale,
+          priceTableChildish,
         }),
       );
+      console.log('💙 Pricing tables set to default.');
+    }
+
+    // LOAD LIST DATA AND NOTES
+    if (clsData !== null) {
+      const data = JSON.parse(clsData);
+      loadMainSettings(data); // RESTORE
+    } else {
+      loadMainSettings(); // SET DEFAULT
     }
   }, []);
 
-  // UPDATE TABLE ROWS WHEN PRICE CHANGES
   useEffect(() => {
-    // RECALCULATE EACH LINE
-    const updatedTableRows = orderListItems.map((orderItem) => {
-      // CALCULATE PAYMENT VALUE BASED IN BUSSINESS PRICES DATA
-      const updatedPaymentValue = Utils.CalculatePaymentValueToOrderItem(
-        currentClothingPrices,
-        clothingSizes,
-        orderItem.clothingSettings,
-        orderItem.gender,
-      );
+    console.log('orderListItems changed', orderListItems);
 
-      return {
-        ...orderItem,
-        payment: {
-          ...orderItem.payment,
-          value: updatedPaymentValue,
-        },
-      };
-    });
-
-    setOrderListItems(updatedTableRows);
-  }, [currentClothingPrices]);
-
-  // SAVE ORDER LIST NOTES
-  useEffect(() => {
-    const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
-
-    localStorage.setItem(
-      'sisbot',
-      JSON.stringify({
-        ...currentLocalStorage,
-        orderListItemsNotes,
-      }),
-    );
-
-    // console.log('[UPDATED] LocalStorage: orderListItemsNotes.');
-  }, [orderListItemsNotes]);
-
-  // SAVE CYCLING FLAG
-  useEffect(() => {
-    const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
-
-    localStorage.setItem(
-      'sisbot',
-      JSON.stringify({
-        ...currentLocalStorage,
-        isCycling,
-      }),
-    );
-  }, [isCycling]);
-
-  // SAVE SETTINGS
-  useEffect(() => {
-    localStorage.setItem(
-      'sisbot.settings',
-      JSON.stringify({
-        ...settings,
-      }),
-    );
-  }, [settings]);
-
-  useEffect(() => {
     // KEEP LOCALSTORAGE UPDATED
     const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
 
@@ -353,6 +351,54 @@ const OrderListProvider = ({children}) => {
       totalProgressAsPercentage: fixedTotalProgressAsPercentage,
     });
   }, [orderListItems]);
+
+  // SAVE ORDER LIST NOTES / CYCLING FLAG
+  useEffect(() => {
+    localStorage.setItem(
+      'sisbot',
+      JSON.stringify({
+        orderListItems,
+        orderListItemsNotes,
+        isCycling,
+      }),
+    );
+  }, [orderListItemsNotes, isCycling]);
+
+  // UPDATE TABLE ROWS WHEN PRICE CHANGES
+  useEffect(() => {
+    if (orderListItems.length === 0) return;
+
+    // RECALCULATE EACH LINE
+    const updatedTableRows = orderListItems.map((orderItem) => {
+      // CALCULATE PAYMENT VALUE BASED IN BUSSINESS PRICES DATA
+      const updatedPaymentValue = Utils.CalculatePaymentValueToOrderItem(
+        currentClothingPrices,
+        clothingSizes,
+        orderItem.clothingSettings,
+        orderItem.gender,
+      );
+
+      return {
+        ...orderItem,
+        payment: {
+          ...orderItem.payment,
+          value: updatedPaymentValue,
+        },
+      };
+    });
+
+    setOrderListItems(updatedTableRows);
+  }, [currentClothingPrices]);
+
+  // SAVE SETTINGS
+  useEffect(() => {
+    localStorage.setItem(
+      'sisbot.settings',
+      JSON.stringify({
+        ...settings,
+      }),
+    );
+  }, [settings]);
 
   const ContextValues = {
     Translator,

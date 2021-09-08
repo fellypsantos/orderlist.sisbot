@@ -110,8 +110,6 @@ const ModalChooseClothes = () => {
       tempOrderItem.gender,
     );
 
-    console.log('paymentPriceForNewOrderItem', paymentPriceForNewOrderItem);
-
     // UPDATE MAIN LIST
     setOrderListItems([
       ...orderListItems,
@@ -382,7 +380,7 @@ const ModalChooseClothes = () => {
               );
 
               let totalValueOfCurrentClothe = 0;
-              targetPriceTable[key].map((price) => {
+              targetPriceTable[key.replace('Cycling', '')].map((price) => {
                 totalValueOfCurrentClothe += price;
                 return price;
               });
@@ -425,13 +423,17 @@ const ModalChooseClothes = () => {
                           theGender,
                         );
 
-                        return targetPriceTable[key][index] > 0 || false;
+                        return (
+                          targetPriceTable[key.replace('Cycling', '')][index] >
+                            0 || false
+                        );
                       })
                       .map((size) => {
                         if (
                           getTargetOrderItemToManipulate().gender === 'CHILDISH'
                         ) {
                           // RENDER ONLY CHILDISH SIZES
+                          console.log('render only childish sizes');
                           if (size.target === 'ADULT') return false;
                         }
 

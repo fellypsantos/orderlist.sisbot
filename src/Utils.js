@@ -102,7 +102,11 @@ export default {
           callback(result);
         };
 
-        fileReader.readAsText(e.target.files[0]);
+        if (fileExtension.includes('image')) {
+          fileReader.readAsDataURL(e.target.files[0]);
+        } else {
+          fileReader.readAsText(e.target.files[0]);
+        }
       }
     };
 

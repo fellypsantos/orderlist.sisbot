@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
+  faCamera,
   faFilePdf,
   faPenAlt,
   faPrint,
@@ -18,7 +19,9 @@ import {ReportContext} from '../../contexts/ReportContext';
 const ReportMenu = () => {
   const history = useHistory();
   const {Translator} = useContext(OrderListContext);
-  const {setModalEditHeaderOpen} = useContext(ReportContext);
+  const {setModalEditHeaderOpen, setModalVisibleImageSelection} = useContext(
+    ReportContext,
+  );
 
   const handleGeneratePDF = () => {
     html2canvas(document.getElementById('report')).then((canvas) => {
@@ -55,6 +58,16 @@ const ReportMenu = () => {
           <span className="ml-1 d-none d-md-inline-block">
             {Translator('EDIT_REPORT_HEADER')}
           </span>
+        </Button>
+
+        {/* ADD IMAGE PREVIEW */}
+        <Button
+          variant="secondary"
+          className="mr-2"
+          size="sm"
+          onClick={() => setModalVisibleImageSelection(true)}>
+          <FontAwesomeIcon icon={faCamera} />
+          <span className="ml-1 d-none d-md-inline-block">Foto</span>
         </Button>
 
         {/* PRINT */}
