@@ -448,7 +448,6 @@ const ModalChooseClothes = () => {
 
                       // NOT RENDER EMPTY PRICES
                       const shouldRender = returnSchema[ajustedIndex];
-                      console.log('shouldRender', shouldRender);
                       if (!shouldRender) return;
 
                       // RENDER THE <OPTION>

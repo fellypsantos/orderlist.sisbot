@@ -35,12 +35,12 @@ const Report = () => {
     setModalVisibleImageSelection,
   } = useContext(ReportContext);
 
-  const canvasDimension = {width: 480, height: 270};
   const [useCrop, setUseCrop] = useState(false);
   const [crop, setCrop] = useState({x: 0, y: 0});
   const [zoom, setZoom] = useState(1);
   const [croppedArea, setCroppedArea] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [finalProcessedImage, setFinalProcessedImage] = useState(null);
   const [imageDimensions, setImageDimensions] = useState(null);
   const [consolidatedCounting, setConsolidatedCounting] = useState({
     tshirt: 0,
@@ -319,7 +319,9 @@ const Report = () => {
   }, []);
 
   const handleApplyCrop = () => {
-    const canvas = document.getElementById('ClothePreview');
+    const canvas = document.createElement('canvas');
+    canvas.width = croppedArea.width / 2;
+    canvas.height = croppedArea.height / 2;
     const canvasContext = canvas.getContext('2d');
     const imageObj = new Image();
 
@@ -328,10 +330,12 @@ const Report = () => {
       const sourceY = croppedArea.y;
       const sourceWidth = croppedArea.width;
       const sourceHeight = croppedArea.height;
-      const destWidth = canvasDimension.width;
-      const destHeight = canvasDimension.height;
-      const destX = canvas.width / 2 - destWidth / 2;
-      const destY = canvas.height / 2 - destHeight / 2;
+      const destWidth = canvas.width;
+      const destHeight = canvas.height;
+      // const destX = canvas.width / 2 - destWidth / 2;
+      // const destY = canvas.height / 2 - destHeight / 2;
+      const destX = 0;
+      const destY = 0;
 
       // Draw Cropped Image
       canvasContext.drawImage(
@@ -346,6 +350,7 @@ const Report = () => {
         destHeight,
       );
 
+      setFinalProcessedImage(canvas.toDataURL());
       handleCloseModal();
     };
 
@@ -378,15 +383,13 @@ const Report = () => {
       ? imageDimensions.width / imageDimensions.height
       : 4 / 3;
 
-  console.log('consolidatedCounting', consolidatedCounting);
-
   return (
     <div>
       <ModalEditReportHeader />
 
       <Modal show={modalImageSelection} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Iamgem do Layout</Modal.Title>
+          <Modal.Title>Imagem do Layout</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedImage && (
@@ -841,19 +844,30 @@ const Report = () => {
                       <td>
                         <img src={clothingIcons[item].icon} alt="Icon" />
                       </td>
-                      <td>1</td>
+                      <td>{consolidatedCounting[item]}</td>
                     </tr>
                   ))}
+
+                <tr>
+                  <td>Total</td>
+                  <td>
+                    {Object.values(consolidatedCounting).reduce(
+                      (a, b) => a + b,
+                    )}
+                  </td>
+                </tr>
               </tbody>
             </TableContentCentered>
           </Col>
           <Col xs="8">
             <h5>Foto do layout</h5>
-            {selectedImage && (
-              <canvas
+            {finalProcessedImage && (
+              // <canvas id="ClothePreview" width={canvasDimension.width} />
+              <img
+                alt="preview"
                 id="ClothePreview"
-                width={canvasDimension.width}
-                height={canvasDimension.height}
+                src={finalProcessedImage}
+                width="90%"
               />
             )}
           </Col>
