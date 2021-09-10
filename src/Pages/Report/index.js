@@ -332,8 +332,6 @@ const Report = () => {
       const sourceHeight = croppedArea.height;
       const destWidth = canvas.width;
       const destHeight = canvas.height;
-      // const destX = canvas.width / 2 - destWidth / 2;
-      // const destY = canvas.height / 2 - destHeight / 2;
       const destX = 0;
       const destY = 0;
 
@@ -389,7 +387,7 @@ const Report = () => {
 
       <Modal show={modalImageSelection} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Imagem do Layout</Modal.Title>
+          <Modal.Title>{Translator('REPORT_MODAL_PREVIEW_TITLE')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedImage && (
@@ -424,12 +422,12 @@ const Report = () => {
             <Col xs={6}>
               <Row>
                 <Form>
-                  <div>Recorte</div>
+                  <div>{Translator('REPORT_MODAL_PREVIEW_CROP')}</div>
                   <div key="nocrop" className="mb-3">
                     <Form.Check
                       id="nocrop"
                       type="checkbox"
-                      label="Usar tamanho original"
+                      label={Translator('REPORT_MODAL_PREVIEW_CROP_LABEL')}
                       checked={useCrop}
                       onClick={handleNoCrop}
                     />
@@ -444,7 +442,7 @@ const Report = () => {
             {Translator('CLOSE')}
           </Button>
           <Button variant="secondary" onClick={handleUploadImage}>
-            Escolher Imagem
+            {Translator('REPORT_MODAL_PREVIEW_CHOOSE_IMAGE')}
           </Button>
           <Button variant="primary" onClick={handleApplyCrop}>
             {Translator('CONFIRM')}
@@ -822,7 +820,7 @@ const Report = () => {
         {/* SECOND PAGE */}
         <Row style={{marginTop: '200px'}}>
           <Col xs="4">
-            <h5>Contagem de Peças</h5>
+            <h5>{Translator('REPORT_PIECES_COUNTING')}</h5>
             <TableContentCentered>
               <tbody>
                 {Object.keys(clothingIcons)
@@ -860,12 +858,10 @@ const Report = () => {
             </TableContentCentered>
           </Col>
           <Col xs="8">
-            <h5>Foto do layout</h5>
+            <h5>{Translator('REPORT_LAYOUT_IMAGE')}</h5>
             {finalProcessedImage && (
-              // <canvas id="ClothePreview" width={canvasDimension.width} />
               <img
-                alt="preview"
-                id="ClothePreview"
+                alt={Translator('REPORT_LAYOUT_IMAGE')}
                 src={finalProcessedImage}
                 width="90%"
               />

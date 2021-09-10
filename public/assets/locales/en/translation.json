@@ -73,6 +73,7 @@
   "TAKING_SCREENSHOT": "Taking...",
   "REPORT": "Report",
   "NOTES": "Notes",
+  "PHOTO": "Photo",
 
   "SIZE": "Size",
   "QUANTITY": "Quantity",
@@ -81,6 +82,14 @@
   "PIECES": "Pieces",
   "PRICE": "Price",
   "PRICES": "Prices",
+
+  "REPORT_MODAL_PREVIEW_TITLE": "Layout Image",
+  "REPORT_MODAL_PREVIEW_CROP": "Crop",
+  "REPORT_MODAL_PREVIEW_CROP_LABEL": "Use original size",
+  "REPORT_MODAL_PREVIEW_CHOOSE_IMAGE": "Choose Image",
+  "REPORT_PIECES_COUNTING": "Pieces Counting",
+  "REPORT_LAYOUT_IMAGE": "Layout Photo",
+  "UNTITLED": "Untitled Budget",
 
   "CONFIRM_DELETE_ITEM": "Really want to delete this item from order list ?",
   "CONFIRM_DELETE_ITEM_MODAL": "Really want to delete selected item ?",
@@ -115,6 +124,8 @@
   "TOAST_DOWNLOAD_COMPLETE": "Nice! The file was successfully saved in your computer.",
   "TOAST_UPLOAD_COMPLETE": "Great! All your data was successfully restored.",
   "TOAST_NOTES_UPDATED": "Your production notes were updated.",
+  "TOAST_CYCLING_MODE": "Cycling Mode.",
+  "TOAST_DEFAULT_MODE": "Default Mode.",
 
-  "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at oneformes.com/melista to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
+  "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at list.oneformes.com to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
 }

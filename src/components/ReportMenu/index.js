@@ -67,7 +67,9 @@ const ReportMenu = () => {
           size="sm"
           onClick={() => setModalVisibleImageSelection(true)}>
           <FontAwesomeIcon icon={faCamera} />
-          <span className="ml-1 d-none d-md-inline-block">Foto</span>
+          <span className="ml-1 d-none d-md-inline-block">
+            {Translator('PHOTO')}
+          </span>
         </Button>
 
         {/* PRINT */}

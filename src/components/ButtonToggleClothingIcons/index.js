@@ -9,14 +9,17 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 
 const ButtonToggleClothignIcons = () => {
   const {addToast} = useToasts();
-  const {isCycling, setIsCycling} = useContext(OrderListContext);
+  const {isCycling, setIsCycling, Translator} = useContext(OrderListContext);
 
   const updateCyclingFlag = (newState) => {
     if (newState !== isCycling) {
       setIsCycling(newState);
-      const currentClothe = newState === true ? 'Ciclismo' : 'Padrão';
+      const currentClothe =
+        newState === true
+          ? Translator('TOAST_CYCLING_MODE')
+          : Translator('TOAST_DEFAULT_MODE');
 
-      addToast(`Modo ${currentClothe}`, {
+      addToast(currentClothe, {
         appearance: 'success',
         autoDismiss: true,
       });

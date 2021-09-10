@@ -231,7 +231,10 @@ const BussinessPricing = () => {
 
     const anchor = document.createElement('a');
     anchor.setAttribute('href', `data:text/plain;charset=utf-8,${jsonContent}`);
-    anchor.setAttribute('download', `${projectName || 'Untitled'}.json`);
+    anchor.setAttribute(
+      'download',
+      `${projectName || Translator('UNTITLED')}.json`,
+    );
     anchor.click();
     anchor.remove();
 
@@ -253,7 +256,7 @@ const BussinessPricing = () => {
         <CustomInputAsHeaderText
           type="text"
           value={projectName}
-          placeholder="Orçamento sem título"
+          placeholder={Translator('UNTITLED')}
           onChange={handleChangeFileNameToExport}
         />
 
@@ -300,7 +303,7 @@ const BussinessPricing = () => {
 
       <Tabs className="mb-3">
         {/* MALE */}
-        <Tab eventKey="tabMale" title="Masculino">
+        <Tab eventKey="tabMale" title={Translator('MALE')}>
           <Table bordered hover>
             <thead>
               <tr className="text-center">
@@ -360,7 +363,7 @@ const BussinessPricing = () => {
         </Tab>
 
         {/* FEMALE */}
-        <Tab eventKey="tabFemale" title="Feminino">
+        <Tab eventKey="tabFemale" title={Translator('FEMALE')}>
           <Table bordered hover>
             <thead>
               <tr className="text-center">
@@ -420,7 +423,7 @@ const BussinessPricing = () => {
         </Tab>
 
         {/* CHILDISH */}
-        <Tab eventKey="tabChildish" title="Infantil">
+        <Tab eventKey="tabChildish" title={Translator('CHILDISH')}>
           <Table bordered hover>
             <thead>
               <tr className="text-center">

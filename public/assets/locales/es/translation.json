@@ -73,6 +73,7 @@
   "TAKING_SCREENSHOT": "Capturando ...",
   "REPORT": "Reporte",
   "NOTES": "Notas",
+  "PHOTO": "Photo",
 
   "SIZE": "Tamaño",
   "QUANTITY": "Cantidad",
@@ -81,6 +82,14 @@
   "PIECES": "Piezas",
   "PRICE": "Precio",
   "PRICES": "Precios",
+
+  "REPORT_MODAL_PREVIEW_TITLE": "Imagen de diseño",
+  "REPORT_MODAL_PREVIEW_CROP": "Delimitar imagen",
+  "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamaño original",
+  "REPORT_MODAL_PREVIEW_CHOOSE_IMAGE": "Elegir imagen",
+  "REPORT_PIECES_COUNTING": "Recuento de piezas",
+  "REPORT_LAYOUT_IMAGE": "Foto de diseño",
+  "UNTITLED": "Presupuesto sin título",
 
   "CONFIRM_DELETE_ITEM": "¿Realmente desea eliminar este artículo de la lista de pedidos?",
   "CONFIRM_DELETE_ITEM_MODAL": "¿Realmente desea eliminar el elemento seleccionado?",
@@ -115,6 +124,8 @@
   "TOAST_DOWNLOAD_COMPLETE": "¡Lindo! El archivo se guardó con éxito en su computadora.",
   "TOAST_UPLOAD_COMPLETE": "¡Genial! Todos sus datos se restauraron con éxito.",
   "TOAST_NOTES_UPDATED": "Se actualizaron sus notas de producción.",
+  "TOAST_CYCLING_MODE": "Modo de ciclismo.",
+  "TOAST_DEFAULT_MODE": "Modo por defecto.",
 
-  "INSTRUCTIONS_CONTENT": "Hola,\n\nEsta lista de pedidos se creó utilizando el sitio web oneformes.com.\n¿Sabías que puedes automatizar tu producción usando esta lista?\n\nEche un vistazo a cómo funciona visitando nuestro canal de YouTube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstrucciones\n\nSISBot lee el archivo .csv para automatizar las producciones de CorelDraw.\n.bkp se puede importar en oneformes.com/melista para restaurar la lista de pedidos y realizar cambios.\n\n\nGenere informes de producción.\nEvite errores y desperdicios.\nAutomatiza trabajos repetitivos.\nTenga una visión amplia de la lista de pedidos.\n\n\nSaludos\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
+  "INSTRUCTIONS_CONTENT": "Hola,\n\nEsta lista de pedidos se creó utilizando el sitio web oneformes.com.\n¿Sabías que puedes automatizar tu producción usando esta lista?\n\nEche un vistazo a cómo funciona visitando nuestro canal de YouTube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstrucciones\n\nSISBot lee el archivo .csv para automatizar las producciones de CorelDraw.\n.bkp se puede importar en list.oneformes.com para restaurar la lista de pedidos y realizar cambios.\n\n\nGenere informes de producción.\nEvite errores y desperdicios.\nAutomatiza trabajos repetitivos.\nTenga una visión amplia de la lista de pedidos.\n\n\nSaludos\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

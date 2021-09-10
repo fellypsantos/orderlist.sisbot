@@ -73,6 +73,7 @@
   "TAKING_SCREENSHOT": "Capturando...",
   "REPORT": "Relatório",
   "NOTES": "Notas",
+  "PHOTO": "Foto",
 
   "SIZE": "Tamanho",
   "QUANTITY": "Quantidade",
@@ -81,6 +82,14 @@
   "PIECES": "Peças",
   "PRICE": "Preço",
   "PRICES": "Preços",
+
+  "REPORT_MODAL_PREVIEW_TITLE": "Imagem do Layout",
+  "REPORT_MODAL_PREVIEW_CROP": "Recorte",
+  "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamanho original",
+  "REPORT_MODAL_PREVIEW_CHOOSE_IMAGE": "Escolher Imagem",
+  "REPORT_PIECES_COUNTING": "Contagem de Peças",
+  "REPORT_LAYOUT_IMAGE": "Foto do Layout",
+  "UNTITLED": "Orçamento sem título",
 
   "CONFIRM_DELETE_ITEM": "Quer mesmo excluir esse item da lista de pedidos?",
   "CONFIRM_DELETE_ITEM_MODAL": "Deseja mesmo excluir o item selecionado?",
@@ -115,6 +124,8 @@
   "TOAST_DOWNLOAD_COMPLETE": "Pronto! O arquivo foi salvo som sucesso no seu computador.",
   "TOAST_UPLOAD_COMPLETE": "Pronto! Todas as informações foram restauradas com sucesso.",
   "TOAST_NOTES_UPDATED": "Suas notas de produção foram atualizadas.",
+  "TOAST_CYCLING_MODE": "Modo Ciclismo.",
+  "TOAST_DEFAULT_MODE": "Modo Padrão.",
 
-  "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site oneformes.com/melista\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
+  "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site list.oneformes.com\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }
