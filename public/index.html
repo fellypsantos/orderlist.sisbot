@@ -3,16 +3,88 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon-16x16.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" id="viewportMeta"/>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+      id="viewportMeta"
+    />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Crie uma lista de produção para ser utilizada no SISBot."
     />
-    <title>Melista</title>
+    <style>
+      #footerbanner[ID]A {
+        position: fixed;
+        bottom: 0;
+        transform: translate(-50%, 0%);
+        left: 50%;
+      }
+      .closemex[ID]A {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        text-decoration: none;
+        font-size: 15px;
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: #000000;
+        color: #ffffff;
+        border-radius: 50%;
+      }
+
+      @media print {
+        .noprint {
+          display: none;
+        }
+      }
+    </style>
+    <title>List</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app!</noscript>
     <div id="root"></div>
+
+    <!-- CUSTOM AD SYSTEM -->
+    <div id="AADIV34" class="noprint"></div>
+    <script>
+      /* list */ var k = decodeURIComponent(document.cookie),
+        ca = k.split(';'),
+        psc = '';
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1);
+        if (c.indexOf('adcapban') == 0)
+          psc +=
+            (psc == '' ? '' : ',') +
+            c.replace('adcapban', '').replace('=', ',');
+      }
+      var s = document.createElement('script');
+      s.src =
+        'https://publi.oneformes.com/ser.php?t=AADIV34' +
+        String.fromCharCode(38) +
+        'f=34' +
+        String.fromCharCode(38) +
+        'psc=' +
+        psc;
+      document.head.appendChild(s);
+    </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-Z245ZVMR90"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-Z245ZVMR90');
+    </script>
   </body>
 </html>

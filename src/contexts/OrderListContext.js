@@ -10,8 +10,6 @@ import Utils from '../Utils';
 
 export const OrderListContext = createContext();
 
-const translationPath = Utils.GetBaseName('', '/melista');
-
 i18n
   .use(HttpApi)
   .use(LanguageDetector)
@@ -23,7 +21,7 @@ i18n
       caches: ['cookie'],
     },
     backend: {
-      loadPath: `${translationPath}/assets/locales/{{lng}}/translation.json`,
+      loadPath: '/assets/locales/{{lng}}/translation.json',
     },
     react: {useSuspense: false},
   });

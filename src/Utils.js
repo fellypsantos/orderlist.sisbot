@@ -82,11 +82,6 @@ export default {
 
   Sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 
-  GetBaseName: (whileInDev, whileInProd) =>
-    !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
-      ? whileInDev
-      : whileInProd,
-
   HandleUploadFile: (fileExtension, callback) => {
     const inputFileChooser = document.createElement('input');
     inputFileChooser.setAttribute('type', 'file');

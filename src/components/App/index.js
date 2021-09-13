@@ -19,9 +19,9 @@ import Report from '../../Pages/Report';
 import BussinessPricing from '../../Pages/BussinessPricing';
 
 import RedEyeOneFormes from '../RedEyeOneFormes';
-import Utils from '../../Utils';
 import ModalSettings from '../ModalSettings';
 import SettingsButtonNavbar from '../SettingsButtonNavbar';
+import KanbanButtonNavbar from '../KanbanButtonNavbar';
 
 const ReportWithContext = () => (
   <ReportProvider>
@@ -38,13 +38,14 @@ const App = () => (
       <NavbarContainer className="bg-primary">
         <NavbarLeftContent>
           <RedEyeOneFormes />
+          <KanbanButtonNavbar />
           <SettingsButtonNavbar />
           <LanguageChanger />
         </NavbarLeftContent>
       </NavbarContainer>
       <MainContentContainer>
         <Container>
-          <BrowserRouter basename={Utils.GetBaseName('', '/melista')}>
+          <BrowserRouter>
             <Switch>
               <Route exact path="/" component={Main} />
               <Route path="/report" component={ReportWithContext} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavbarCustom} from './styles';
 
-import MeLista from '../../images/icons/melista.logo.svg';
+import MeLista from '../../images/icons/list.logo.png';
 
 export default function NavbarLeftContent({children}) {
   return (
