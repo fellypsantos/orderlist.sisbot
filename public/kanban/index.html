@@ -50,61 +50,34 @@
           <div class="modal-body">
             <!-- MODAL CONTENT -->
             <form>
+              <!-- LABEL 1 -->
               <div class="form-group">
-                <label for="exampleInputEmail1">Label 1</label>
-                <input
-                  type="email"
-                  class="form-control no-ml"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  value="BACKLOG"
-                />
+                <label for="col1">LABEL 1</label>
+                <input type="text" class="form-control no-ml" id="col1" value="" />
               </div>
 
               <!-- LABEL 2 -->
               <div class="form-group">
-                <label for="exampleInputEmail1">Label 2</label>
-                <input
-                  type="email"
-                  class="form-control no-ml"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  value="TO DO"
-                />
+                <label for="col2">LABEL 2</label>
+                <input type="text" class="form-control no-ml" id="col2" value="" />
               </div>
 
-              <!-- LABEL 2 -->
+              <!-- LABEL 3 -->
               <div class="form-group">
-                <label for="exampleInputEmail1">Label 2</label>
-                <input
-                  type="email"
-                  class="form-control no-ml"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  value="IN PROGRESS"
-                />
+                <label for="col3">LABEL 3</label>
+                <input type="text" class="form-control no-ml" id="col3" value="" />
               </div>
-              <!-- LABEL 2 -->
+
+              <!-- LABEL 4 -->
               <div class="form-group">
-                <label for="exampleInputEmail1">Label 2</label>
-                <input
-                  type="email"
-                  class="form-control no-ml"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  value="TESTING"
-                />
+                <label for="col4">LABEL 4</label>
+                <input type="text" class="form-control no-ml" id="col4" value="" />
               </div>
-              <!-- LABEL 2 -->
+
+              <!-- LABEL 5 -->
               <div class="form-group">
-                <label for="exampleInputEmail1">Label 2</label>
-                <input
-                  type="email"
-                  class="form-control no-ml"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  value="DONE"
-                />
+                <label for="col5">LABEL 5</label>
+                <input type="text" class="form-control no-ml" id="col5" value="" />
               </div>
             </form>
           </div>
@@ -198,6 +171,35 @@
         var s = document.getElementsByTagName('script')[0];
         s.parentNode.insertBefore(ga, s);
       })();
+    </script>
+
+    <script type="text/javascript">
+      window.onload = () => {
+        const KANBAN_CARDS = 'kanban.cards';
+        const cardsStorage = localStorage.getItem(KANBAN_CARDS);
+
+        if (cardsStorage !== null) {
+          // RESTORE
+          const parsedCards = JSON.parse(cardsStorage);
+          console.log('RESTORE', parsedCards);
+
+          // set labels
+          parsedCards.map((item, index) => {
+            const labelElement = document.querySelector(`label[for=col${index+1}]`);
+            const inputElement = document.querySelector(`input[id=col${index+1}]`);
+
+            labelElement.innerHTML = `Coluna ${index+1}`;
+            inputElement.value = item;
+          });
+        }
+
+        else {
+          // SET DEFAULT
+          console.log('DEFAULT LABELS SET');
+          const titles = ['BACKLOG', 'TO DO', 'IN PROGRESS', 'TESTING', 'DONE'];
+          localStorage.setItem(KANBAN_CARDS, JSON.stringify(titles));
+        }
+      }
     </script>
   </body>
 </html>
