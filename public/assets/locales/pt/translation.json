@@ -83,6 +83,13 @@
   "PRICE": "Preço",
   "PRICES": "Preços",
 
+  "TITLE": "Título",
+  "DESCRIPTION": "Descrição",
+  "EDIT_LABELS": "Editar Rótulos",
+  "LABEL": "Rótulo",
+  "LABELS": "Rótulos",
+  "DARK_LIGHT": "Escuro/Claro",
+
   "REPORT_MODAL_PREVIEW_TITLE": "Imagem do Layout",
   "REPORT_MODAL_PREVIEW_CROP": "Recorte",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamanho original",

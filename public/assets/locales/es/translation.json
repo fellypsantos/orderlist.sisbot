@@ -83,6 +83,13 @@
   "PRICE": "Precio",
   "PRICES": "Precios",
 
+  "TITLE": "Título",
+  "DESCRIPTION": "Descripción",
+  "EDIT_LABELS": "Editar etiquetas",
+  "LABEL": "Etiqueta",
+  "LABELS": "Etiquetas",
+  "DARK_LIGHT": "Oscuro/Claro",
+
   "REPORT_MODAL_PREVIEW_TITLE": "Imagen de diseño",
   "REPORT_MODAL_PREVIEW_CROP": "Delimitar imagen",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamaño original",

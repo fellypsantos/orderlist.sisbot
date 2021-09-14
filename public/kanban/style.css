@@ -248,3 +248,13 @@ input{
 .no-ml {
   margin-left: 0px !important;
 }
+
+.btn-home {
+  display: flex !important;
+  justify-content: center;
+  width: 100px;
+}
+
+.btn-home > span:first-child {
+  margin-right: 5px;
+}

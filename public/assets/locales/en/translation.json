@@ -83,6 +83,13 @@
   "PRICE": "Price",
   "PRICES": "Prices",
 
+  "TITLE": "Title",
+  "DESCRIPTION": "Description",
+  "EDIT_LABELS": "Edit Labels",
+  "LABEL": "Label",
+  "LABELS": "Labels",
+  "DARK_LIGHT": "Dark/Light",
+
   "REPORT_MODAL_PREVIEW_TITLE": "Layout Image",
   "REPORT_MODAL_PREVIEW_CROP": "Crop",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Use original size",

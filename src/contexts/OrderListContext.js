@@ -53,10 +53,6 @@ const initialTempOrderItem = {
 const OrderListProvider = ({children}) => {
   const {t: Translator} = useTranslation();
 
-  const updateLanguage = (countryCode) => {
-    i18n.changeLanguage(countryCode);
-  };
-
   const [isCycling, setIsCycling] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
 
@@ -140,6 +136,8 @@ const OrderListProvider = ({children}) => {
   const [orderListItems, setOrderListItems] = useState([]);
 
   const [orderListItemsNotes, setOrderListItemsNotes] = useState('');
+
+  const [lastChangeI18Next, setLastChangeI18Next] = useState(null);
 
   const [editMode, setEditMode] = useState({
     enabled: false,
@@ -229,6 +227,11 @@ const OrderListProvider = ({children}) => {
   // Control modal with list of clothes
   const [modalClothesOpened, setModalClothesOpened] = useState(false);
 
+  const updateLanguage = (countryCode) => {
+    i18n.changeLanguage(countryCode);
+    setLastChangeI18Next(new Date());
+  };
+
   const loadMainSettings = (data = null) => {
     if (data !== null) {
       // RESTORE ORDER ITEMS LIST
@@ -306,6 +309,8 @@ const OrderListProvider = ({children}) => {
     } else {
       loadMainSettings(); // SET DEFAULT
     }
+
+    setLastChangeI18Next(new Date());
   }, []);
 
   useEffect(() => {
@@ -427,6 +432,8 @@ const OrderListProvider = ({children}) => {
     setSettingsOpen,
     settings,
     setSettings,
+    lastChangeI18Next,
+    setLastChangeI18Next,
   };
 
   return (
