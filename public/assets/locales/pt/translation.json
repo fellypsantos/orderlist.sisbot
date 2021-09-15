@@ -90,6 +90,13 @@
   "LABELS": "Rótulos",
   "DARK_LIGHT": "Escuro/Claro",
 
+  "SETTINGS_POPUP_TITLE": "Configurações",
+  "SETTINGS_COIN_PREFIX": "Prefixo de Moeda",
+  "SETTINGS_COIN_PREFIX_DESCRIPTION": "Esse prefixo de moeda será usado para os valores do sistema. ",
+  "SETTINGS_MAX_PER_PIECE": "Máximo por Peça",
+  "SETTINGS_MAX_PER_PIECE_DESCSRIPTION": "Valor máximo que pode ser pedido para cada peça de roupa.",
+  "SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE": "Não mostrar tamanhos de roupas sem orçamento.",
+
   "REPORT_MODAL_PREVIEW_TITLE": "Imagem do Layout",
   "REPORT_MODAL_PREVIEW_CROP": "Recorte",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamanho original",

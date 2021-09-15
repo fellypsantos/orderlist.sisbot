@@ -32,6 +32,8 @@ const BussinessPricing = () => {
     setOrderListItems,
     setSettings,
     settings,
+    shouldFiter,
+    setShouldFilter,
   } = useContext(OrderListContext);
 
   const [projectName, setProjectName] = useState('');
@@ -209,6 +211,7 @@ const BussinessPricing = () => {
         setPriceTableFemale(uploaded.priceTableFemale);
         setPriceTableChildish(uploaded.priceTableChildish);
         setSettings(uploaded.settings);
+        setShouldFilter(uploaded.settings.filterEnabled);
 
         addToast(Translator('TOAST_UPLOAD_COMPLETE'), {
           appearance: 'success',
@@ -225,7 +228,10 @@ const BussinessPricing = () => {
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
-        settings,
+        settings: {
+          ...settings,
+          filterEnabled: shouldFiter,
+        },
       }),
     );
 

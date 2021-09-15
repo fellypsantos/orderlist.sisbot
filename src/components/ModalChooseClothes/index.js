@@ -31,6 +31,7 @@ const ModalChooseClothes = () => {
     genderOptions,
     isCycling,
     settings,
+    shouldFiter,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -431,24 +432,26 @@ const ModalChooseClothes = () => {
                       }
 
                       // CHECK EMPTY PRICE
-                      const targetPriceTable = Utils.GetPriceTableByGender(
-                        currentClothingPrices,
-                        currentGender,
-                      );
+                      if (shouldFiter) {
+                        const targetPriceTable = Utils.GetPriceTableByGender(
+                          currentClothingPrices,
+                          currentGender,
+                        );
 
-                      const returnSchema = targetPriceTable[adjustedKey].map(
-                        (priceItem) => priceItem > 0,
-                      );
+                        const returnSchema = targetPriceTable[adjustedKey].map(
+                          (priceItem) => priceItem > 0,
+                        );
 
-                      // INDEX WILL CHANGE ACCORDING TO GENDER
-                      // CHILDISH STARTS AT INDEX 9 AND NOT 0 AS DEFAULT
-                      // SO NEED SUBTRACT THIS NUMBER TO GET INDEX 0
-                      const ajustedIndex =
-                        currentGender === 'CHILDISH' ? index - 9 : index;
+                        // INDEX WILL CHANGE ACCORDING TO GENDER
+                        // CHILDISH STARTS AT INDEX 9 AND NOT 0 AS DEFAULT
+                        // SO NEED SUBTRACT THIS NUMBER TO GET INDEX 0
+                        const ajustedIndex =
+                          currentGender === 'CHILDISH' ? index - 9 : index;
 
-                      // NOT RENDER EMPTY PRICES
-                      const shouldRender = returnSchema[ajustedIndex];
-                      if (!shouldRender) return;
+                        // NOT RENDER EMPTY PRICES
+                        const shouldRender = returnSchema[ajustedIndex];
+                        if (!shouldRender) return;
+                      }
 
                       // RENDER THE <OPTION>
                       return (

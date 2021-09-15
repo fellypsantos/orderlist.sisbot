@@ -131,6 +131,8 @@ const OrderListProvider = ({children}) => {
 
   const [screenshotMode, setScreenshotMode] = useState(false);
 
+  const [shouldFiter, setShouldFilter] = useState(false);
+
   const [tempOrderItem, setTempOrderItem] = useState(initialTempOrderItem);
 
   const [orderListItems, setOrderListItems] = useState([]);
@@ -434,6 +436,8 @@ const OrderListProvider = ({children}) => {
     setSettings,
     lastChangeI18Next,
     setLastChangeI18Next,
+    shouldFiter,
+    setShouldFilter,
   };
 
   return (

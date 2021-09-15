@@ -90,6 +90,13 @@
   "LABELS": "Etiquetas",
   "DARK_LIGHT": "Oscuro/Claro",
 
+  "SETTINGS_POPUP_TITLE": "Ajustes",
+  "SETTINGS_COIN_PREFIX": "Prefijo de Moneda",
+  "SETTINGS_COIN_PREFIX_DESCRIPTION": "Este prefijo de moneda se utilizará para mostrar los valores del sistema. ",
+  "SETTINGS_MAX_PER_PIECE": "Max por pieza",
+  "SETTINGS_MAX_PER_PIECE_DESCSRIPTION": "Valor máximo que se puede pedir para cada prenda.",
+  "SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE": "No muestre tallas de ropa con precio vacío.",
+
   "REPORT_MODAL_PREVIEW_TITLE": "Imagen de diseño",
   "REPORT_MODAL_PREVIEW_CROP": "Delimitar imagen",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamaño original",

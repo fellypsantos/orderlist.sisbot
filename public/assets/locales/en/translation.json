@@ -90,6 +90,13 @@
   "LABELS": "Labels",
   "DARK_LIGHT": "Dark/Light",
 
+  "SETTINGS_POPUP_TITLE": "Settings",
+  "SETTINGS_COIN_PREFIX": "Coin Prefix",
+  "SETTINGS_COIN_PREFIX_DESCRIPTION": "This coin prefix will be used to display system values. ",
+  "SETTINGS_MAX_PER_PIECE": "Max per piece",
+  "SETTINGS_MAX_PER_PIECE_DESCSRIPTION": "Max value that can be ordered for each clothing piece.",
+  "SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE": "Don't show clothing sizes with empty price.",
+
   "REPORT_MODAL_PREVIEW_TITLE": "Layout Image",
   "REPORT_MODAL_PREVIEW_CROP": "Crop",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Use original size",

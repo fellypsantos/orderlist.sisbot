@@ -13,6 +13,8 @@ const ModalSettings = () => {
     setSettingsOpen,
     settings,
     setSettings,
+    shouldFiter,
+    setShouldFilter,
   } = useContext(OrderListContext);
 
   const [tempMaxQuantity, setTempMaxQuantity] = useState(50);
@@ -35,13 +37,13 @@ const ModalSettings = () => {
   return (
     <Modal show={isSettingsOpen} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Configurações</Modal.Title>
+        <Modal.Title>{Translator('SETTINGS_POPUP_TITLE')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {/* COIN PREFIX */}
         <Form.Group as={Row} className="mb-3">
           <Form.Label column sm="4">
-            Prefixo de Moeda
+            {Translator('SETTINGS_COIN_PREFIX')}
           </Form.Label>
           <Col sm="8">
             <Form.Control
@@ -49,7 +51,7 @@ const ModalSettings = () => {
               onChange={updateCoinPrefix}
             />
             <Form.Text className="text-muted">
-              Esse prefixo de moeda será usado para os valores do sistema. Ex:{' '}
+              {Translator('SETTINGS_COIN_PREFIX_DESCRIPTION')}
               <span>{settings.coinPrefix}</span> 35
             </Form.Text>
           </Col>
@@ -58,7 +60,7 @@ const ModalSettings = () => {
         {/* COIN PREFIX */}
         <Form.Group as={Row} className="mb-3">
           <Form.Label column sm="4">
-            Máximo por Peça
+            {Translator('SETTINGS_MAX_PER_PIECE')}
           </Form.Label>
           <Col sm="8">
             <Form.Control
@@ -68,10 +70,20 @@ const ModalSettings = () => {
               onBlur={updateMaxQuantity}
             />
             <Form.Text className="text-muted">
-              Valor máximo que pode ser pedido para cada peça de roupa.
+              {Translator('SETTINGS_MAX_PER_PIECE_DESCSRIPTION')}
             </Form.Text>
           </Col>
         </Form.Group>
+
+        {/* CLOTHES FILTER */}
+        <hr />
+        <Form.Check
+          id="nocrop"
+          type="checkbox"
+          label={Translator('SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE')}
+          checked={shouldFiter}
+          onClick={() => setShouldFilter(!shouldFiter)}
+        />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
