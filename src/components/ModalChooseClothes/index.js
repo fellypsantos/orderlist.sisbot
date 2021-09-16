@@ -372,6 +372,8 @@ const ModalChooseClothes = () => {
             .filter((key) => {
               if (currentClothingPrices === null) return false;
 
+              if (!shouldFiter) return true;
+
               const theGender = tempOrderItem.gender;
               const targetPriceTable = Utils.GetPriceTableByGender(
                 currentClothingPrices,
