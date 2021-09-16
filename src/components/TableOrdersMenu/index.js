@@ -8,7 +8,6 @@ import JSZip from 'jszip';
 
 import {
   faCamera,
-  faCommentAlt,
   faDollarSign,
   faDownload,
   faEraser,
@@ -34,7 +33,6 @@ const TableOrdersMenu = () => {
     setOrderListItems,
     orderListItems,
     Translator,
-    orderListItemsNotes,
     setOrderListItemsNotes,
   } = useContext(OrderListContext);
 
@@ -42,8 +40,6 @@ const TableOrdersMenu = () => {
   const [showModalConfirmDownload, setShowModalConfirmDownload] = useState(
     false,
   );
-
-  const [notesModalVisible, setNotesModalVisible] = useState(false);
 
   const [zipFileName, setZIPFileName] = useState('');
 
@@ -58,6 +54,7 @@ const TableOrdersMenu = () => {
     }
 
     setOrderListItems([]);
+    setOrderListItemsNotes('');
     setConfirmClearOrderItems(false);
     addToast(Translator('TOAST_CLEARED_LIST'), {
       appearance: 'success',
@@ -213,14 +210,6 @@ const TableOrdersMenu = () => {
     setShowModalConfirmDownload(false);
   };
 
-  const handleCloseAnnotations = () => {
-    setNotesModalVisible(false);
-    addToast(Translator('TOAST_NOTES_UPDATED'), {
-      appearance: 'success',
-      autoDismiss: true,
-    });
-  };
-
   const handleRestoreBackup = (data) => {
     // PARSE THE RESULT
     const backupData = JSON.parse(atob(data));
@@ -263,7 +252,7 @@ const TableOrdersMenu = () => {
       />
 
       {/* ANNOTATIONS */}
-      <ModalTextInput
+      {/* <ModalTextInput
         isOpen={notesModalVisible}
         useTextarea
         title={Translator('PRODUCTION_NOTES')}
@@ -273,7 +262,7 @@ const TableOrdersMenu = () => {
         handleChange={(e) => setOrderListItemsNotes(e.target.value)}
         handleConfirm={handleCloseAnnotations}
         handleClose={handleCloseAnnotations}
-      />
+      /> */}
 
       <Row className="mt-4 mb-2">
         <Col className="d-flex justify-content-end">
@@ -340,7 +329,6 @@ const TableOrdersMenu = () => {
 
           <Button
             variant="secondary"
-            className="mr-2"
             size="sm"
             onClick={() => history.push('/report')}>
             <FontAwesomeIcon icon={faTable} />
@@ -349,7 +337,7 @@ const TableOrdersMenu = () => {
             </span>
           </Button>
 
-          <Button
+          {/* <Button
             variant="secondary"
             size="sm"
             onClick={() => setNotesModalVisible(true)}>
@@ -360,7 +348,7 @@ const TableOrdersMenu = () => {
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('NOTES')}
             </span>
-          </Button>
+          </Button> */}
         </Col>
       </Row>
     </>

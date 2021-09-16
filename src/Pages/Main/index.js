@@ -45,8 +45,12 @@ const Main = () => {
           <ButtonToggleClothignIcons />
         </div>
       </div>
-      <DashboardReports isVisible={showDashboard} />
-      <TableOrdersMenu />
+      {showDashboard && (
+        <>
+          <DashboardReports />
+          <TableOrdersMenu />
+        </>
+      )}
       <TableOrderList />
     </>
   );

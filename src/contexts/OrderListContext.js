@@ -153,7 +153,7 @@ const OrderListProvider = ({children}) => {
     totalProgressAsPercentage: 0,
   });
 
-  const [showDashboard, setShowDashboard] = useState(true);
+  const [showDashboard, setShowDashboard] = useState(false);
 
   // * * * * * * * * * * * * * * * *
   // CONTROL PRICES FOR EACH GENDER
