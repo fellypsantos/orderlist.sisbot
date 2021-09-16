@@ -59,6 +59,8 @@ const OrderListProvider = ({children}) => {
   const [settings, setSettings] = useState({
     coinPrefix: '$',
     maxQuantityPerClothe: 100,
+    filterEnabled: false,
+    isDashboardVisible: false,
   });
 
   const [clothingIcons] = useState({
@@ -274,6 +276,8 @@ const OrderListProvider = ({children}) => {
     if (clsSettings !== null) {
       const data = JSON.parse(clsSettings);
       setSettings(data);
+      setShouldFilter(data.filterEnabled);
+      setShowDashboard(data.isDashboardVisible);
       console.log('✅ Loaded price settings.');
     } else {
       // DEFAULT SETTINGS
@@ -282,6 +286,8 @@ const OrderListProvider = ({children}) => {
         JSON.stringify({
           coinPrefix: '$',
           maxQuantityPerClothe: 100,
+          filterEnabled: false,
+          isDashboardVisible: false,
         }),
       );
     }
@@ -399,9 +405,11 @@ const OrderListProvider = ({children}) => {
       'sisbot.settings',
       JSON.stringify({
         ...settings,
+        filterEnabled: shouldFiter,
+        isDashboardVisible: showDashboard,
       }),
     );
-  }, [settings]);
+  }, [settings, shouldFiter, showDashboard]);
 
   const ContextValues = {
     Translator,

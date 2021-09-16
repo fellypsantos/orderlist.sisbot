@@ -78,11 +78,10 @@ const ModalSettings = () => {
         {/* CLOTHES FILTER */}
         <hr />
         <Form.Check
-          id="nocrop"
           type="checkbox"
           label={Translator('SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE')}
           checked={shouldFiter}
-          onClick={() => setShouldFilter(!shouldFiter)}
+          onChange={() => setShouldFilter(!shouldFiter)}
         />
       </Modal.Body>
       <Modal.Footer>
