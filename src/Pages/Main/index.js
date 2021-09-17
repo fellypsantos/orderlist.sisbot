@@ -1,8 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
+import {useToasts} from 'react-toast-notifications';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
+import {faEye, faEyeSlash, faDownload} from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
+import JSZip from 'jszip';
 
+import saveAs from '../../../node_modules/jszip/vendor/FileSaver';
 import TableOrdersMenu from '../../components/TableOrdersMenu';
 import FormAddOrderItem from '../../components/FormAddOrderItem';
 import DashboardReports from '../../components/DashboardReports';
@@ -11,21 +14,152 @@ import Separator from '../../components/Separator';
 import TableOrderList from '../../components/TableOrderList';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcons';
+import ModalTextInput from '../../components/ModalTextInput';
 
 const Main = () => {
-  const {Translator, showDashboard, setShowDashboard} = useContext(
-    OrderListContext,
+  const {
+    Translator,
+    showDashboard,
+    setShowDashboard,
+    orderListItems,
+  } = useContext(OrderListContext);
+
+  const {addToast} = useToasts();
+
+  const [zipFileName, setZIPFileName] = useState('');
+  const [showModalConfirmDownload, setShowModalConfirmDownload] = useState(
+    false,
   );
+
+  const handleCLoseModalTextInput = () => {
+    setZIPFileName('');
+    setShowModalConfirmDownload(false);
+  };
+
+  const handleDownload = (confirmed = false) => {
+    if (!confirmed) {
+      setShowModalConfirmDownload(true);
+      return;
+    }
+
+    const zip = new JSZip();
+
+    const safeFilename =
+      zipFileName === '' ? Translator('MAIN_TITLE') : zipFileName;
+
+    const sisbotGender = {
+      MALE: 'ma',
+      FEMALE: 'fe',
+      CHILDISH: 'c',
+    };
+
+    const sisbotClothingID = {
+      TSHIRT: 'CSVID_TSHIRT',
+      TSHIRTLONG: 'CSVID_TSHIRTLONG',
+      SHORTS: 'CSVID_SHORTS',
+      PANTS: 'CSVID_PANTS',
+      TANKTOP: 'CSVID_TANKTOP',
+      VEST: 'CSVID_VEST',
+    };
+
+    const csvFullData = [];
+
+    orderListItems.map((orderItem) => {
+      const csvDataToJoin = [];
+      const sisbotGenderTranslated = sisbotGender[orderItem.gender];
+      csvDataToJoin.push(sisbotGenderTranslated);
+      csvDataToJoin.push(orderItem.name);
+      csvDataToJoin.push(orderItem.number);
+
+      orderItem.clothingSettings.map((theClothe) => {
+        // ADJUST SIZE FOR CHILDISH (IT CAME WITH WORK ANOS|YEARS|ANÕS)
+        const theSize =
+          orderItem.gender === 'CHILDISH'
+            ? Translator(theClothe.size).replace(/ anos| years old| años/i, '')
+            : Translator(theClothe.size);
+
+        csvDataToJoin.push(
+          `${Translator(sisbotClothingID[theClothe.name.toUpperCase()])}=${
+            theClothe.quantity > 0 ? `${theClothe.quantity}-${theSize}` : ''
+          }`,
+        );
+        return theClothe;
+      });
+
+      const csvRow = csvDataToJoin.join(',');
+      csvFullData.push(csvRow);
+      return orderItem;
+    });
+
+    const csvHeader = [];
+    csvHeader.push(Translator('CSVID_GENDER'));
+    csvHeader.push(Translator('CSVID_NAME'));
+    csvHeader.push(Translator('CSVID_NUMBER'));
+    csvHeader.push(Translator('CSVID_TSHIRT'));
+    csvHeader.push(Translator('CSVID_TSHIRTLONG'));
+    csvHeader.push(Translator('CSVID_SHORTS'));
+    csvHeader.push(Translator('CSVID_PANTS'));
+    csvHeader.push(Translator('CSVID_TANKTOP'));
+    csvHeader.push(Translator('CSVID_VEST'));
+
+    // ADD CSV HEADER
+    csvFullData.unshift(csvHeader.join(','));
+
+    // ADD FILES TO ZIP
+    zip.file(`${Translator('MAIN_TITLE')}.csv`, csvFullData.join('\n'));
+    zip.file('Melista.bkp', btoa(localStorage.getItem('sisbot')));
+    zip.file(
+      `${Translator('INSTRUCTIONS_FILENAME')}.txt`,
+      `${Translator('INSTRUCTIONS_CONTENT')}`,
+    );
+
+    // DOWNLOAD ZIP
+    zip.generateAsync({type: 'blob'}).then((content) => {
+      saveAs(content, `${safeFilename}.zip`);
+    });
+
+    setShowModalConfirmDownload(false);
+    setZIPFileName('');
+
+    addToast(Translator('TOAST_DOWNLOAD_COMPLETE'), {
+      autoDismiss: true,
+      appearance: 'success',
+    });
+  };
 
   return (
     <>
       <FormAddOrderItem />
       <Separator />
+
+      {/* DOWNLOAD */}
+      <ModalTextInput
+        isOpen={showModalConfirmDownload}
+        title={Translator('DOWNLOAD_TITLE')}
+        inputTextContent={zipFileName}
+        labelContent={Translator('ASK_FILENAME')}
+        placeholderContent={Translator('MAIN_TITLE')}
+        handleChange={(e) => setZIPFileName(e.target.value)}
+        handleConfirm={() => handleDownload(true)}
+        handleClose={handleCLoseModalTextInput}
+      />
+
       <div
         className="d-flex"
         style={{justifyContent: 'space-between', alignItems: 'center'}}>
         <Title text={Translator('MAIN_TITLE')} />
         <div>
+          <Button
+            variant="success"
+            className="mr-2"
+            size="sm"
+            onClick={() => handleDownload()}>
+            <FontAwesomeIcon icon={faDownload} />
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('DOWNLOAD')}
+            </span>
+          </Button>
+
           <Button
             className="mr-2"
             variant="secondary"
