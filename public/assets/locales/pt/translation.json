@@ -147,6 +147,8 @@
   "TOAST_CYCLING_MODE": "Modo Ciclismo.",
   "TOAST_DEFAULT_MODE": "Modo Padrão.",
   "TOAST_FAILED_TO_SENT_LIST": "Falha ao enviar a lista por e-mail.",
+  "TOAST_INVALID_EMAIL": "E-mail inválido.",
+  "TOAST_MUST_SOLVE_CAPTCHA": "Você precisa resolver o desafio captcha.",
 
   "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site list.oneformes.com\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

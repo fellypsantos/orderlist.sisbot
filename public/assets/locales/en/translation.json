@@ -147,6 +147,8 @@
   "TOAST_CYCLING_MODE": "Cycling Mode.",
   "TOAST_DEFAULT_MODE": "Default Mode.",
   "TOAST_FAILED_TO_SENT_LIST": "Failed to send list via email.",
+  "TOAST_INVALID_EMAIL": "Invalid email.",
+  "TOAST_MUST_SOLVE_CAPTCHA": "You must solve captcha challenge.",
 
   "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at list.oneformes.com to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
 }

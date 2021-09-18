@@ -147,7 +147,7 @@ const Main = () => {
   const handleSendMail = async () => {
     // VALIDATE EMAIL
     if (!Utils.IsValidEmail(targetEmail)) {
-      addToast('email bugado fi', {
+      addToast(Translator('TOAST_INVALID_EMAIL'), {
         autoDismiss: true,
         appearance: 'error',
       });
@@ -157,7 +157,7 @@ const Main = () => {
 
     // VALIDATE HCAPTCHA
     if (HCaptchaToken === '') {
-      addToast('Resolva o desafio.', {
+      addToast(Translator('TOAST_MUST_SOLVE_CAPTCHA'), {
         autoDismiss: true,
         appearance: 'error',
       });
