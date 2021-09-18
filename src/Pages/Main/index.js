@@ -41,7 +41,7 @@ const Main = () => {
   );
 
   const [targetEmail, setTargetEmail] = useState('');
-  const [showModalSendMail, setShowModalSendMail] = useState(true);
+  const [showModalSendMail, setShowModalSendMail] = useState(false);
 
   const handleCLoseModalTextInput = () => {
     setZIPFileName('');
@@ -51,6 +51,8 @@ const Main = () => {
   const handleCloseModalSendMail = () => {
     setRequestLoading(null);
     setShowModalSendMail(false);
+    setTargetEmail('');
+    setHCaptchaToken('');
   };
 
   const handleDownload = (confirmed = false) => {
