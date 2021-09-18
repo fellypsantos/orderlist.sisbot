@@ -1,9 +1,15 @@
 import React, {useContext, useState} from 'react';
 import {useToasts} from 'react-toast-notifications';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faEye, faEyeSlash, faDownload} from '@fortawesome/free-solid-svg-icons';
+import {
+  faEye,
+  faEyeSlash,
+  faDownload,
+  faEnvelope,
+} from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import JSZip from 'jszip';
+import axios from 'axios';
 
 import saveAs from '../../../node_modules/jszip/vendor/FileSaver';
 import TableOrdersMenu from '../../components/TableOrdersMenu';
@@ -15,6 +21,7 @@ import TableOrderList from '../../components/TableOrderList';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcons';
 import ModalTextInput from '../../components/ModalTextInput';
+import Utils from '../../Utils';
 
 const Main = () => {
   const {
@@ -26,14 +33,24 @@ const Main = () => {
 
   const {addToast} = useToasts();
 
+  const [HCaptchaToken, setHCaptchaToken] = useState('');
+  const [requestLoading, setRequestLoading] = useState(null);
   const [zipFileName, setZIPFileName] = useState('');
   const [showModalConfirmDownload, setShowModalConfirmDownload] = useState(
     false,
   );
 
+  const [targetEmail, setTargetEmail] = useState('');
+  const [showModalSendMail, setShowModalSendMail] = useState(true);
+
   const handleCLoseModalTextInput = () => {
     setZIPFileName('');
     setShowModalConfirmDownload(false);
+  };
+
+  const handleCloseModalSendMail = () => {
+    setRequestLoading(null);
+    setShowModalSendMail(false);
   };
 
   const handleDownload = (confirmed = false) => {
@@ -127,6 +144,57 @@ const Main = () => {
     });
   };
 
+  const handleSendMail = async () => {
+    // VALIDATE EMAIL
+    if (!Utils.IsValidEmail(targetEmail)) {
+      addToast('email bugado fi', {
+        autoDismiss: true,
+        appearance: 'error',
+      });
+
+      return;
+    }
+
+    // VALIDATE HCAPTCHA
+    if (HCaptchaToken === '') {
+      addToast('Resolva o desafio.', {
+        autoDismiss: true,
+        appearance: 'error',
+      });
+
+      return;
+    }
+
+    setRequestLoading(true);
+
+    const postData = {
+      token: HCaptchaToken,
+      listContent: 'ab1iu1bhvbuy12089s7d',
+    };
+
+    const postFormData = new FormData();
+    Object.keys(postData).map((key) => postFormData.append(key, postData[key]));
+
+    const serverResponse = await axios.post(
+      'http://10.0.0.100/hcaptcha/',
+      postFormData,
+      {
+        headers: {'Content-Type': 'multipart/form-data'},
+      },
+    );
+
+    if (serverResponse.data === true) {
+      setRequestLoading(false);
+      setTargetEmail('');
+    } else {
+      addToast(Translator('TOAST_FAILED_TO_SENT_LIST'), {
+        autoDismiss: true,
+        appearance: 'error',
+      });
+      setRequestLoading(null);
+    }
+  };
+
   return (
     <>
       <FormAddOrderItem />
@@ -144,6 +212,22 @@ const Main = () => {
         handleClose={handleCLoseModalTextInput}
       />
 
+      {/* SEND VIA EMAIL */}
+      <ModalTextInput
+        isOpen={showModalSendMail}
+        title={Translator('MODAL_TITLE_SENT_VIA_EMAIL')}
+        hcaptchaEnabled
+        hideHelpText
+        hcaptchaSolved={(theToken) => setHCaptchaToken(theToken)}
+        loadingRequest={requestLoading}
+        labelContent={Translator('ASK_DESTINATION_EMAIL')}
+        placeholderContent="sample@server.com"
+        inputTextContent={targetEmail}
+        handleChange={(e) => setTargetEmail(e.target.value.trim())}
+        handleConfirm={handleSendMail}
+        handleClose={handleCloseModalSendMail}
+      />
+
       <div
         className="d-flex"
         style={{justifyContent: 'space-between', alignItems: 'center'}}>
@@ -157,6 +241,17 @@ const Main = () => {
             <FontAwesomeIcon icon={faDownload} />
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('DOWNLOAD')}
+            </span>
+          </Button>
+
+          <Button
+            variant="primary"
+            className="mr-2"
+            size="sm"
+            onClick={() => setShowModalSendMail(true)}>
+            <FontAwesomeIcon icon={faEnvelope} />
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('SEND_MAIL')}
             </span>
           </Button>
 

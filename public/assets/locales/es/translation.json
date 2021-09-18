@@ -74,6 +74,7 @@
   "REPORT": "Reporte",
   "NOTES": "Comentarios",
   "PHOTO": "Photo",
+  "SEND_MAIL": "Enviar",
 
   "SIZE": "Tamaño",
   "QUANTITY": "Cantidad",
@@ -89,6 +90,11 @@
   "LABEL": "Etiqueta",
   "LABELS": "Etiquetas",
   "DARK_LIGHT": "Oscuro/Claro",
+
+  "SENDING_MAIL": "Enviando, espera un segundo...",
+  "EMAIL_SENT": "¡Hecho! Lista enviada.",
+  "MODAL_TITLE_SENT_VIA_EMAIL": "Enviar lista por correo electrónico",
+  "ASK_DESTINATION_EMAIL": "¿Cuál es el correo electrónico de destino?",
 
   "SETTINGS_POPUP_TITLE": "Ajustes",
   "SETTINGS_COIN_PREFIX": "Prefijo de Moneda",
@@ -140,6 +146,7 @@
   "TOAST_NOTES_UPDATED": "Se actualizaron sus notas de producción.",
   "TOAST_CYCLING_MODE": "Modo de ciclismo.",
   "TOAST_DEFAULT_MODE": "Modo por defecto.",
+  "TOAST_FAILED_TO_SENT_LIST": "No se pudo enviar la lista por correo electrónico.",
 
   "INSTRUCTIONS_CONTENT": "Hola,\n\nEsta lista de pedidos se creó utilizando el sitio web oneformes.com.\n¿Sabías que puedes automatizar tu producción usando esta lista?\n\nEche un vistazo a cómo funciona visitando nuestro canal de YouTube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstrucciones\n\nSISBot lee el archivo .csv para automatizar las producciones de CorelDraw.\n.bkp se puede importar en list.oneformes.com para restaurar la lista de pedidos y realizar cambios.\n\n\nGenere informes de producción.\nEvite errores y desperdicios.\nAutomatiza trabajos repetitivos.\nTenga una visión amplia de la lista de pedidos.\n\n\nSaludos\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

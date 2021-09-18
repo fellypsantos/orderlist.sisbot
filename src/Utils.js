@@ -127,4 +127,7 @@ export default {
 
     return targetPriceTable;
   },
+
+  IsValidEmail: (email) =>
+    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email),
 };
