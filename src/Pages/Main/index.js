@@ -22,6 +22,9 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcons';
 import ModalTextInput from '../../components/ModalTextInput';
 import Utils from '../../Utils';
+import ModalSendViaEmail from '../../components/ModalSendViaEmail';
+
+const HCAPTCHA_SERVER_CHECK = 'https://list.oneformes.com/hcaptcha/';
 
 const Main = () => {
   const {
@@ -40,6 +43,7 @@ const Main = () => {
     false,
   );
 
+  const [clientName, setClientName] = useState('');
   const [targetEmail, setTargetEmail] = useState('');
   const [showModalSendMail, setShowModalSendMail] = useState(false);
 
@@ -51,20 +55,13 @@ const Main = () => {
   const handleCloseModalSendMail = () => {
     setRequestLoading(null);
     setShowModalSendMail(false);
+    setClientName('');
     setTargetEmail('');
     setHCaptchaToken('');
   };
 
-  const handleDownload = (confirmed = false) => {
-    if (!confirmed) {
-      setShowModalConfirmDownload(true);
-      return;
-    }
-
+  const generateZip = async () => {
     const zip = new JSZip();
-
-    const safeFilename =
-      zipFileName === '' ? Translator('MAIN_TITLE') : zipFileName;
 
     const sisbotGender = {
       MALE: 'ma',
@@ -126,16 +123,27 @@ const Main = () => {
 
     // ADD FILES TO ZIP
     zip.file(`${Translator('MAIN_TITLE')}.csv`, csvFullData.join('\n'));
-    zip.file('Melista.bkp', btoa(localStorage.getItem('sisbot')));
+    zip.file('list.bkp', btoa(localStorage.getItem('sisbot')));
     zip.file(
       `${Translator('INSTRUCTIONS_FILENAME')}.txt`,
       `${Translator('INSTRUCTIONS_CONTENT')}`,
     );
 
     // DOWNLOAD ZIP
-    zip.generateAsync({type: 'blob'}).then((content) => {
-      saveAs(content, `${safeFilename}.zip`);
-    });
+    const blobContent = await zip.generateAsync({type: 'blob'});
+    return blobContent;
+  };
+
+  const handleDownload = async (confirmed = false) => {
+    if (!confirmed) {
+      setShowModalConfirmDownload(true);
+      return;
+    }
+
+    const safeFilename =
+      zipFileName === '' ? Translator('MAIN_TITLE') : zipFileName;
+    const zipData = await generateZip();
+    saveAs(zipData, `${safeFilename}.zip`);
 
     setShowModalConfirmDownload(false);
     setZIPFileName('');
@@ -157,6 +165,16 @@ const Main = () => {
       return;
     }
 
+    // VALIDATE CLIENT NAME
+    if (clientName.trim() === '') {
+      addToast(Translator('TOAST_EMPTY_CLIENT_NAME'), {
+        autoDismiss: true,
+        appearance: 'error',
+      });
+
+      return;
+    }
+
     // VALIDATE HCAPTCHA
     if (HCaptchaToken === '') {
       addToast(Translator('TOAST_MUST_SOLVE_CAPTCHA'), {
@@ -168,22 +186,35 @@ const Main = () => {
     }
 
     setRequestLoading(true);
+    const zipData = await generateZip();
 
     const postData = {
       token: HCaptchaToken,
-      listContent: 'ab1iu1bhvbuy12089s7d',
+      zipfile: zipData,
+      email: targetEmail,
+      client: clientName,
     };
 
     const postFormData = new FormData();
     Object.keys(postData).map((key) => postFormData.append(key, postData[key]));
 
-    const serverResponse = await axios.post(
-      'http://10.0.0.100/hcaptcha/',
-      postFormData,
-      {
+    const serverResponse = await axios
+      .post(HCAPTCHA_SERVER_CHECK, postFormData, {
         headers: {'Content-Type': 'multipart/form-data'},
-      },
-    );
+        timeout: 15000,
+      })
+      .catch((error) => {
+        addToast(Translator('TOAST_AXIOS_ERROR'), {
+          autoDismiss: true,
+          appearance: 'error',
+        });
+
+        setRequestLoading(null);
+
+        console.log('AXIOS_ERROR: ', error);
+      });
+
+    if (serverResponse === undefined) return;
 
     if (serverResponse.data === true) {
       setRequestLoading(false);
@@ -215,19 +246,16 @@ const Main = () => {
       />
 
       {/* SEND VIA EMAIL */}
-      <ModalTextInput
+      <ModalSendViaEmail
+        name={clientName}
+        email={targetEmail}
+        handleChangeName={({target}) => setClientName(target.value)}
+        handleChangeEmail={({target}) => setTargetEmail(target.value.trim())}
         isOpen={showModalSendMail}
-        title={Translator('MODAL_TITLE_SENT_VIA_EMAIL')}
-        hcaptchaEnabled
-        hideHelpText
-        hcaptchaSolved={(theToken) => setHCaptchaToken(theToken)}
-        loadingRequest={requestLoading}
-        labelContent={Translator('ASK_DESTINATION_EMAIL')}
-        placeholderContent="sample@server.com"
-        inputTextContent={targetEmail}
-        handleChange={(e) => setTargetEmail(e.target.value.trim())}
         handleConfirm={handleSendMail}
         handleClose={handleCloseModalSendMail}
+        requestLoading={requestLoading}
+        hcaptchaSolved={(responseToken) => setHCaptchaToken(responseToken)}
       />
 
       <div

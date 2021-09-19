@@ -95,6 +95,8 @@
   "EMAIL_SENT": "Done! List sent.",
   "MODAL_TITLE_SENT_VIA_EMAIL": "Send list via email",
   "ASK_DESTINATION_EMAIL": "What's the destination email?",
+  "ASK_CLIENT_NAME": "Type your name to identify the list file",
+  "ASK_NOT_ROBOT": "Confirm that you're not a robot",
 
   "SETTINGS_POPUP_TITLE": "Settings",
   "SETTINGS_COIN_PREFIX": "Coin Prefix",
@@ -147,8 +149,10 @@
   "TOAST_CYCLING_MODE": "Cycling Mode.",
   "TOAST_DEFAULT_MODE": "Default Mode.",
   "TOAST_FAILED_TO_SENT_LIST": "Failed to send list via email.",
+  "TOAST_EMPTY_CLIENT_NAME": "Client name cannot be empty.",
   "TOAST_INVALID_EMAIL": "Invalid email.",
   "TOAST_MUST_SOLVE_CAPTCHA": "You must solve captcha challenge.",
+  "TOAST_AXIOS_ERROR": "Connection error occurred",
 
   "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at list.oneformes.com to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
 }
