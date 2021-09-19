@@ -137,6 +137,8 @@
   "CLOTHING_PRICES": "Preços das Roupas",
   "SETUP_UNIT_PRICE": "Configure o valor unitário de cada peça.",
 
+  "EMAIL_BODY": "Segue em anexo o arquivo zip com a lista de pedidos.",
+
   "TOAST_EMPTY_LIST": "Lista vazia! Não há nada para adicionar até o momento.",
   "TOAST_EMPTY_LIST_ON_UPDATE": "Lista vazia! Você não pode editar a informação deixando vazia.",
   "TOAST_ITEM_ADDED": "Feito! Novo item adicionado na sua lista de pedidos.",

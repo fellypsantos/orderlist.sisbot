@@ -137,6 +137,8 @@
   "CLOTHING_PRICES": "Clothing Prices",
   "SETUP_UNIT_PRICE": "Setup the unitary value of each piece.",
 
+  "EMAIL_BODY": "Attached is the zip file with the list of orders.",
+
   "TOAST_EMPTY_LIST": "Empty List! Nothing to add for now.",
   "TOAST_EMPTY_LIST_ON_UPDATE": "Empty List! You can't edit the informations keeping empty.",
   "TOAST_ITEM_ADDED": "Done! New item was added to your order list.",

@@ -24,6 +24,7 @@ import ModalTextInput from '../../components/ModalTextInput';
 import Utils from '../../Utils';
 import ModalSendViaEmail from '../../components/ModalSendViaEmail';
 
+// const HCAPTCHA_SERVER_CHECK = 'http://localhost/hcaptcha/';
 const HCAPTCHA_SERVER_CHECK = 'https://list.oneformes.com/hcaptcha/';
 
 const Main = () => {
@@ -193,6 +194,11 @@ const Main = () => {
       zipfile: zipData,
       email: targetEmail,
       client: clientName,
+      translatedText: JSON.stringify({
+        emailTitle: Translator('MAIN_TITLE'),
+        emailBody: Translator('EMAIL_BODY'),
+        labelClient: Translator('CLIENT'),
+      }),
     };
 
     const postFormData = new FormData();
