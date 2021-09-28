@@ -112,6 +112,7 @@
   "REPORT_PIECES_COUNTING": "Recuento de piezas",
   "REPORT_LAYOUT_IMAGE": "Foto de diseño",
   "UNTITLED": "Presupuesto sin título",
+  "GENERATE_LINK": "Generar Enlace",
 
   "CONFIRM_DELETE_ITEM": "¿Realmente desea eliminar este artículo de la lista de pedidos?",
   "CONFIRM_DELETE_ITEM_MODAL": "¿Realmente desea eliminar el elemento seleccionado?",

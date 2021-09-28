@@ -9,6 +9,7 @@ import Table from 'react-bootstrap/Table';
 import {
   faArrowLeft,
   faDownload,
+  faLink,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import {useToasts} from 'react-toast-notifications';
@@ -19,6 +20,7 @@ import {CustomInputAsHeaderText} from './styles';
 import Utils from '../../Utils';
 import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcons';
 
+const API = 'https://list.oneformes.com/api';
 const LS_PRICES_ID = 'sisbot.bussiness.prices';
 
 const BussinessPricing = () => {
@@ -81,8 +83,87 @@ const BussinessPricing = () => {
     );
   };
 
+  const isValidJsonFileForPrices = (object) => {
+    if (
+      object.projectName !== undefined &&
+      object.priceTableMale !== undefined &&
+      object.priceTableFemale !== undefined &&
+      object.priceTableChildish !== undefined
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const generateLink = async (e) => {
+    e.preventDefault();
+
+    await fetch(`${API}/generateLink.php`, {
+      method: 'POST',
+      body: JSON.stringify({
+        projectName,
+        priceTableMale,
+        priceTableFemale,
+        priceTableChildish,
+        settings: {
+          ...settings,
+          filterEnabled: shouldFiter,
+        },
+      }),
+    })
+      .then((response) => response.text())
+      .then((responseText) => {
+        const generatedLink = document.getElementById('generatedLink');
+        generatedLink.setAttribute(
+          'href',
+          window.location.origin +
+            window.location.pathname +
+            '?query=' +
+            responseText,
+        );
+        generatedLink.setAttribute('class', 'mt-2 d-flex');
+        generatedLink.textContent =
+          window.location.origin +
+          window.location.pathname +
+          '?query=' +
+          responseText;
+      });
+  };
+
+  const loadLink = async (query) => {
+    await fetch(`${API}/loadLink.php` + query, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson !== null) {
+          const uploaded = JSON.parse(responseJson);
+          if (isValidJsonFileForPrices(uploaded)) {
+            setProjectName(uploaded.projectName);
+            setPriceTableMale(uploaded.priceTableMale);
+            setPriceTableFemale(uploaded.priceTableFemale);
+            setPriceTableChildish(uploaded.priceTableChildish);
+            setSettings(uploaded.settings);
+            setShouldFilter(uploaded.settings.filterEnabled);
+          }
+        } else {
+          alert('Link expirado!');
+        }
+      });
+  };
+
   // LOAD DATA FROM LOCALSTORAGE
   useEffect(() => {
+    const theQuery = window.location.search;
+    console.log('💥 CHECK QUERY: ', theQuery, theQuery.length);
+
+    if (theQuery !== '') {
+      console.log('LOAD FROM SERVER!');
+      loadLink(theQuery);
+      return;
+    }
+
     const localStorageBussinessPrices = localStorage.getItem(LS_PRICES_ID);
 
     if (localStorageBussinessPrices !== null) {
@@ -189,19 +270,6 @@ const BussinessPricing = () => {
     });
   };
 
-  const isValidJsonFileForPrices = (object) => {
-    if (
-      object.projectName !== undefined &&
-      object.priceTableMale !== undefined &&
-      object.priceTableFemale !== undefined &&
-      object.priceTableChildish !== undefined
-    ) {
-      return true;
-    }
-
-    return false;
-  };
-
   const handleUploadPricesTables = () => {
     Utils.HandleUploadFile('.json', (content) => {
       const uploaded = JSON.parse(content);
@@ -272,7 +340,7 @@ const BussinessPricing = () => {
             className="mr-2"
             variant="secondary"
             size="sm"
-            onClick={() => history.goBack()}>
+            onClick={() => history.push('/')}>
             <FontAwesomeIcon icon={faArrowLeft} />
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('GOBACK')}
@@ -492,6 +560,24 @@ const BussinessPricing = () => {
           </Table>
         </Tab>
       </Tabs>
+
+      {/* GERAR LINK */}
+      <div
+        className="d-flex"
+        style={{justifyContent: 'center', alignItems: 'center'}}>
+        <Button variant="secondary" size="sm" onClick={generateLink}>
+          <FontAwesomeIcon icon={faLink} />
+          <span className="ml-1">{Translator('GENERATE_LINK')}</span>
+        </Button>
+      </div>
+
+      <div
+        className="d-flex"
+        style={{justifyContent: 'center', alignItems: 'center'}}>
+        <a href="/#" id="generatedLink" className="mt-2 d-none">
+          Link
+        </a>
+      </div>
     </div>
   );
 };

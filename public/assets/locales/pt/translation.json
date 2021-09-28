@@ -112,6 +112,7 @@
   "REPORT_PIECES_COUNTING": "Contagem de Peças",
   "REPORT_LAYOUT_IMAGE": "Foto do Layout",
   "UNTITLED": "Orçamento sem título",
+  "GENERATE_LINK": "Gerar Link",
 
   "CONFIRM_DELETE_ITEM": "Quer mesmo excluir esse item da lista de pedidos?",
   "CONFIRM_DELETE_ITEM_MODAL": "Deseja mesmo excluir o item selecionado?",
