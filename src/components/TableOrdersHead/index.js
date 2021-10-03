@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
   faCoins,
@@ -8,17 +8,42 @@ import {
   faEye,
 } from '@fortawesome/free-solid-svg-icons';
 import {OrderListContext} from '../../contexts/OrderListContext';
+import Utils from '../../Utils';
 
-export default function TableOrdersHead() {
-  const {clothingIcons, screenshotMode, Translator, isCycling} = useContext(
-    OrderListContext,
-  );
+const TableOrdersHead = () => {
+  const {
+    clothingIcons,
+    screenshotMode,
+    Translator,
+    isCycling,
+    orderListItems,
+  } = useContext(OrderListContext);
+
+  const [totalOfPieces, setTotalOfPieces] = useState(0);
+
+  useEffect(() => {
+    const calculated = Utils.HelperCountTotalOfPieces(orderListItems, true);
+    setTotalOfPieces(calculated);
+  }, [orderListItems]);
 
   return (
     <thead>
+      <tr className={screenshotMode ? 'd-none' : ''}>
+        <td
+          className="text-center"
+          colSpan={Utils.GetTotalColumnsTableOrderListItems(
+            document.getElementById('tableOrderListItems'),
+          )}>
+          {`${Translator('CONTAINS_N_UNITS')} ${totalOfPieces}`}
+        </td>
+      </tr>
+
       <tr className={!screenshotMode ? 'd-none' : ''}>
         <td colSpan={10} className="text-center">
-          <strong>{Translator('MAIN_TITLE')}</strong>
+          <strong>
+            {Translator('MAIN_TITLE')} -{' '}
+            {`${Translator('CONTAINS_N_UNITS')} ${totalOfPieces}`}
+          </strong>
         </td>
       </tr>
       <tr className="text-center">
@@ -70,4 +95,6 @@ export default function TableOrdersHead() {
       </tr>
     </thead>
   );
-}
+};
+
+export default TableOrdersHead;

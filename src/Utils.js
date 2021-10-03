@@ -73,7 +73,7 @@ export default {
 
   GetTotalColumnsTableOrderListItems: (tableElement) => {
     if (tableElement !== null) {
-      const columnCount = tableElement.children[0].children[1].children.length;
+      const columnCount = tableElement.children[0].children[2].children.length;
       return columnCount;
     }
 
@@ -130,4 +130,31 @@ export default {
 
   IsValidEmail: (email) =>
     /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email),
+
+  HelperCountTotalOfPieces: (orderListItems, returnTotalOnly = false) => {
+    const calculator = {
+      tshirt: 0,
+      tshirtLong: 0,
+      shorts: 0,
+      pants: 0,
+      tanktop: 0,
+      vest: 0,
+    };
+
+    orderListItems.map((orderItem) => {
+      orderItem.clothingSettings.map((theClothe) => {
+        const clotheName = theClothe.name.replace('Cycling', '');
+        const clotheQty = theClothe.quantity;
+
+        calculator[clotheName] += clotheQty; // CALCULATE
+      });
+    });
+
+    // RETURN OBJECT WITH SUM VALUES OR TOTAL OF EVERYTHING
+    const valueToReturn = returnTotalOnly
+      ? Object.values(calculator).reduce((a, b) => a + b)
+      : calculator;
+
+    return valueToReturn;
+  },
 };

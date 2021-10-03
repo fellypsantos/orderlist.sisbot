@@ -31,6 +31,7 @@
   "CSVID_VEST": "chaleco",
 
   "MAIN_TITLE": "Lista de orden",
+  "CONTAINS_N_UNITS": "Total de Piezas:",
   "DASHBOARD_BUTTON_HIDE": "Esconder",
   "DASHBOARD_BUTTON_SHOW": "Mostrar",
   "DOWNLOAD_TITLE": "Descargar lista",

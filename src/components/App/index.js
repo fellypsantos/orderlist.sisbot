@@ -1,7 +1,7 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import {ToastProvider} from 'react-toast-notifications';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {Switch, Route, HashRouter} from 'react-router-dom';
 
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'flag-icon-css/css/flag-icon.min.css';
@@ -45,13 +45,13 @@ const App = () => (
       </NavbarContainer>
       <MainContentContainer>
         <Container>
-          <BrowserRouter>
+          <HashRouter>
             <Switch>
               <Route exact path="/" component={Main} />
               <Route path="/report" component={ReportWithContext} />
               <Route path="/bussiness/pricing" component={BussinessPricing} />
             </Switch>
-          </BrowserRouter>
+          </HashRouter>
         </Container>
       </MainContentContainer>
     </ToastProvider>

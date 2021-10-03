@@ -31,6 +31,7 @@
   "CSVID_VEST": "vest",
 
   "MAIN_TITLE": "Order List",
+  "CONTAINS_N_UNITS": "Total of Pieces:",
   "DASHBOARD_BUTTON_HIDE": "Hide",
   "DASHBOARD_BUTTON_SHOW": "Show",
   "DOWNLOAD_TITLE": "List Download",

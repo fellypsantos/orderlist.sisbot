@@ -42,14 +42,7 @@ const Report = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [finalProcessedImage, setFinalProcessedImage] = useState(null);
   const [imageDimensions, setImageDimensions] = useState(null);
-  const [consolidatedCounting, setConsolidatedCounting] = useState({
-    tshirt: 0,
-    tshirtLong: 0,
-    shorts: 0,
-    pants: 0,
-    tanktop: 0,
-    vest: 0,
-  });
+  const [consolidatedCounting, setConsolidatedCounting] = useState(null);
 
   const [sortedOrderList, setSortedOrderList] = useState({
     male: {
@@ -295,12 +288,6 @@ const Report = () => {
           const clotheSize = theClothe.size;
           const clotheQty = theClothe.quantity;
 
-          // CALCULATE CONSOLIDATED QUANTITIES
-          setConsolidatedCounting({
-            ...consolidatedCounting,
-            [clotheName]: (consolidatedCounting[clotheName] += clotheQty),
-          });
-
           tempSortedOrderList[tempGender][clotheName][clotheSize] += clotheQty;
           setSortedOrderList(tempSortedOrderList);
         }
@@ -308,6 +295,10 @@ const Report = () => {
       });
       return orderItem;
     });
+
+    // LOAD CONSOLIDATED VALUES AS OBJECT
+    const calculated = Utils.HelperCountTotalOfPieces(orderListItems);
+    setConsolidatedCounting(calculated);
   }, [orderListItems]);
 
   const handleCloseModal = () => {
@@ -817,57 +808,63 @@ const Report = () => {
           </Row>
         </div>
 
-        {/* SECOND PAGE */}
-        <Row style={{marginTop: '200px'}}>
-          <Col xs="4">
-            <h5>{Translator('REPORT_PIECES_COUNTING')}</h5>
-            <TableContentCentered>
-              <tbody>
-                {Object.keys(clothingIcons)
-                  .filter((key) => {
-                    // Always return no variant clothes
-                    if (clothingIcons[key].isCycling === undefined) {
-                      return true;
-                    }
+        {consolidatedCounting !== null && (
+          <Row>
+            <Col xs="4">
+              <h5>{Translator('REPORT_PIECES_COUNTING')}</h5>
+              <TableContentCentered>
+                <tbody>
+                  <tr>
+                    {Object.keys(clothingIcons)
+                      .filter((key) => {
+                        // Always return no variant clothes
+                        if (clothingIcons[key].isCycling === undefined) {
+                          return true;
+                        }
 
-                    // Only return bike or normal clothes, never both;
-                    if (clothingIcons[key].isCycling !== isCycling) {
-                      return false;
-                    }
+                        // Only return bike or normal clothes, never both;
+                        if (clothingIcons[key].isCycling !== isCycling) {
+                          return false;
+                        }
 
-                    return true;
-                  })
-                  .map((item) => (
-                    <tr>
-                      <td>
-                        <img src={clothingIcons[item].icon} alt="Icon" />
-                      </td>
-                      <td>{consolidatedCounting[item]}</td>
-                    </tr>
-                  ))}
+                        return true;
+                      })
+                      .map((item) => (
+                        <React.Fragment key={item}>
+                          <td>
+                            <img src={clothingIcons[item].icon} alt="Icon" />
+                          </td>
+                          <td>{consolidatedCounting[item]}</td>
+                        </React.Fragment>
+                      ))}
 
-                <tr>
-                  <td>Total</td>
-                  <td>
-                    {Object.values(consolidatedCounting).reduce(
-                      (a, b) => a + b,
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </TableContentCentered>
-          </Col>
-          <Col xs="8">
-            <h5>{Translator('REPORT_LAYOUT_IMAGE')}</h5>
-            {finalProcessedImage && (
+                    <td style={{backgroundColor: '#ddd'}}>
+                      <strong>Total</strong>
+                    </td>
+                    <td>
+                      {Object.values(consolidatedCounting).reduce(
+                        (a, b) => a + b,
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </TableContentCentered>
+            </Col>
+          </Row>
+        )}
+
+        {finalProcessedImage && (
+          <Row className="mt-4">
+            <Col xs="8">
+              <h5>{Translator('REPORT_LAYOUT_IMAGE')}</h5>
               <img
                 alt={Translator('REPORT_LAYOUT_IMAGE')}
                 src={finalProcessedImage}
                 width="90%"
               />
-            )}
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        )}
       </div>
     </div>
   );

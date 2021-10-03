@@ -115,24 +115,16 @@ const BussinessPricing = () => {
       .then((response) => response.text())
       .then((responseText) => {
         const generatedLink = document.getElementById('generatedLink');
-        generatedLink.setAttribute(
-          'href',
-          window.location.origin +
-            window.location.pathname +
-            '?query=' +
-            responseText,
-        );
+        const generatedURL = `${window.location.origin}/${window.location.hash}?query=${responseText}`;
+
+        generatedLink.setAttribute('href', generatedURL);
         generatedLink.setAttribute('class', 'mt-2 d-flex');
-        generatedLink.textContent =
-          window.location.origin +
-          window.location.pathname +
-          '?query=' +
-          responseText;
+        generatedLink.textContent = generatedURL;
       });
   };
 
   const loadLink = async (query) => {
-    await fetch(`${API}/loadLink.php` + query, {
+    await fetch(`${API}/loadLink.php?query=` + query, {
       method: 'GET',
     })
       .then((response) => response.json())
@@ -155,9 +147,7 @@ const BussinessPricing = () => {
 
   // LOAD DATA FROM LOCALSTORAGE
   useEffect(() => {
-    const theQuery = window.location.search;
-    console.log('💥 CHECK QUERY: ', theQuery, theQuery.length);
-
+    const theQuery = window.location.hash.split('?query=')[1];
     if (theQuery !== '') {
       console.log('LOAD FROM SERVER!');
       loadLink(theQuery);
