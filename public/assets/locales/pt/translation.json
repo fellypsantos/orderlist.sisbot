@@ -141,6 +141,7 @@
 
   "EMAIL_BODY": "Segue em anexo o arquivo zip com a lista de pedidos.",
 
+  "LINK_EXPIRED": "Esse link já expirou.",
   "TOAST_EMPTY_LIST": "Lista vazia! Não há nada para adicionar até o momento.",
   "TOAST_EMPTY_LIST_ON_UPDATE": "Lista vazia! Você não pode editar a informação deixando vazia.",
   "TOAST_ITEM_ADDED": "Feito! Novo item adicionado na sua lista de pedidos.",
@@ -157,6 +158,8 @@
   "TOAST_INVALID_EMAIL": "E-mail inválido.",
   "TOAST_MUST_SOLVE_CAPTCHA": "Você precisa resolver o desafio captcha.",
   "TOAST_AXIOS_ERROR": "Ocorreu um erro na conexão.",
+  "TOAST_DATA_LOADED_FROM_SERVER": "Os dados foram carregados do servidor.",
+  "TOAST_REDIRECTING": "Redirecionando...",
 
   "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site list.oneformes.com\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

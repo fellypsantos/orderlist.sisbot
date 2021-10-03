@@ -4,6 +4,7 @@ import {faEdit, faEye, faTrash} from '@fortawesome/free-solid-svg-icons';
 import {TableCell, TableRow} from './styles';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import ModalConfirmDialog from '../ModalConfirmDialog';
+import Clickable from '../Clickable';
 import Utils from '../../Utils';
 
 const TableOrdersBody = () => {
@@ -139,9 +140,9 @@ const TableOrdersBody = () => {
 
               {/* EYE ICON */}
               <TableCell className="d-table-cell d-md-none">
-                <a href="#!" onClick={() => handleEdit(item)}>
+                <Clickable handleClick={() => handleEdit(item)}>
                   <FontAwesomeIcon icon={faEye} />
-                </a>
+                </Clickable>
               </TableCell>
 
               {/* EDIT ICON */}
@@ -149,9 +150,9 @@ const TableOrdersBody = () => {
                 className={
                   screenshotMode ? 'd-none' : 'd-none d-md-table-cell'
                 }>
-                <a href="#!" onClick={() => handleEdit(item)}>
+                <Clickable handleClick={() => handleEdit(item)}>
                   <FontAwesomeIcon icon={faEdit} />
-                </a>
+                </Clickable>
               </TableCell>
 
               {/* TRASH ICON */}
@@ -159,12 +160,11 @@ const TableOrdersBody = () => {
                 className={
                   screenshotMode ? 'd-none' : 'd-none d-md-table-cell'
                 }>
-                <a
-                  href="#!"
-                  className="color-flat-red"
-                  onClick={() => handleDelete(item.id)}>
+                <Clickable
+                  handleClick={() => handleDelete(item.id)}
+                  className="color-flat-red">
                   <FontAwesomeIcon icon={faTrash} />
-                </a>
+                </Clickable>
               </TableCell>
             </TableRow>
           ))

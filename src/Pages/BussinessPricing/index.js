@@ -138,9 +138,25 @@ const BussinessPricing = () => {
             setPriceTableChildish(uploaded.priceTableChildish);
             setSettings(uploaded.settings);
             setShouldFilter(uploaded.settings.filterEnabled);
+
+            addToast(Translator('TOAST_DATA_LOADED_FROM_SERVER'), {
+              autoDismiss: true,
+              appearance: 'success',
+            });
+
+            addToast(Translator('TOAST_REDIRECTING'), {
+              autoDismiss: true,
+              appearance: 'success',
+            });
+
+            // WAIT TO REDIRECT
+            setTimeout(() => history.push('/'), 3500);
           }
         } else {
-          alert('Link expirado!');
+          addToast(Translator('LINK_EXPIRED'), {
+            autoDismiss: true,
+            appearance: 'error',
+          });
         }
       });
   };
@@ -148,8 +164,8 @@ const BussinessPricing = () => {
   // LOAD DATA FROM LOCALSTORAGE
   useEffect(() => {
     const theQuery = window.location.hash.split('?query=')[1];
-    if (theQuery !== '') {
-      console.log('LOAD FROM SERVER!');
+    if (theQuery !== undefined) {
+      console.log('LOAD FROM SERVER!', theQuery, typeof theQuery);
       loadLink(theQuery);
       return;
     }
