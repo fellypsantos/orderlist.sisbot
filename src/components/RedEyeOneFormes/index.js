@@ -7,7 +7,7 @@ import {RedEyeOneFormesRounded} from './styles';
 const RedEyeOneFormes = () => {
   const {Translator} = useContext(OrderListContext);
 
-  const handleGoToOneFormes = (e) => {
+  const handleGoToOneFormes = () => {
     window.location.href = 'https://oneformes.com';
   };
 

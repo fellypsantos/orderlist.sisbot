@@ -124,7 +124,7 @@ const BussinessPricing = () => {
   };
 
   const loadLink = async (query) => {
-    await fetch(`${API}/loadLink.php?query=` + query, {
+    await fetch(`${API}/loadLink.php?query=${query}`, {
       method: 'GET',
     })
       .then((response) => response.json())
