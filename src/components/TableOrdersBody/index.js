@@ -135,7 +135,7 @@ const TableOrdersBody = () => {
 
               {/* PAYMENT VALUE */}
               <TableCell>
-                {settings.coinPrefix} {item.payment.value}
+                {settings.coinPrefix} {item.payment.value.toFixed(2)}
               </TableCell>
 
               {/* EYE ICON */}

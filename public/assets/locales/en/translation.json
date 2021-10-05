@@ -108,6 +108,7 @@
 
   "REPORT_MODAL_PREVIEW_TITLE": "Layout Image",
   "REPORT_MODAL_PREVIEW_CROP": "Crop",
+  "REPORT_MODAL_PREVIEW_SCALE": "Scale (Reduce to tint economy)",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Use original size",
   "REPORT_MODAL_PREVIEW_CHOOSE_IMAGE": "Choose Image",
   "REPORT_PIECES_COUNTING": "Pieces Counting",

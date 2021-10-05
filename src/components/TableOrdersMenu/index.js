@@ -26,7 +26,9 @@ const TableOrdersMenu = () => {
   const {
     screenshotMode,
     setScreenshotMode,
+    setListName,
     setOrderListItems,
+    setIsCycling,
     Translator,
     setOrderListItemsNotes,
   } = useContext(OrderListContext);
@@ -107,6 +109,8 @@ const TableOrdersMenu = () => {
   const handleRestoreBackup = (data) => {
     // PARSE THE RESULT
     const backupData = JSON.parse(atob(data));
+    setListName(backupData.listName);
+    setIsCycling(backupData.isCycling);
     setOrderListItems(backupData.orderListItems);
     setOrderListItemsNotes(backupData.orderListItemsNotes);
     addToast(Translator('TOAST_UPLOAD_COMPLETE'), {

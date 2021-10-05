@@ -240,7 +240,14 @@ const BussinessPricing = () => {
 
     const updated = selectedPriceTable[theClotheName].map((item, index) => {
       if (index === indexPrice) {
-        return parseInt(newPrice.replace(settings.coinPrefix, '')) || 0;
+        if (newPrice === '') return '0';
+
+        const thePriceSanitizedV1 = newPrice.replace(settings.coinPrefix, '');
+        const thePriceSanitizedV2 = thePriceSanitizedV1.replace('$', '');
+        const thePriceTrim = thePriceSanitizedV2.trim();
+        const thePriceAsFloat = parseFloat(thePriceTrim);
+
+        return thePriceAsFloat;
       }
 
       return item;
@@ -419,11 +426,12 @@ const BussinessPricing = () => {
                       if (theSize.target === 'TEEN') return false;
                       const genericKey = key.replace('Cycling', '');
                       const itemPrice = priceTableMale[genericKey][index];
+                      const itemPriceAsFloat = parseFloat(itemPrice);
 
                       return (
                         <td key={theSize.id}>
                           <TableCellAsInput
-                            value={itemPrice > 0 ? itemPrice : ''}
+                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
                             handleBlur={({target}) => {
                               handleUpdatePriceTable(
                                 'MALE',
@@ -479,11 +487,12 @@ const BussinessPricing = () => {
                       if (theSize.target === 'TEEN') return false;
                       const genericKey = key.replace('Cycling', '');
                       const itemPrice = priceTableFemale[genericKey][index];
+                      const itemPriceAsFloat = parseFloat(itemPrice);
 
                       return (
                         <td key={theSize.id}>
                           <TableCellAsInput
-                            value={itemPrice > 0 ? itemPrice : ''}
+                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
                             handleBlur={({target}) => {
                               handleUpdatePriceTable(
                                 'FEMALE',
@@ -544,10 +553,12 @@ const BussinessPricing = () => {
                       const itemPrice =
                         priceTableChildish[genericKey][customIndex];
 
+                      const itemPriceAsFloat = parseFloat(itemPrice);
+
                       return (
                         <td key={theSize.id}>
                           <TableCellAsInput
-                            value={itemPrice > 0 ? itemPrice : ''}
+                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
                             handleBlur={({target}) => {
                               handleUpdatePriceTable(
                                 'CHILDISH',

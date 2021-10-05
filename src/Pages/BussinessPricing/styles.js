@@ -7,7 +7,7 @@ export const CustomInputAsHeaderText = styled.input`
   font-weight: 500;
   line-height: 1.2;
   font-size: 1.5rem;
-  max-width: 300px;
+  max-width: ${(props) => (props.small ? '230px' : '300px')};
   outline: none;
 
   :hover,

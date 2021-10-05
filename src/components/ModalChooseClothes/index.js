@@ -160,6 +160,8 @@ const ModalChooseClothes = () => {
       (clotheItem) => clotheItem.size !== '' && clotheItem.quantity !== 0,
     );
 
+    if (noEmptyClothes.length === 0) return '0.00';
+
     const currentValue = Utils.CalculatePaymentValueToOrderItem(
       currentClothingPrices,
       clothingSizes,
@@ -167,7 +169,7 @@ const ModalChooseClothes = () => {
       tempOrderItem.gender,
     );
 
-    return currentValue;
+    return currentValue.toFixed(2);
   };
 
   const handleOnHide = () => {

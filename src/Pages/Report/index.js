@@ -38,6 +38,7 @@ const Report = () => {
   const [useCrop, setUseCrop] = useState(false);
   const [crop, setCrop] = useState({x: 0, y: 0});
   const [zoom, setZoom] = useState(1);
+  const [scale, setScale] = useState(50);
   const [croppedArea, setCroppedArea] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [finalProcessedImage, setFinalProcessedImage] = useState(null);
@@ -425,6 +426,22 @@ const Report = () => {
                   </div>
                 </Form>
               </Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <div>{Translator('REPORT_MODAL_PREVIEW_SCALE')}</div>
+              <RangeSlider
+                tooltip="off"
+                value={scale}
+                min={10}
+                max={100}
+                step={0.1}
+                size="lg"
+                onChange={(e) => setScale(e.target.value)}
+                style={{width: '100%'}}
+                disabled={selectedImage === null}
+              />
             </Col>
           </Row>
         </Modal.Body>
@@ -855,12 +872,12 @@ const Report = () => {
 
         {finalProcessedImage && (
           <Row className="mt-4">
-            <Col xs="8">
+            <Col xs="12">
               <h5>{Translator('REPORT_LAYOUT_IMAGE')}</h5>
               <img
                 alt={Translator('REPORT_LAYOUT_IMAGE')}
                 src={finalProcessedImage}
-                width="90%"
+                width={`${scale}%`}
               />
             </Col>
           </Row>

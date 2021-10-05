@@ -15,7 +15,6 @@ import saveAs from '../../../node_modules/jszip/vendor/FileSaver';
 import TableOrdersMenu from '../../components/TableOrdersMenu';
 import FormAddOrderItem from '../../components/FormAddOrderItem';
 import DashboardReports from '../../components/DashboardReports';
-import Title from '../../components/Title';
 import Separator from '../../components/Separator';
 import TableOrderList from '../../components/TableOrderList';
 import {OrderListContext} from '../../contexts/OrderListContext';
@@ -23,6 +22,7 @@ import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcon
 import ModalTextInput from '../../components/ModalTextInput';
 import Utils from '../../Utils';
 import ModalSendViaEmail from '../../components/ModalSendViaEmail';
+import {CustomInputAsHeaderText} from '../BussinessPricing/styles';
 
 // const HCAPTCHA_SERVER_CHECK = 'http://localhost/hcaptcha/';
 const HCAPTCHA_SERVER_CHECK = 'https://list.oneformes.com/hcaptcha/';
@@ -33,6 +33,8 @@ const Main = () => {
     showDashboard,
     setShowDashboard,
     orderListItems,
+    listName,
+    setListName,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -267,7 +269,13 @@ const Main = () => {
       <div
         className="d-flex"
         style={{justifyContent: 'space-between', alignItems: 'center'}}>
-        <Title text={Translator('MAIN_TITLE')} />
+        <CustomInputAsHeaderText
+          small
+          type="text"
+          value={listName}
+          placeholder={Translator('MAIN_TITLE')}
+          onChange={({target}) => setListName(target.value)}
+        />
         <div>
           <Button
             variant="success"

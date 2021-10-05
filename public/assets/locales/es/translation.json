@@ -108,6 +108,7 @@
 
   "REPORT_MODAL_PREVIEW_TITLE": "Imagen de diseño",
   "REPORT_MODAL_PREVIEW_CROP": "Delimitar imagen",
+  "REPORT_MODAL_PREVIEW_SCALE": "Escala (Reducir para ahorrar tinta.)",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamaño original",
   "REPORT_MODAL_PREVIEW_CHOOSE_IMAGE": "Elegir imagen",
   "REPORT_PIECES_COUNTING": "Recuento de piezas",

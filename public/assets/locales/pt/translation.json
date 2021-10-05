@@ -108,6 +108,7 @@
 
   "REPORT_MODAL_PREVIEW_TITLE": "Imagem do Layout",
   "REPORT_MODAL_PREVIEW_CROP": "Recorte",
+  "REPORT_MODAL_PREVIEW_SCALE": "Escala (Reduza para economia de tinta)",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamanho original",
   "REPORT_MODAL_PREVIEW_CHOOSE_IMAGE": "Escolher Imagem",
   "REPORT_PIECES_COUNTING": "Contagem de Peças",

@@ -13,7 +13,7 @@ const TableCellAsInput = ({value, handleChange, handleBlur}) => {
     includeThousandsSeparator: false,
     allowDecimal: true,
     decimalSymbol: '.',
-    decimalLimit: 0, // how many digits allowed after the decimal
+    decimalLimit: 2, // how many digits allowed after the decimal
     integerLimit: 4, // limit length of integer numbers
     allowNegative: false,
     allowLeadingZeroes: false,

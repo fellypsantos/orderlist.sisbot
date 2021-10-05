@@ -139,6 +139,8 @@ const OrderListProvider = ({children}) => {
 
   const [orderListItems, setOrderListItems] = useState([]);
 
+  const [listName, setListName] = useState('');
+
   const [orderListItemsNotes, setOrderListItemsNotes] = useState('');
 
   const [lastChangeI18Next, setLastChangeI18Next] = useState(null);
@@ -181,12 +183,12 @@ const OrderListProvider = ({children}) => {
   });
 
   const [priceTableChildish] = useState({
-    tshirt: [0, 0, 0, 0, 0, 0, 0, 0],
-    tshirtLong: [0, 0, 0, 0, 0, 0, 0, 0],
-    shorts: [0, 0, 0, 0, 0, 0, 0, 0],
-    pants: [0, 0, 0, 0, 0, 0, 0, 0],
-    tanktop: [0, 0, 0, 0, 0, 0, 0, 0],
-    vest: [0, 0, 0, 0, 0, 0, 0, 0],
+    tshirt: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    tshirtLong: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    shorts: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   // HELPER FUNCTIONS TO UPDATE DASHBOARD
@@ -238,6 +240,10 @@ const OrderListProvider = ({children}) => {
 
   const loadMainSettings = (data = null) => {
     if (data !== null) {
+      // RESTORE LIST NAME
+      setListName(data.listName);
+      console.log('✅ Loaded list name.');
+
       // RESTORE ORDER ITEMS LIST
       setOrderListItems(data.orderListItems);
       console.log('✅ Loaded order list.');
@@ -254,6 +260,7 @@ const OrderListProvider = ({children}) => {
       localStorage.setItem(
         'sisbot',
         JSON.stringify({
+          listName: '',
           orderListItemsNotes,
           orderListItems: [],
           isCycling: false,
@@ -361,17 +368,18 @@ const OrderListProvider = ({children}) => {
     });
   }, [orderListItems]);
 
-  // SAVE ORDER LIST NOTES / CYCLING FLAG
+  // SAVE LIST NAME / ORDER LIST NOTES / CYCLING FLAG
   useEffect(() => {
     localStorage.setItem(
       'sisbot',
       JSON.stringify({
+        listName,
         orderListItems,
         orderListItemsNotes,
         isCycling,
       }),
     );
-  }, [orderListItemsNotes, isCycling]);
+  }, [listName, orderListItemsNotes, isCycling]);
 
   // UPDATE TABLE ROWS WHEN PRICE CHANGES
   useEffect(() => {
@@ -446,6 +454,8 @@ const OrderListProvider = ({children}) => {
     setLastChangeI18Next,
     shouldFiter,
     setShouldFilter,
+    listName,
+    setListName,
   };
 
   return (
