@@ -95,8 +95,8 @@
   "SENDING_MAIL": "Enviando, aguarde...",
   "EMAIL_SENT": "Pronto! Lista enviada.",
   "MODAL_TITLE_SENT_VIA_EMAIL": "Enviar lista por e-mail",
-  "ASK_DESTINATION_EMAIL": "Pra qual e-mail enviar?",
-  "ASK_CLIENT_NAME": "Insira seu nome pra identificar o arquivo",
+  "ASK_DESTINATION_EMAIL": "Para qual e-mail enviar?",
+  "ASK_CLIENT_NAME": "Insira seu nome para identificar o arquivo",
   "ASK_NOT_ROBOT": "Confirme que você não é um robô",
 
   "SETTINGS_POPUP_TITLE": "Configurações",

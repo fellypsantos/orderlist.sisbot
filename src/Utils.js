@@ -67,7 +67,6 @@ export default {
       totalPrice += pricePerSize * item.quantity;
       return item;
     });
-
     return totalPrice;
   },
 

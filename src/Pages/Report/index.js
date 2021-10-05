@@ -447,7 +447,7 @@ const Report = () => {
         </Col>
       </Row>
 
-      <div id="report" style={{padding: '0px 10px'}}>
+      <div id="report" style={{padding: '0px 10px', fontSize: '16pt'}}>
         <div style={{backgroundColor: '#fff', minHeight: '1300px'}}>
           {/* HEADER */}
           <Row className="mt-5">
