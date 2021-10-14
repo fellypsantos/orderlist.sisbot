@@ -5,6 +5,8 @@ import hash from 'object-hash';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import {
   faArrowLeft,
@@ -337,17 +339,17 @@ const BussinessPricing = () => {
 
   return (
     <div>
-      <div
-        className="d-flex"
-        style={{justifyContent: 'space-between', alignItems: 'center'}}>
-        <CustomInputAsHeaderText
-          type="text"
-          value={projectName}
-          placeholder={Translator('UNTITLED')}
-          onChange={handleChangeFileNameToExport}
-        />
+      <Row>
+        <Col xs="12" sm="6">
+          <CustomInputAsHeaderText
+            type="text"
+            value={projectName}
+            placeholder={Translator('UNTITLED')}
+            onChange={handleChangeFileNameToExport}
+          />
+        </Col>
 
-        <div>
+        <Col style={{textAlign: 'right'}}>
           {/* BACK */}
           <Button
             className="mr-2"
@@ -385,7 +387,17 @@ const BussinessPricing = () => {
           </Button>
 
           <ButtonToggleClothignIcons />
-        </div>
+        </Col>
+      </Row>
+      <div
+        className="d-flex"
+        style={{justifyContent: 'space-between', alignItems: 'center'}}>
+        {/* <CustomInputAsHeaderText
+          type="text"
+          value={projectName}
+          placeholder={Translator('UNTITLED')}
+          onChange={handleChangeFileNameToExport}
+        /> */}
       </div>
 
       <Tabs className="mb-3">

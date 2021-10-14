@@ -387,7 +387,6 @@ const ModalChooseClothes = () => {
                 totalValueOfCurrentClothe += price;
                 return price;
               });
-
               return totalValueOfCurrentClothe > 0;
             })
             .map((key) => (

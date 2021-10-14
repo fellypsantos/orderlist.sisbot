@@ -305,15 +305,21 @@ const OrderListProvider = ({children}) => {
       setCurrentClothingPrices(data);
     } else {
       // DEFAULT DATA
+      const defaultData = {
+        projectName: projectName,
+        priceTableMale,
+        priceTableFemale,
+        priceTableChildish,
+      };
+
+      // SET LOCALSTORAGE
       localStorage.setItem(
         'sisbot.bussiness.prices',
-        JSON.stringify({
-          projectName: projectName,
-          priceTableMale,
-          priceTableFemale,
-          priceTableChildish,
-        }),
+        JSON.stringify(defaultData),
       );
+
+      // SET STATE
+      setCurrentClothingPrices(defaultData);
       console.log('💙 Pricing tables set to default.');
     }
 

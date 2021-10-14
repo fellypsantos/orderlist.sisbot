@@ -8,6 +8,8 @@ import {
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import JSZip from 'jszip';
 import axios from 'axios';
 
@@ -266,58 +268,65 @@ const Main = () => {
         hcaptchaSolved={(responseToken) => setHCaptchaToken(responseToken)}
       />
 
-      <div
-        className="d-flex"
-        style={{justifyContent: 'space-between', alignItems: 'center'}}>
-        <CustomInputAsHeaderText
-          small
-          type="text"
-          value={listName}
-          placeholder={Translator('MAIN_TITLE')}
-          onChange={({target}) => setListName(target.value)}
-        />
-        <div>
-          <Button
-            variant="success"
-            className="mr-2"
-            size="sm"
-            onClick={() => handleDownload()}>
-            <FontAwesomeIcon icon={faDownload} />
-            <span className="ml-1 d-none d-md-inline-block">
-              {Translator('DOWNLOAD')}
-            </span>
-          </Button>
+      {/* NEW ATTEMP */}
+      <Row>
+        <Col xs="12" sm="6">
+          {/* INPUT FOR LIST NAME */}
+          <CustomInputAsHeaderText
+            type="text"
+            value={listName}
+            placeholder={Translator('MAIN_TITLE')}
+            onChange={({target}) => setListName(target.value)}
+          />
+        </Col>
 
-          <Button
-            variant="primary"
-            className="mr-2"
-            size="sm"
-            onClick={() => setShowModalSendMail(true)}>
-            <FontAwesomeIcon icon={faEnvelope} />
-            <span className="ml-1 d-none d-md-inline-block">
-              {Translator('SEND_MAIL')}
-            </span>
-          </Button>
+        <Col style={{textAlign: 'right'}}>
+          {/* DASHBOARD BUTTONS */}
+          <div>
+            <Button
+              variant="success"
+              className="mr-2"
+              size="sm"
+              onClick={() => handleDownload()}>
+              <FontAwesomeIcon icon={faDownload} />
+              <span className="ml-1 d-none d-md-inline-block">
+                {Translator('DOWNLOAD')}
+              </span>
+            </Button>
 
-          <Button
-            className="mr-2"
-            variant="secondary"
-            size="sm"
-            onClick={() => setShowDashboard(!showDashboard)}>
-            <FontAwesomeIcon
-              icon={showDashboard ? faEyeSlash : faEye}
-              width={35}
-            />
-            <span className="ml-1 d-none d-md-inline-block">
-              {showDashboard
-                ? Translator('DASHBOARD_BUTTON_HIDE')
-                : Translator('DASHBOARD_BUTTON_SHOW')}
-            </span>
-          </Button>
+            <Button
+              variant="primary"
+              className="mr-2"
+              size="sm"
+              onClick={() => setShowModalSendMail(true)}>
+              <FontAwesomeIcon icon={faEnvelope} />
+              <span className="ml-1 d-none d-md-inline-block">
+                {Translator('SEND_MAIL')}
+              </span>
+            </Button>
 
-          <ButtonToggleClothignIcons />
-        </div>
-      </div>
+            <Button
+              className="mr-2"
+              variant="secondary"
+              size="sm"
+              onClick={() => setShowDashboard(!showDashboard)}>
+              <FontAwesomeIcon
+                icon={showDashboard ? faEyeSlash : faEye}
+                width={35}
+              />
+              <span className="ml-1 d-none d-md-inline-block">
+                {showDashboard
+                  ? Translator('DASHBOARD_BUTTON_HIDE')
+                  : Translator('DASHBOARD_BUTTON_SHOW')}
+              </span>
+            </Button>
+
+            <ButtonToggleClothignIcons />
+          </div>
+        </Col>
+      </Row>
+
+      {/* DASHBOARD BLOCKS WITH VALUES */}
       {showDashboard && (
         <>
           <DashboardReports />
