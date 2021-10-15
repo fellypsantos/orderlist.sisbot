@@ -141,6 +141,8 @@ const OrderListProvider = ({children}) => {
 
   const [listName, setListName] = useState('');
 
+  const [companyEmail, setCompanyEmail] = useState('');
+
   const [orderListItemsNotes, setOrderListItemsNotes] = useState('');
 
   const [lastChangeI18Next, setLastChangeI18Next] = useState(null);
@@ -307,6 +309,7 @@ const OrderListProvider = ({children}) => {
       // DEFAULT DATA
       const defaultData = {
         projectName: projectName,
+        companyEmail,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
@@ -462,6 +465,8 @@ const OrderListProvider = ({children}) => {
     setShouldFilter,
     listName,
     setListName,
+    companyEmail,
+    setCompanyEmail,
   };
 
   return (

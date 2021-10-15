@@ -115,6 +115,8 @@
   "REPORT_LAYOUT_IMAGE": "Layout Photo",
   "UNTITLED": "Untitled Budget",
   "GENERATE_LINK": "Generate Link",
+  "BUDGET_IDENTIFICATION": "Identification",
+  "COMPANY_EMAIL": "Company e-mail",
 
   "CONFIRM_DELETE_ITEM": "Really want to delete this item from order list ?",
   "CONFIRM_DELETE_ITEM_MODAL": "Really want to delete selected item ?",

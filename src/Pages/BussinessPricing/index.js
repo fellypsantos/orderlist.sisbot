@@ -5,9 +5,11 @@ import hash from 'object-hash';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
+
 import {
   faArrowLeft,
   faDownload,
@@ -18,7 +20,6 @@ import {useToasts} from 'react-toast-notifications';
 
 import TableCellAsInput from '../../components/TableCellAsInput';
 import {OrderListContext} from '../../contexts/OrderListContext';
-import {CustomInputAsHeaderText} from './styles';
 import Utils from '../../Utils';
 import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcons';
 
@@ -38,6 +39,8 @@ const BussinessPricing = () => {
     settings,
     shouldFiter,
     setShouldFilter,
+    companyEmail,
+    setCompanyEmail,
   } = useContext(OrderListContext);
 
   const [projectName, setProjectName] = useState('');
@@ -72,12 +75,13 @@ const BussinessPricing = () => {
 
   const {addToast} = useToasts();
 
-  const saveToLocalStorage = (paraProjectName = '') => {
+  const saveToLocalStorage = (pProjectName = '', pCompanyEmail = '') => {
     // SETTING DEFAULT EMPTY DATA
     localStorage.setItem(
       LS_PRICES_ID,
       JSON.stringify({
-        projectName: paraProjectName,
+        projectName: pProjectName,
+        companyEmail: pCompanyEmail,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
@@ -105,6 +109,7 @@ const BussinessPricing = () => {
       method: 'POST',
       body: JSON.stringify({
         projectName,
+        companyEmail,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
@@ -135,6 +140,7 @@ const BussinessPricing = () => {
           const uploaded = JSON.parse(responseJson);
           if (isValidJsonFileForPrices(uploaded)) {
             setProjectName(uploaded.projectName);
+            setCompanyEmail(uploaded.companyEmail);
             setPriceTableMale(uploaded.priceTableMale);
             setPriceTableFemale(uploaded.priceTableFemale);
             setPriceTableChildish(uploaded.priceTableChildish);
@@ -182,6 +188,9 @@ const BussinessPricing = () => {
       // RESTORE PROJECT NAME
       setProjectName(data.projectName);
 
+      // RESTORE COMPANY EMAIL
+      setCompanyEmail(data.companyEmail);
+
       // RESTORE MALE PRICES IF ARE DIFFERENT
       if (hash(priceTableMale) !== hash(data.priceTableMale)) {
         setPriceTableMale(data.priceTableMale);
@@ -205,7 +214,7 @@ const BussinessPricing = () => {
 
   // SAVE CHANGES TO LOCALSTORAGE
   useEffect(() => {
-    saveToLocalStorage(projectName);
+    saveToLocalStorage(projectName, companyEmail);
 
     // UPDATE CONTEXT TO REFLECT CHANGES IN MAIN PAGE PRICES
     setCurrentClothingPrices({
@@ -217,7 +226,13 @@ const BussinessPricing = () => {
 
     // FORCE RE-RENDER TABLE TO UPDATE TOTAL PRICE OF EACH ROW
     setOrderListItems([...orderListItems]);
-  }, [projectName, priceTableMale, priceTableFemale, priceTableChildish]);
+  }, [
+    projectName,
+    companyEmail,
+    priceTableMale,
+    priceTableFemale,
+    priceTableChildish,
+  ]);
 
   const handleUpdatePriceTable = (
     thePriceTableID,
@@ -337,19 +352,23 @@ const BussinessPricing = () => {
     setProjectName(element.target.value);
   };
 
+  const handleValidateEmail = (email) => {
+    if (!Utils.IsValidEmail(email)) {
+      addToast(Translator('TOAST_INVALID_EMAIL'), {
+        autoDismiss: true,
+        appearance: 'error',
+      });
+
+      setCompanyEmail('');
+      return false;
+    }
+  };
+
   return (
     <div>
       <Row>
-        <Col xs="12" sm="6">
-          <CustomInputAsHeaderText
-            type="text"
-            value={projectName}
-            placeholder={Translator('UNTITLED')}
-            onChange={handleChangeFileNameToExport}
-          />
-        </Col>
-
-        <Col style={{textAlign: 'right'}}>
+        {/* BUTTONS */}
+        <Col className="text-right mb-4">
           {/* BACK */}
           <Button
             className="mr-2"
@@ -389,16 +408,40 @@ const BussinessPricing = () => {
           <ButtonToggleClothignIcons />
         </Col>
       </Row>
-      <div
-        className="d-flex"
-        style={{justifyContent: 'space-between', alignItems: 'center'}}>
-        {/* <CustomInputAsHeaderText
-          type="text"
-          value={projectName}
-          placeholder={Translator('UNTITLED')}
-          onChange={handleChangeFileNameToExport}
-        /> */}
-      </div>
+
+      {/* INPUTS */}
+      <Row>
+        <Col xs="12" sm="6">
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>{Translator('BUDGET_IDENTIFICATION')}:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder={Translator('UNTITLED')}
+                value={projectName}
+                onChange={handleChangeFileNameToExport}
+              />
+            </Form.Group>
+          </Form>
+        </Col>
+
+        <Col xs="12" sm="6">
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>{Translator('COMPANY_EMAIL')}:</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="sample@server.com"
+                value={companyEmail}
+                onChange={({target}) => {
+                  setCompanyEmail(target.value.replace(/\s/g, ''));
+                }}
+                onBlur={({target}) => handleValidateEmail(target.value)}
+              />
+            </Form.Group>
+          </Form>
+        </Col>
+      </Row>
 
       <Tabs className="mb-3">
         {/* MALE */}

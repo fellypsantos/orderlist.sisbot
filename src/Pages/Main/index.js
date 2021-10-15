@@ -37,6 +37,7 @@ const Main = () => {
     orderListItems,
     listName,
     setListName,
+    companyEmail,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -49,7 +50,7 @@ const Main = () => {
   );
 
   const [clientName, setClientName] = useState('');
-  const [targetEmail, setTargetEmail] = useState('');
+  const [targetEmail, setTargetEmail] = useState(companyEmail);
   const [showModalSendMail, setShowModalSendMail] = useState(false);
 
   const handleCLoseModalTextInput = () => {
@@ -268,7 +269,6 @@ const Main = () => {
         hcaptchaSolved={(responseToken) => setHCaptchaToken(responseToken)}
       />
 
-      {/* NEW ATTEMP */}
       <Row>
         <Col xs="12" sm="6">
           {/* INPUT FOR LIST NAME */}
@@ -280,49 +280,47 @@ const Main = () => {
           />
         </Col>
 
-        <Col style={{textAlign: 'right'}}>
+        <Col className="text-right mb-4">
           {/* DASHBOARD BUTTONS */}
-          <div>
-            <Button
-              variant="success"
-              className="mr-2"
-              size="sm"
-              onClick={() => handleDownload()}>
-              <FontAwesomeIcon icon={faDownload} />
-              <span className="ml-1 d-none d-md-inline-block">
-                {Translator('DOWNLOAD')}
-              </span>
-            </Button>
+          <Button
+            variant="success"
+            className="mr-2"
+            size="sm"
+            onClick={() => handleDownload()}>
+            <FontAwesomeIcon icon={faDownload} />
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('DOWNLOAD')}
+            </span>
+          </Button>
 
-            <Button
-              variant="primary"
-              className="mr-2"
-              size="sm"
-              onClick={() => setShowModalSendMail(true)}>
-              <FontAwesomeIcon icon={faEnvelope} />
-              <span className="ml-1 d-none d-md-inline-block">
-                {Translator('SEND_MAIL')}
-              </span>
-            </Button>
+          <Button
+            variant="primary"
+            className="mr-2"
+            size="sm"
+            onClick={() => setShowModalSendMail(true)}>
+            <FontAwesomeIcon icon={faEnvelope} />
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('SEND_MAIL')}
+            </span>
+          </Button>
 
-            <Button
-              className="mr-2"
-              variant="secondary"
-              size="sm"
-              onClick={() => setShowDashboard(!showDashboard)}>
-              <FontAwesomeIcon
-                icon={showDashboard ? faEyeSlash : faEye}
-                width={35}
-              />
-              <span className="ml-1 d-none d-md-inline-block">
-                {showDashboard
-                  ? Translator('DASHBOARD_BUTTON_HIDE')
-                  : Translator('DASHBOARD_BUTTON_SHOW')}
-              </span>
-            </Button>
+          <Button
+            className="mr-2"
+            variant="secondary"
+            size="sm"
+            onClick={() => setShowDashboard(!showDashboard)}>
+            <FontAwesomeIcon
+              icon={showDashboard ? faEyeSlash : faEye}
+              width={35}
+            />
+            <span className="ml-1 d-none d-md-inline-block">
+              {showDashboard
+                ? Translator('DASHBOARD_BUTTON_HIDE')
+                : Translator('DASHBOARD_BUTTON_SHOW')}
+            </span>
+          </Button>
 
-            <ButtonToggleClothignIcons />
-          </div>
+          <ButtonToggleClothignIcons />
         </Col>
       </Row>
 

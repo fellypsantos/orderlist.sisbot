@@ -115,6 +115,8 @@
   "REPORT_LAYOUT_IMAGE": "Foto do Layout",
   "UNTITLED": "Orçamento sem título",
   "GENERATE_LINK": "Gerar Link",
+  "BUDGET_IDENTIFICATION": "Identificação",
+  "COMPANY_EMAIL": "E-mail da email",
 
   "CONFIRM_DELETE_ITEM": "Quer mesmo excluir esse item da lista de pedidos?",
   "CONFIRM_DELETE_ITEM_MODAL": "Deseja mesmo excluir o item selecionado?",
