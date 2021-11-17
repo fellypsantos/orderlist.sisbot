@@ -36,6 +36,12 @@
         border-radius: 50%;
       }
 
+      .bannerFixedSize {
+        display:block;
+        max-width:728px;
+        margin:0 auto;
+      }
+
       @media print {
         .noprint {
           display: none;
@@ -151,7 +157,7 @@
     <div id="root"></div>
 
     <!-- CUSTOM AD SYSTEM -->
-    <div id="AADIV34" class="noprint"></div>
+    <div id="AADIV34" class="bannerFixedSize noprint"></div>
     <script>
       /* list */ var k = decodeURIComponent(document.cookie),
         ca = k.split(';'),
