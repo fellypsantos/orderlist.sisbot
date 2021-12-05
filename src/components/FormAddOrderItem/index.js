@@ -5,25 +5,16 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {
-  faUser,
-  faPen,
-  faVenusMars,
-  faPlus,
-  faEraser,
-} from '@fortawesome/free-solid-svg-icons';
+import {faUser, faPen, faPlus} from '@fortawesome/free-solid-svg-icons';
 
 import FormTextInput from '../FormTextInput';
-import FormInputSelect from '../FormInputSelect';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 const FormAddOrderItem = () => {
   const {
     setModalClothesOpened,
-    genderOptions,
     tempOrderItem,
     setTempOrderItem,
-    initialStateTempOrderItem,
     Translator,
   } = useContext(OrderListContext);
 
@@ -41,20 +32,9 @@ const FormAddOrderItem = () => {
     });
   };
 
-  const handleChangeGender = (e) => {
-    setTempOrderItem({
-      ...tempOrderItem,
-      gender: e.target.value.trim(),
-    });
-  };
-
-  const handleClearTempOrderItem = () => {
-    setTempOrderItem(initialStateTempOrderItem);
-  };
-
   return (
     <Row>
-      <Col xs="6" sm="6" md="6" lg="3" xl="3">
+      <Col xs="6" sm="6" md="5" lg="5" xl="5">
         <FormTextInput
           icon={faUser}
           label={`${Translator('NAME')}:`}
@@ -66,7 +46,7 @@ const FormAddOrderItem = () => {
         />
       </Col>
 
-      <Col xs="6" sm="6" md="6" lg="3" xl="3">
+      <Col xs="6" sm="6" md="3" lg="4" xl="4">
         <FormTextInput
           icon={faPen}
           label={`${Translator('NUMBER')}:`}
@@ -76,17 +56,7 @@ const FormAddOrderItem = () => {
         />
       </Col>
 
-      <Col xs="6" sm="6" md="6" lg="3" xl="3">
-        <FormInputSelect
-          label={`${Translator('GENDER')}:`}
-          value={tempOrderItem.gender}
-          icon={faVenusMars}
-          arrOptions={genderOptions}
-          onChange={handleChangeGender}
-        />
-      </Col>
-
-      <Col xs="6" sm="6" md="6" lg="3" xl="3">
+      <Col xs="12" sm="12" md="4" lg="3" xl="3">
         <Form.Group>
           <Form.Label>{`${Translator('CLOTHES')}:`}</Form.Label>
           {/* Hide labels on mobile */}
@@ -94,12 +64,6 @@ const FormAddOrderItem = () => {
             <Button onClick={() => setModalClothesOpened(true)}>
               <FontAwesomeIcon icon={faPlus} />
               <span className="d-none d-sm-inline"> {Translator('ADD')}</span>
-            </Button>
-            <Button
-              variant="outline-primary"
-              onClick={handleClearTempOrderItem}>
-              <FontAwesomeIcon icon={faEraser} />
-              <span className="d-none d-sm-inline"> {Translator('CLEAR')}</span>
             </Button>
           </ButtonGroup>
         </Form.Group>

@@ -450,10 +450,11 @@ const BussinessPricing = () => {
             <thead>
               <tr className="text-center">
                 <th style={{width: '50px'}}>-</th>
-                {clothingSizes.map((theSize) => {
-                  if (theSize.target === 'TEEN') return false;
-                  return <th key={theSize.id}>{Translator(theSize.code)}</th>;
-                })}
+                {clothingSizes
+                  .filter((item) => item.gender === 'MALE')
+                  .map((theSize) => (
+                    <th key={theSize.id}>{Translator(theSize.value)}</th>
+                  ))}
               </tr>
             </thead>
             <tbody>
@@ -477,28 +478,29 @@ const BussinessPricing = () => {
                         height={25}
                       />
                     </td>
-                    {clothingSizes.map((theSize, index) => {
-                      if (theSize.target === 'TEEN') return false;
-                      const genericKey = key.replace('Cycling', '');
-                      const itemPrice = priceTableMale[genericKey][index];
-                      const itemPriceAsFloat = parseFloat(itemPrice);
+                    {clothingSizes
+                      .filter((item) => item.gender === 'MALE')
+                      .map((theSize, index) => {
+                        const genericKey = key.replace('Cycling', '');
+                        const itemPrice = priceTableMale[genericKey][index];
+                        const itemPriceAsFloat = parseFloat(itemPrice);
 
-                      return (
-                        <td key={theSize.id}>
-                          <TableCellAsInput
-                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
-                            handleBlur={({target}) => {
-                              handleUpdatePriceTable(
-                                'MALE',
-                                genericKey,
-                                target.value,
-                                index,
-                              );
-                            }}
-                          />
-                        </td>
-                      );
-                    })}
+                        return (
+                          <td key={theSize.id}>
+                            <TableCellAsInput
+                              value={itemPrice > 0 ? itemPriceAsFloat : ''}
+                              handleBlur={({target}) => {
+                                handleUpdatePriceTable(
+                                  'MALE',
+                                  genericKey,
+                                  target.value,
+                                  index,
+                                );
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
             </tbody>
@@ -511,10 +513,11 @@ const BussinessPricing = () => {
             <thead>
               <tr className="text-center">
                 <th style={{width: '50px'}}>-</th>
-                {clothingSizes.map((theSize) => {
-                  if (theSize.target === 'TEEN') return false;
-                  return <th key={theSize.id}>{Translator(theSize.code)}</th>;
-                })}
+                {clothingSizes
+                  .filter((item) => item.gender === 'FEMALE')
+                  .map((theSize) => (
+                    <th key={theSize.id}>{Translator(theSize.value)}</th>
+                  ))}
               </tr>
             </thead>
             <tbody>
@@ -538,28 +541,29 @@ const BussinessPricing = () => {
                         height={25}
                       />
                     </td>
-                    {clothingSizes.map((theSize, index) => {
-                      if (theSize.target === 'TEEN') return false;
-                      const genericKey = key.replace('Cycling', '');
-                      const itemPrice = priceTableFemale[genericKey][index];
-                      const itemPriceAsFloat = parseFloat(itemPrice);
+                    {clothingSizes
+                      .filter((item) => item.gender === 'FEMALE')
+                      .map((theSize, index) => {
+                        const genericKey = key.replace('Cycling', '');
+                        const itemPrice = priceTableFemale[genericKey][index];
+                        const itemPriceAsFloat = parseFloat(itemPrice);
 
-                      return (
-                        <td key={theSize.id}>
-                          <TableCellAsInput
-                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
-                            handleBlur={({target}) => {
-                              handleUpdatePriceTable(
-                                'FEMALE',
-                                genericKey,
-                                target.value,
-                                index,
-                              );
-                            }}
-                          />
-                        </td>
-                      );
-                    })}
+                        return (
+                          <td key={theSize.id}>
+                            <TableCellAsInput
+                              value={itemPrice > 0 ? itemPriceAsFloat : ''}
+                              handleBlur={({target}) => {
+                                handleUpdatePriceTable(
+                                  'FEMALE',
+                                  genericKey,
+                                  target.value,
+                                  index,
+                                );
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
             </tbody>
@@ -572,11 +576,11 @@ const BussinessPricing = () => {
             <thead>
               <tr className="text-center">
                 <th style={{width: '50px'}}>-</th>
-                {clothingSizes.map((theSize) => {
-                  if (theSize.target === 'ADULT') return false;
-
-                  return <th key={theSize.id}>{Translator(theSize.code)}</th>;
-                })}
+                {clothingSizes
+                  .filter((item) => item.gender === 'CHILDISH')
+                  .map((theSize) => (
+                    <th key={theSize.id}>{Translator(theSize.value)}</th>
+                  ))}
               </tr>
             </thead>
             <tbody>
@@ -600,32 +604,30 @@ const BussinessPricing = () => {
                         height={25}
                       />
                     </td>
-                    {clothingSizes.map((theSize, index) => {
-                      if (theSize.target === 'ADULT') return false;
-                      // TEENS START IN HIGHER INDEX ON LIST, SUBTRACT TO CONSIDER ZERO
-                      const genericKey = key.replace('Cycling', '');
-                      const customIndex = index - 9;
-                      const itemPrice =
-                        priceTableChildish[genericKey][customIndex];
+                    {clothingSizes
+                      .filter((item) => item.gender === 'CHILDISH')
+                      .map((theSize, index) => {
+                        // CHILDISH START IN HIGHER INDEX ON LIST, SUBTRACT TO CONSIDER ZERO
+                        const genericKey = key.replace('Cycling', '');
+                        const itemPrice = priceTableChildish[genericKey][index];
 
-                      const itemPriceAsFloat = parseFloat(itemPrice);
-
-                      return (
-                        <td key={theSize.id}>
-                          <TableCellAsInput
-                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
-                            handleBlur={({target}) => {
-                              handleUpdatePriceTable(
-                                'CHILDISH',
-                                genericKey,
-                                target.value,
-                                customIndex,
-                              );
-                            }}
-                          />
-                        </td>
-                      );
-                    })}
+                        const itemPriceAsFloat = parseFloat(itemPrice);
+                        return (
+                          <td key={theSize.id}>
+                            <TableCellAsInput
+                              value={itemPrice > 0 ? itemPriceAsFloat : ''}
+                              handleBlur={({target}) => {
+                                handleUpdatePriceTable(
+                                  'CHILDISH',
+                                  genericKey,
+                                  target.value,
+                                  index,
+                                );
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
             </tbody>
