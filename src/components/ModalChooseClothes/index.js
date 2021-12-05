@@ -312,11 +312,27 @@ const ModalChooseClothes = () => {
     }
   };
 
-  const csGetQuantityByID = (theID, orderItem) =>
-    orderItem.clothingSettings[theID - 1].quantity;
-
   const getTargetOrderItemToManipulate = () =>
     editMode.enabled ? editMode.orderItem : tempOrderItem;
+
+  const csGetSizeByID = (theID) => {
+    const targetOrderItem = getTargetOrderItemToManipulate();
+    const theSize = targetOrderItem.clothingSettings[theID - 1].size;
+    const theGender = targetOrderItem.clothingSettings[theID - 1].gender;
+    const theGenderIndex = Utils.ParseGenderToIndex(theGender);
+
+    if (theSize === '' || theGender === '') return false;
+
+    // Filter to get previews selected value in <Select> elemment
+    const theValue = clothingSizesDropDown[theGenderIndex].options.filter(
+      (option) => option.value === theSize,
+    );
+
+    return theValue;
+  };
+
+  const csGetQuantityByID = (theID, orderItem) =>
+    orderItem.clothingSettings[theID - 1].quantity;
 
   return (
     <Modal show={modalClothesOpened} onHide={handleOnHide}>
@@ -473,6 +489,7 @@ const ModalChooseClothes = () => {
                 <Col xs={5}>
                   <Select
                     options={clothingSizesDropDown}
+                    value={csGetSizeByID(clothingIcons[key].id)}
                     onChange={(selectedItem) => {
                       const previewsQuantity = csGetQuantityByID(
                         clothingIcons[key].id,

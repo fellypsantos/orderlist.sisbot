@@ -146,4 +146,10 @@ export default {
 
     return valueToReturn;
   },
+
+  ParseGenderToIndex: (theGender) => {
+    if (theGender === 'MALE') return 0;
+    if (theGender === 'FEMALE') return 1;
+    if (theGender === 'CHILDISH') return 2;
+  },
 };
