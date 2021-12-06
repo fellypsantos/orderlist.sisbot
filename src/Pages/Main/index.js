@@ -17,7 +17,6 @@ import saveAs from '../../../node_modules/jszip/vendor/FileSaver';
 import TableOrdersMenu from '../../components/TableOrdersMenu';
 import FormAddOrderItem from '../../components/FormAddOrderItem';
 import DashboardReports from '../../components/DashboardReports';
-import Separator from '../../components/Separator';
 import TableOrderList from '../../components/TableOrderList';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcons';
@@ -25,6 +24,7 @@ import ModalTextInput from '../../components/ModalTextInput';
 import Utils from '../../Utils';
 import ModalSendViaEmail from '../../components/ModalSendViaEmail';
 import {CustomInputAsHeaderText} from '../BussinessPricing/styles';
+import ControlPanel from '../../components/ControlPanel';
 
 // const HCAPTCHA_SERVER_CHECK = 'http://localhost/hcaptcha/';
 const HCAPTCHA_SERVER_CHECK = 'https://list.oneformes.com/hcaptcha/';
@@ -242,7 +242,71 @@ const Main = () => {
   return (
     <>
       <FormAddOrderItem />
-      <Separator />
+
+      {/* CONTROL PANEL CAN SHOW/HIDE */}
+      {/* @NEW_CODE_POSITION */}
+      <ControlPanel>
+        <Row>
+          <Col xs="12" sm="6">
+            {/* INPUT FOR LIST NAME */}
+            <CustomInputAsHeaderText
+              type="text"
+              value={listName}
+              placeholder={Translator('MAIN_TITLE')}
+              onChange={({target}) => setListName(target.value)}
+            />
+          </Col>
+
+          {/* DASHBOARD BUTTONS */}
+          <Col className="text-right mb-4">
+            <Button
+              variant="success"
+              className="mr-2"
+              size="sm"
+              onClick={() => handleDownload()}>
+              <FontAwesomeIcon icon={faDownload} />
+              <span className="ml-1 d-none d-md-inline-block">
+                {Translator('DOWNLOAD')}
+              </span>
+            </Button>
+
+            <Button
+              variant="primary"
+              className="mr-2"
+              size="sm"
+              onClick={() => setShowModalSendMail(true)}>
+              <FontAwesomeIcon icon={faEnvelope} />
+              <span className="ml-1 d-none d-md-inline-block">
+                {Translator('SEND_MAIL')}
+              </span>
+            </Button>
+
+            <Button
+              className="mr-2"
+              variant="secondary"
+              size="sm"
+              onClick={() => setShowDashboard(!showDashboard)}>
+              <FontAwesomeIcon
+                icon={showDashboard ? faEyeSlash : faEye}
+                width={35}
+              />
+              <span className="ml-1 d-none d-md-inline-block">
+                {showDashboard
+                  ? Translator('DASHBOARD_BUTTON_HIDE')
+                  : Translator('DASHBOARD_BUTTON_SHOW')}
+              </span>
+            </Button>
+
+            <ButtonToggleClothignIcons />
+          </Col>
+        </Row>
+
+        {/* DASHBOARD BLOCKS WITH VALUES */}
+        {showDashboard && <DashboardReports />}
+
+        {/* BUTTONS TO CONTROL TABLE WITH ORDERS */}
+        <TableOrdersMenu />
+      </ControlPanel>
 
       {/* DOWNLOAD */}
       <ModalTextInput
@@ -269,19 +333,20 @@ const Main = () => {
         hcaptchaSolved={(responseToken) => setHCaptchaToken(responseToken)}
       />
 
-      <Row>
-        <Col xs="12" sm="6">
-          {/* INPUT FOR LIST NAME */}
-          <CustomInputAsHeaderText
-            type="text"
-            value={listName}
-            placeholder={Translator('MAIN_TITLE')}
-            onChange={({target}) => setListName(target.value)}
-          />
-        </Col>
+      {/*
+           CODE WAS MOVED TO NEW UI CONCEPT
+           IN CASE IT'S NOT ACCEPTED
+           BRING IT BACK HERE
+           NEW POSITION IS AT @NEW_CODE_POSITION
+           SEARCH FOR IT
+      */}
 
-        <Col className="text-right mb-4">
-          {/* DASHBOARD BUTTONS */}
+      {/* MAIN TABLE SHOWN ORDERS */}
+      <TableOrderList />
+
+      {/* NEW POSITION FOR MAIN BUTTONS */}
+      <Row className="mt-2">
+        <Col className="text-center">
           <Button
             variant="success"
             className="mr-2"
@@ -303,35 +368,8 @@ const Main = () => {
               {Translator('SEND_MAIL')}
             </span>
           </Button>
-
-          <Button
-            className="mr-2"
-            variant="secondary"
-            size="sm"
-            onClick={() => setShowDashboard(!showDashboard)}>
-            <FontAwesomeIcon
-              icon={showDashboard ? faEyeSlash : faEye}
-              width={35}
-            />
-            <span className="ml-1 d-none d-md-inline-block">
-              {showDashboard
-                ? Translator('DASHBOARD_BUTTON_HIDE')
-                : Translator('DASHBOARD_BUTTON_SHOW')}
-            </span>
-          </Button>
-
-          <ButtonToggleClothignIcons />
         </Col>
       </Row>
-
-      {/* DASHBOARD BLOCKS WITH VALUES */}
-      {showDashboard && (
-        <>
-          <DashboardReports />
-          <TableOrdersMenu />
-        </>
-      )}
-      <TableOrderList />
     </>
   );
 };

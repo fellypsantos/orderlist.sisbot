@@ -137,7 +137,7 @@ const TableOrdersMenu = () => {
         handleClose={() => setConfirmClearOrderItems(false)}
       />
 
-      <Row className="mt-4 mb-2">
+      <Row className="mt-1">
         <Col className="d-flex justify-content-end">
           <Button
             variant="secondary"
