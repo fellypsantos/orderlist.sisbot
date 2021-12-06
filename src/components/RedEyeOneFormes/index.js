@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
+import Button from 'react-bootstrap/Button';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEye} from '@fortawesome/free-solid-svg-icons';
 import {OrderListContext} from '../../contexts/OrderListContext';
-import OneFormes from '../../images/icons/oneformes.logo.svg';
-import Clickable from '../Clickable';
-import {RedEyeOneFormesRounded} from './styles';
 
 const RedEyeOneFormes = () => {
   const {Translator} = useContext(OrderListContext);
@@ -12,12 +12,13 @@ const RedEyeOneFormes = () => {
   };
 
   return (
-    <Clickable
-      handleClick={handleGoToOneFormes}
-      title={Translator('BACK_TO_HOME_ONEFORMES')}
-      className="mr-2">
-      <RedEyeOneFormesRounded src={OneFormes} />
-    </Clickable>
+    <Button
+      className="mr-1"
+      variant="light"
+      onClick={handleGoToOneFormes}
+      title={Translator('BACK_TO_HOME_ONEFORMES')}>
+      <FontAwesomeIcon icon={faEye} />
+    </Button>
   );
 };
 

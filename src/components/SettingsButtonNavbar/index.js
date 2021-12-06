@@ -8,7 +8,10 @@ const SettingsButtonNavbar = () => {
   const {setSettingsOpen} = useContext(OrderListContext);
 
   return (
-    <Button onClick={() => setSettingsOpen(true)}>
+    <Button
+      variant="light"
+      className="mr-1"
+      onClick={() => setSettingsOpen(true)}>
       <FontAwesomeIcon icon={faCog} />
     </Button>
   );

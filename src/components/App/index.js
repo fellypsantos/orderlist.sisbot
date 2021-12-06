@@ -35,10 +35,9 @@ const App = () => (
     <ToastProvider>
       <ModalChooseClothes />
       <ModalSettings />
-      <NavbarContainer className="bg-primary">
+      <NavbarContainer>
         <NavbarLeftContent>
           <RedEyeOneFormes />
-          <KanbanButtonNavbar />
           <SettingsButtonNavbar />
           <LanguageChanger />
         </NavbarLeftContent>

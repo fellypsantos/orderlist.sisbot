@@ -7,5 +7,5 @@ export const NavbarContainer = styled.div`
 export const MainContentContainer = styled.div`
   margin: auto;
   max-width: 980px;
-  margin-top: 30px;
+  margin-top: 50px;
 `;

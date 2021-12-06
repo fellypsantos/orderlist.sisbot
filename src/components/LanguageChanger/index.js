@@ -56,6 +56,7 @@ export default function LanguageChanger() {
     <>
       <DropdownContainer isOpen={dropdownVisible}>
         <Button
+          variant="light"
           title="Selecione o idioma do sistema."
           onClick={() => setDropdownVisible(!dropdownVisible)}
           onBlur={handleOnBlurDropdown}>
