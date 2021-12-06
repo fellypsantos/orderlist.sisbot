@@ -85,13 +85,6 @@
   "PRICE": "Preço",
   "PRICES": "Preços",
 
-  "TITLE": "Título",
-  "DESCRIPTION": "Descrição",
-  "EDIT_LABELS": "Editar Rótulos",
-  "LABEL": "Rótulo",
-  "LABELS": "Rótulos",
-  "DARK_LIGHT": "Escuro/Claro",
-
   "SENDING_MAIL": "Enviando, aguarde...",
   "EMAIL_SENT": "Pronto! Lista enviada.",
   "MODAL_TITLE_SENT_VIA_EMAIL": "Enviar lista por e-mail",

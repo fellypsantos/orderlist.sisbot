@@ -21,7 +21,6 @@ import BussinessPricing from '../../Pages/BussinessPricing';
 import RedEyeOneFormes from '../RedEyeOneFormes';
 import ModalSettings from '../ModalSettings';
 import SettingsButtonNavbar from '../SettingsButtonNavbar';
-import KanbanButtonNavbar from '../KanbanButtonNavbar';
 
 const ReportWithContext = () => (
   <ReportProvider>

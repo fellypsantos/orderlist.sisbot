@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -18,39 +18,13 @@ const systemLanguages = [
 ];
 
 export default function LanguageChanger() {
-  const {updateLanguage, Translator, lastChangeI18Next} = useContext(
-    OrderListContext,
-  );
+  const {updateLanguage, Translator} = useContext(OrderListContext);
   const [dropdownVisible, setDropdownVisible] = useState(false);
 
   const handleOnBlurDropdown = async () => {
     await Utils.Sleep(150);
     setDropdownVisible(false);
   };
-
-  useEffect(() => {
-    // LOAD TRANSLATION DATA FOR KANBAN
-    if (Translator('TITLE') === 'TITLE') return false;
-
-    const kanbanTranslation = {
-      title: Translator('TITLE'),
-      description: Translator('DESCRIPTION'),
-      editLabels: Translator('EDIT_LABELS'),
-      label: Translator('LABEL'),
-      labels: Translator('LABELS'),
-      addButton: Translator('ADD'),
-      deleteAllButton: Translator('CLEAR'),
-      saveChangesButton: Translator('SAVE_CHANGES'),
-      closeButton: Translator('CLOSE'),
-      darkLightButton: Translator('DARK_LIGHT'),
-    };
-
-    // SAVE TO LOCALSTORAGE
-    localStorage.setItem(
-      'kanban.translation',
-      JSON.stringify(kanbanTranslation),
-    );
-  }, [updateLanguage, lastChangeI18Next]);
 
   return (
     <>

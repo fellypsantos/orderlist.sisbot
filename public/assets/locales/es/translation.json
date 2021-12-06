@@ -85,13 +85,6 @@
   "PRICE": "Precio",
   "PRICES": "Precios",
 
-  "TITLE": "Título",
-  "DESCRIPTION": "Descripción",
-  "EDIT_LABELS": "Editar etiquetas",
-  "LABEL": "Etiqueta",
-  "LABELS": "Etiquetas",
-  "DARK_LIGHT": "Oscuro/Claro",
-
   "SENDING_MAIL": "Enviando, espera un segundo...",
   "EMAIL_SENT": "¡Hecho! Lista enviada.",
   "MODAL_TITLE_SENT_VIA_EMAIL": "Enviar lista por correo electrónico",

@@ -85,13 +85,6 @@
   "PRICE": "Price",
   "PRICES": "Prices",
 
-  "TITLE": "Title",
-  "DESCRIPTION": "Description",
-  "EDIT_LABELS": "Edit Labels",
-  "LABEL": "Label",
-  "LABELS": "Labels",
-  "DARK_LIGHT": "Dark/Light",
-
   "SENDING_MAIL": "Sending, wait a second...",
   "EMAIL_SENT": "Done! List sent.",
   "MODAL_TITLE_SENT_VIA_EMAIL": "Send list via email",
