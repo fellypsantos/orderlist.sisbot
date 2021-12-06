@@ -428,64 +428,6 @@ const ModalChooseClothes = () => {
                 </Col>
 
                 {/* SIZE */}
-                {/* <Col xs={5}>
-                  <Form.Control
-
-                    value={csGetSizeByID(
-                      clothingIcons[key].id,
-                      getTargetOrderItemToManipulate(),
-                    )}
-
-                    onChange={(e) => {
-                      handleChangeClotingSettings(
-                        e.target.value,
-                        clothingIcons[key].id,
-                        'size',
-                      );
-                    }}>
-
-                    <option value="">{Translator('NONE')}</option>
-
-                    {clothingSizes.map((size, index) => {
-                      const adjustedKey = key.replace('Cycling', '');
-                      const currentGender = getTargetOrderItemToManipulate()
-                        .gender;
-
-                      // CHECK EMPTY PRICE
-                      if (shouldFiter) {
-                        const targetPriceTable = Utils.GetPriceTableByGender(
-                          currentClothingPrices,
-                          currentGender,
-                        );
-
-                        const returnSchema = targetPriceTable[adjustedKey].map(
-                          (priceItem) => priceItem > 0,
-                        );
-
-                        // INDEX WILL CHANGE ACCORDING TO GENDER
-                        // CHILDISH STARTS AT INDEX 9 AND NOT 0 AS DEFAULT
-                        // SO NEED SUBTRACT THIS NUMBER TO GET INDEX 0
-                        const ajustedIndex =
-                          currentGender === 'CHILDISH' ? index - 9 : index;
-
-                        // NOT RENDER EMPTY PRICES
-                        const shouldRender = returnSchema[ajustedIndex];
-                        if (!shouldRender) return;
-                      }
-
-                      // RENDER THE <OPTION>
-                      return (
-                        <option
-                          key={size.id}
-                          value={size.code}
-                          data-id={size.id}>
-                          {Translator(size.code)}
-                        </option>
-                      );
-                    })}
-                  </Form.Control>
-                </Col> */}
-
                 <Col xs={5}>
                   <Select
                     options={clothingSizesDropDown}
