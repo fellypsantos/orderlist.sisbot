@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useHistory} from 'react-router-dom';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import hash from 'object-hash';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
@@ -9,9 +10,12 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
 
 import {
   faArrowLeft,
+  faCopy,
   faDownload,
   faLink,
   faUpload,
@@ -44,6 +48,7 @@ const BussinessPricing = () => {
   } = useContext(OrderListContext);
 
   const [projectName, setProjectName] = useState('');
+  const [generatedLink, setGeneratedLink] = useState('');
   const history = useHistory();
 
   const [priceTableMale, setPriceTableMale] = useState({
@@ -121,12 +126,8 @@ const BussinessPricing = () => {
     })
       .then((response) => response.text())
       .then((responseText) => {
-        const generatedLink = document.getElementById('generatedLink');
         const generatedURL = `${window.location.origin}/${window.location.hash}?query=${responseText}`;
-
-        generatedLink.setAttribute('href', generatedURL);
-        generatedLink.setAttribute('class', 'mt-2 d-flex');
-        generatedLink.textContent = generatedURL;
+        setGeneratedLink(generatedURL);
       });
   };
 
@@ -364,6 +365,13 @@ const BussinessPricing = () => {
     }
   };
 
+  const handleOnCopy = () => {
+    addToast(Translator('TOAST_COPIED_TO_CLIPBOARD'), {
+      autoDismiss: true,
+      appearance: 'success',
+    });
+  };
+
   return (
     <div>
       <Row>
@@ -450,10 +458,11 @@ const BussinessPricing = () => {
             <thead>
               <tr className="text-center">
                 <th style={{width: '50px'}}>-</th>
-                {clothingSizes.map((theSize) => {
-                  if (theSize.target === 'TEEN') return false;
-                  return <th key={theSize.id}>{Translator(theSize.code)}</th>;
-                })}
+                {clothingSizes
+                  .filter((item) => item.gender === 'MALE')
+                  .map((theSize) => (
+                    <th key={theSize.id}>{Translator(theSize.value)}</th>
+                  ))}
               </tr>
             </thead>
             <tbody>
@@ -477,28 +486,29 @@ const BussinessPricing = () => {
                         height={25}
                       />
                     </td>
-                    {clothingSizes.map((theSize, index) => {
-                      if (theSize.target === 'TEEN') return false;
-                      const genericKey = key.replace('Cycling', '');
-                      const itemPrice = priceTableMale[genericKey][index];
-                      const itemPriceAsFloat = parseFloat(itemPrice);
+                    {clothingSizes
+                      .filter((item) => item.gender === 'MALE')
+                      .map((theSize, index) => {
+                        const genericKey = key.replace('Cycling', '');
+                        const itemPrice = priceTableMale[genericKey][index];
+                        const itemPriceAsFloat = parseFloat(itemPrice);
 
-                      return (
-                        <td key={theSize.id}>
-                          <TableCellAsInput
-                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
-                            handleBlur={({target}) => {
-                              handleUpdatePriceTable(
-                                'MALE',
-                                genericKey,
-                                target.value,
-                                index,
-                              );
-                            }}
-                          />
-                        </td>
-                      );
-                    })}
+                        return (
+                          <td key={theSize.id}>
+                            <TableCellAsInput
+                              value={itemPrice > 0 ? itemPriceAsFloat : ''}
+                              handleBlur={({target}) => {
+                                handleUpdatePriceTable(
+                                  'MALE',
+                                  genericKey,
+                                  target.value,
+                                  index,
+                                );
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
             </tbody>
@@ -511,10 +521,11 @@ const BussinessPricing = () => {
             <thead>
               <tr className="text-center">
                 <th style={{width: '50px'}}>-</th>
-                {clothingSizes.map((theSize) => {
-                  if (theSize.target === 'TEEN') return false;
-                  return <th key={theSize.id}>{Translator(theSize.code)}</th>;
-                })}
+                {clothingSizes
+                  .filter((item) => item.gender === 'FEMALE')
+                  .map((theSize) => (
+                    <th key={theSize.id}>{Translator(theSize.value)}</th>
+                  ))}
               </tr>
             </thead>
             <tbody>
@@ -538,28 +549,29 @@ const BussinessPricing = () => {
                         height={25}
                       />
                     </td>
-                    {clothingSizes.map((theSize, index) => {
-                      if (theSize.target === 'TEEN') return false;
-                      const genericKey = key.replace('Cycling', '');
-                      const itemPrice = priceTableFemale[genericKey][index];
-                      const itemPriceAsFloat = parseFloat(itemPrice);
+                    {clothingSizes
+                      .filter((item) => item.gender === 'FEMALE')
+                      .map((theSize, index) => {
+                        const genericKey = key.replace('Cycling', '');
+                        const itemPrice = priceTableFemale[genericKey][index];
+                        const itemPriceAsFloat = parseFloat(itemPrice);
 
-                      return (
-                        <td key={theSize.id}>
-                          <TableCellAsInput
-                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
-                            handleBlur={({target}) => {
-                              handleUpdatePriceTable(
-                                'FEMALE',
-                                genericKey,
-                                target.value,
-                                index,
-                              );
-                            }}
-                          />
-                        </td>
-                      );
-                    })}
+                        return (
+                          <td key={theSize.id}>
+                            <TableCellAsInput
+                              value={itemPrice > 0 ? itemPriceAsFloat : ''}
+                              handleBlur={({target}) => {
+                                handleUpdatePriceTable(
+                                  'FEMALE',
+                                  genericKey,
+                                  target.value,
+                                  index,
+                                );
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
             </tbody>
@@ -572,11 +584,11 @@ const BussinessPricing = () => {
             <thead>
               <tr className="text-center">
                 <th style={{width: '50px'}}>-</th>
-                {clothingSizes.map((theSize) => {
-                  if (theSize.target === 'ADULT') return false;
-
-                  return <th key={theSize.id}>{Translator(theSize.code)}</th>;
-                })}
+                {clothingSizes
+                  .filter((item) => item.gender === 'CHILDISH')
+                  .map((theSize) => (
+                    <th key={theSize.id}>{Translator(theSize.value)}</th>
+                  ))}
               </tr>
             </thead>
             <tbody>
@@ -600,32 +612,30 @@ const BussinessPricing = () => {
                         height={25}
                       />
                     </td>
-                    {clothingSizes.map((theSize, index) => {
-                      if (theSize.target === 'ADULT') return false;
-                      // TEENS START IN HIGHER INDEX ON LIST, SUBTRACT TO CONSIDER ZERO
-                      const genericKey = key.replace('Cycling', '');
-                      const customIndex = index - 9;
-                      const itemPrice =
-                        priceTableChildish[genericKey][customIndex];
+                    {clothingSizes
+                      .filter((item) => item.gender === 'CHILDISH')
+                      .map((theSize, index) => {
+                        // CHILDISH START IN HIGHER INDEX ON LIST, SUBTRACT TO CONSIDER ZERO
+                        const genericKey = key.replace('Cycling', '');
+                        const itemPrice = priceTableChildish[genericKey][index];
 
-                      const itemPriceAsFloat = parseFloat(itemPrice);
-
-                      return (
-                        <td key={theSize.id}>
-                          <TableCellAsInput
-                            value={itemPrice > 0 ? itemPriceAsFloat : ''}
-                            handleBlur={({target}) => {
-                              handleUpdatePriceTable(
-                                'CHILDISH',
-                                genericKey,
-                                target.value,
-                                customIndex,
-                              );
-                            }}
-                          />
-                        </td>
-                      );
-                    })}
+                        const itemPriceAsFloat = parseFloat(itemPrice);
+                        return (
+                          <td key={theSize.id}>
+                            <TableCellAsInput
+                              value={itemPrice > 0 ? itemPriceAsFloat : ''}
+                              handleBlur={({target}) => {
+                                handleUpdatePriceTable(
+                                  'CHILDISH',
+                                  genericKey,
+                                  target.value,
+                                  index,
+                                );
+                              }}
+                            />
+                          </td>
+                        );
+                      })}
                   </tr>
                 ))}
             </tbody>
@@ -633,22 +643,36 @@ const BussinessPricing = () => {
         </Tab>
       </Tabs>
 
-      {/* GERAR LINK */}
+      {/* SHOW GENERATED LINK */}
       <div
-        className="d-flex"
+        className={generatedLink !== '' ? 'd-flex' : 'd-none'}
+        style={{justifyContent: 'center', alignItems: 'center'}}>
+        <InputGroup className="mb-2">
+          <InputGroup.Prepend>
+            <InputGroup.Text>
+              <FontAwesomeIcon icon={faLink} />
+            </InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl className="text-center" value={generatedLink} />
+          <InputGroup.Append>
+            <CopyToClipboard text={generatedLink} onCopy={handleOnCopy}>
+              <Button variant="secondary" size="sm">
+                <FontAwesomeIcon icon={faCopy} />
+                <span className="ml-1">{Translator('COPY_LINK')}</span>
+              </Button>
+            </CopyToClipboard>
+          </InputGroup.Append>
+        </InputGroup>
+      </div>
+
+      {/* TRIGGER LINK GENERATION */}
+      <div
+        className="d-flex mt-2"
         style={{justifyContent: 'center', alignItems: 'center'}}>
         <Button variant="secondary" size="sm" onClick={generateLink}>
           <FontAwesomeIcon icon={faLink} />
           <span className="ml-1">{Translator('GENERATE_LINK')}</span>
         </Button>
-      </div>
-
-      <div
-        className="d-flex"
-        style={{justifyContent: 'center', alignItems: 'center'}}>
-        <a href="/#" id="generatedLink" className="mt-2 d-none">
-          Link
-        </a>
       </div>
     </div>
   );

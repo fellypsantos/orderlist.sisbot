@@ -39,10 +39,11 @@
   "INSTRUCTIONS_FILENAME": "Instruções",
 
   "PROCESSING_REPORT_TITLE": "Relatório de Processamento",
-  "CLIENT": "Cliente:",
-  "REQUEST_DATE": "Data do Pedido:",
-  "DELIVERY_DATE": "Data de Entrega:",
-  "REPONSIBLE": "Responsável:",
+  "SERVICE_ORDER": "Ordem de Serviço",
+  "CLIENT": "Cliente",
+  "REQUEST_DATE": "Data do Pedido",
+  "DELIVERY_DATE": "Data de Entrega",
+  "REPONSIBLE": "Responsável",
   "ANNOTATIONS": "Anotações",
 
   "GRAND_TOTAL": "Total Geral",
@@ -64,17 +65,15 @@
   "SAVE_CHANGES": "Salvar alterações",
   "CONFIRM": "Confirmar",
   "GOBACK": "Voltar",
-  "EDIT_REPORT_HEADER": "Cabeçalho",
   "PRINT": "Imprimir",
   "DOWNLOAD": "Baixar",
-  "UPLOAD": "Carregar",
+  "UPLOAD": "Importar",
   "SAVE_PDF": " Salvar PDF",
   "PAID": "Pago",
-  "TAKE_SCREENSHOT": "Capturar",
+  "TAKE_SCREENSHOT": "Print Screen",
   "TAKING_SCREENSHOT": "Capturando...",
   "REPORT": "Relatório",
-  "NOTES": "Observações",
-  "PHOTO": "Foto",
+  "PHOTO": "Layout",
   "SEND_MAIL": "Enviar",
 
   "SIZE": "Tamanho",
@@ -84,13 +83,6 @@
   "PIECES": "Peças",
   "PRICE": "Preço",
   "PRICES": "Preços",
-
-  "TITLE": "Título",
-  "DESCRIPTION": "Descrição",
-  "EDIT_LABELS": "Editar Rótulos",
-  "LABEL": "Rótulo",
-  "LABELS": "Rótulos",
-  "DARK_LIGHT": "Escuro/Claro",
 
   "SENDING_MAIL": "Enviando, aguarde...",
   "EMAIL_SENT": "Pronto! Lista enviada.",
@@ -115,6 +107,7 @@
   "REPORT_LAYOUT_IMAGE": "Foto do Layout",
   "UNTITLED": "Orçamento sem título",
   "GENERATE_LINK": "Gerar Link",
+  "COPY_LINK": "Copiar Link",
   "BUDGET_IDENTIFICATION": "Identificação",
   "COMPANY_EMAIL": "E-mail da email",
 
@@ -132,9 +125,6 @@
   "FINAL_VALUE": "Valor Final",
   "PROCEED_WITH_CAUTION": "Prossiga com Cuidado!",
   "ASK_FILENAME": "Qual o nome para o arquivo?",
-  "PRODUCTION_NOTES": "Notas para Produção",
-  "PRODUCTION_NOTES_DESCRIPTION": "Descreva seus detalhes para produção.",
-  "PRODUCTION_NOTES_PLACEHOLDER": "Digite aqui...",
 
   "CHOOSE_CLOTHES_ADD": "Escolha as Roupas",
   "CHOOSE_CLOTHES_EDIT": "Modo de Edição",
@@ -163,6 +153,7 @@
   "TOAST_AXIOS_ERROR": "Ocorreu um erro na conexão.",
   "TOAST_DATA_LOADED_FROM_SERVER": "Os dados foram carregados do servidor.",
   "TOAST_REDIRECTING": "Redirecionando...",
+  "TOAST_COPIED_TO_CLIPBOARD": "Copiado para a área de transferência.",
 
   "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site list.oneformes.com\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

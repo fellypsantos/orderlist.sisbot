@@ -5,47 +5,38 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import InputGroup from 'react-bootstrap/InputGroup';
 import RangeSlider from 'react-bootstrap-range-slider';
+
 import moment from 'moment';
 import 'moment/min/locales';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 import TableContentCentered from '../../components/TableContentCentered';
-import {AnnotationContainer} from '../../components/AnnotationsBox/styles';
 import PenField from '../../components/PenField';
 import ReportHeader from '../../components/ReportHeader';
 import ReportMenu from '../../components/ReportMenu';
-import ModalEditReportHeader from '../../components/ModalEditReportHeader';
 import {ReportContext} from '../../contexts/ReportContext';
 import Utils from '../../Utils';
+import DateTimePickerCustom from '../../components/DateTimePickerCustom';
 
 const Report = () => {
   const {
     orderListItems,
     orderListItemsNotes,
+    setOrderListItemsNotes,
     clothingIcons,
     clothingSizes,
     Translator,
     isCycling,
   } = useContext(OrderListContext);
 
-  const {
-    headerReportData,
-    modalImageSelection,
-    setModalVisibleImageSelection,
-  } = useContext(ReportContext);
+  const {modalImageSelection, setModalVisibleImageSelection} = useContext(
+    ReportContext,
+  );
 
-  const [useCrop, setUseCrop] = useState(false);
-  const [crop, setCrop] = useState({x: 0, y: 0});
-  const [zoom, setZoom] = useState(1);
-  const [scale, setScale] = useState(50);
-  const [croppedArea, setCroppedArea] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [finalProcessedImage, setFinalProcessedImage] = useState(null);
-  const [imageDimensions, setImageDimensions] = useState(null);
-  const [consolidatedCounting, setConsolidatedCounting] = useState(null);
-
-  const [sortedOrderList, setSortedOrderList] = useState({
+  const INITIAL_STATE_SORTED_ORDER_LIST = {
     male: {
       tshirt: {
         'T-PP': 0,
@@ -244,7 +235,31 @@ const Report = () => {
         'T-16A': 0,
       },
     },
-  });
+  };
+
+  // TRANSLATE MOMENTJS FORMAT
+  moment.locale(Translator('MOMENTJS'));
+
+  const [useCrop, setUseCrop] = useState(false);
+  const [crop, setCrop] = useState({x: 0, y: 0});
+  const [zoom, setZoom] = useState(1);
+  const [scale, setScale] = useState(50);
+  const [croppedArea, setCroppedArea] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [finalProcessedImage, setFinalProcessedImage] = useState(null);
+  const [imageDimensions, setImageDimensions] = useState(null);
+  const [consolidatedCounting, setConsolidatedCounting] = useState(null);
+
+  // HEADER STATES
+  const [serviceOrder, setServiceOrder] = useState('');
+  const [clientName, setClientName] = useState('');
+  const [responsableName, setResponsableName] = useState('');
+  const [orderDate, setOrderDate] = useState(moment());
+  const [deliveryDate, setDeliveryDate] = useState(null);
+
+  const [sortedOrderList, setSortedOrderList] = useState(
+    JSON.parse(JSON.stringify(INITIAL_STATE_SORTED_ORDER_LIST)),
+  );
 
   const isEmptyClothingSettings = (clothingSettings) => {
     if (clothingSettings === undefined) return false;
@@ -274,28 +289,30 @@ const Report = () => {
     return totalPieces === 0;
   };
 
-  // TRANSLATE MOMENTJS FORMAT
-  moment.locale(Translator('MOMENTJS'));
-
   // CALCULATE DATA TO FILL TABLES
   useEffect(() => {
+    // INITIALIZE IT ONCE, AND FILL WITH ITERATIONS DOWN BELOW
+    const tempSortedOrderList = JSON.parse(
+      JSON.stringify(INITIAL_STATE_SORTED_ORDER_LIST),
+    );
+
+    // PROCESS THE CLOTHES
     orderListItems.map((orderItem) => {
-      // PROCESS THE CLOTHES
       orderItem.clothingSettings.map((theClothe) => {
         if (theClothe.quantity > 0 && theClothe.size !== '') {
-          const tempSortedOrderList = {...sortedOrderList};
-          const tempGender = orderItem.gender.toLowerCase();
+          const tempGender = theClothe.gender.toLowerCase();
           const clotheName = theClothe.name.replace('Cycling', '');
           const clotheSize = theClothe.size;
           const clotheQty = theClothe.quantity;
 
           tempSortedOrderList[tempGender][clotheName][clotheSize] += clotheQty;
-          setSortedOrderList(tempSortedOrderList);
         }
         return theClothe;
       });
       return orderItem;
     });
+
+    setSortedOrderList(tempSortedOrderList);
 
     // LOAD CONSOLIDATED VALUES AS OBJECT
     const calculated = Utils.HelperCountTotalOfPieces(orderListItems);
@@ -375,8 +392,7 @@ const Report = () => {
 
   return (
     <div>
-      <ModalEditReportHeader />
-
+      {/* HANDLE PREVIEW IMAGE SELECTION AND CROP */}
       <Modal show={modalImageSelection} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>{Translator('REPORT_MODAL_PREVIEW_TITLE')}</Modal.Title>
@@ -458,6 +474,7 @@ const Report = () => {
         </Modal.Footer>
       </Modal>
 
+      {/* CONTROL BUTTONS SECTION */}
       <Row>
         <Col>
           <ReportMenu />
@@ -479,27 +496,113 @@ const Report = () => {
 
             {/* RIGHT SIDE */}
             <Col xs="6">
+              {/* SERVICE ORDER NUMBER */}
+              {/* EDITABLE */}
+              <InputGroup className="mb-2 noprint">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    {Translator('SERVICE_ORDER')}
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={serviceOrder}
+                  onChange={({target}) => setServiceOrder(target.value)}
+                />
+              </InputGroup>
+
+              {/* PRINTABLE */}
               <PenField
-                label={Translator('CLIENT')}
-                value={headerReportData.clientName}
+                printOnly
+                label={`${Translator('SERVICE_ORDER')}:`}
+                value={serviceOrder}
               />
+
+              {/* CLIENT */}
+              {/* EDITABLE */}
+              <InputGroup className="mb-2 noprint">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>{Translator('CLIENT')}</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={clientName}
+                  onChange={({target}) => setClientName(target.value)}
+                />
+              </InputGroup>
+
+              {/* PRINTABLE */}
               <PenField
-                label={Translator('REPONSIBLE')}
-                value={headerReportData.responsableName}
+                printOnly
+                label={`${Translator('CLIENT')}:`}
+                value={clientName}
               />
+
+              {/* RESPONSIBLE */}
+              {/* EDITABLE */}
+              <InputGroup className="mb-2 noprint">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>{Translator('REPONSIBLE')}</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={responsableName}
+                  onChange={({target}) => setResponsableName(target.value)}
+                />
+              </InputGroup>
+
+              {/* PRINTABLE */}
               <PenField
+                printOnly
+                label={`${Translator('REPONSIBLE')}:`}
+                value={responsableName}
+              />
+
+              {/* Order Date */}
+              {/* EDITABLE */}
+              <div className="noprint">
+                <DateTimePickerCustom
+                  closeOnSelect
+                  locale={Translator('MOMENTJS')}
+                  label={Translator('REQUEST_DATE')}
+                  value={orderDate}
+                  onChange={(value) => setOrderDate(value)}
+                  timeFormat={false}
+                />
+              </div>
+
+              {/* PRINTABLE */}
+              <PenField
+                printOnly
                 label={Translator('REQUEST_DATE')}
                 value={
-                  headerReportData.deliveryDate !== null
-                    ? moment(headerReportData.orderDate).format('LL')
+                  deliveryDate !== null
+                    ? moment(orderDate)
+                        .locale(Translator('MOMENTJS'))
+                        .format('LL')
                     : ''
                 }
               />
+
+              {/* Order Date */}
+              {/* EDITABLE */}
+              <div className="noprint">
+                <DateTimePickerCustom
+                  closeOnSelect
+                  locale={Translator('MOMENTJS')}
+                  label={Translator('DELIVERY_DATE')}
+                  value={deliveryDate}
+                  onChange={(value) => setDeliveryDate(value)}
+                  timeFormat={false}
+                />
+              </div>
+
+              {/* PRINTABLE */}
               <PenField
+                printOnly
                 label={Translator('DELIVERY_DATE')}
                 value={
-                  headerReportData.orderDate !== null
-                    ? moment(headerReportData.deliveryDate).format('LL')
+                  deliveryDate !== null
+                    ? moment(deliveryDate)
+                        .locale(Translator('MOMENTJS'))
+                        .format('LL')
                     : ''
                 }
               />
@@ -557,51 +660,61 @@ const Report = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...clothingSizes].map((size) => (
-                    <tr
-                      key={size.id}
-                      className={
-                        isEmptyClothingWithSize(sortedOrderList.male, size.code)
-                          ? 'd-none'
-                          : ''
-                      }>
-                      <td>{Translator(size.code)}</td>
-                      {Object.keys(clothingIcons)
-                        .filter((key) => {
-                          // Always return no variant clothes
-                          if (clothingIcons[key].isCycling === undefined) {
+                  {[...clothingSizes]
+                    .filter((item) => item.gender === 'MALE')
+                    .map((size) => (
+                      <tr
+                        key={size.id}
+                        className={
+                          isEmptyClothingWithSize(
+                            sortedOrderList.male,
+                            size.value,
+                          )
+                            ? 'd-none'
+                            : ''
+                        }>
+                        {/* RENDER VALUE */}
+                        <td>{Translator(size.value)}</td>
+
+                        {/* RENDER COLUMNS */}
+                        {Object.keys(clothingIcons)
+                          .filter((key) => {
+                            // Always return no variant clothes
+                            if (clothingIcons[key].isCycling === undefined) {
+                              return true;
+                            }
+
+                            // Only return bike or normal clothes, never both;
+                            if (clothingIcons[key].isCycling !== isCycling) {
+                              return false;
+                            }
+
                             return true;
-                          }
+                          })
+                          .map((clothingIcon) => {
+                            const genericName = clothingIcon.replace(
+                              'Cycling',
+                              '',
+                            );
+                            const settings = sortedOrderList.male[genericName];
+                            const quantityForTheSize = settings[size.value];
 
-                          // Only return bike or normal clothes, never both;
-                          if (clothingIcons[key].isCycling !== isCycling) {
-                            return false;
-                          }
-
-                          return true;
-                        })
-                        .map((clothingIcon) => {
-                          const genericName = clothingIcon.replace(
-                            'Cycling',
-                            '',
-                          );
-                          const settings = sortedOrderList.male[genericName];
-                          const quantityForTheSize = settings[size.code];
-
-                          return (
-                            <td
-                              key={clothingIcon}
-                              className={
-                                isEmptyClothingSettings(settings)
-                                  ? 'd-none'
-                                  : ''
-                              }>
-                              {quantityForTheSize > 0 ? quantityForTheSize : ''}
-                            </td>
-                          );
-                        })}
-                    </tr>
-                  ))}
+                            return (
+                              <td
+                                key={clothingIcon}
+                                className={
+                                  isEmptyClothingSettings(settings)
+                                    ? 'd-none'
+                                    : ''
+                                }>
+                                {quantityForTheSize > 0
+                                  ? quantityForTheSize
+                                  : ''}
+                              </td>
+                            );
+                          })}
+                      </tr>
+                    ))}
                 </tbody>
               </TableContentCentered>
             </Col>
@@ -655,54 +768,59 @@ const Report = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...clothingSizes].map((size) => (
-                    <tr
-                      key={size.id}
-                      className={
-                        isEmptyClothingWithSize(
-                          sortedOrderList.female,
-                          size.code,
-                        )
-                          ? 'd-none'
-                          : ''
-                      }>
-                      <td>{Translator(size.code)}</td>
-                      {Object.keys(clothingIcons)
-                        .filter((key) => {
-                          // Always return no variant clothes
-                          if (clothingIcons[key].isCycling === undefined) {
+                  {[...clothingSizes]
+                    .filter((item) => item.gender === 'FEMALE')
+                    .map((size) => (
+                      <tr
+                        key={size.id}
+                        className={
+                          isEmptyClothingWithSize(
+                            sortedOrderList.female,
+                            size.value,
+                          )
+                            ? 'd-none'
+                            : ''
+                        }>
+                        <td>{Translator(size.value)}</td>
+                        {Object.keys(clothingIcons)
+                          .filter((key) => {
+                            // Always return no variant clothes
+                            if (clothingIcons[key].isCycling === undefined) {
+                              return true;
+                            }
+
+                            // Only return bike or normal clothes, never both;
+                            if (clothingIcons[key].isCycling !== isCycling) {
+                              return false;
+                            }
+
                             return true;
-                          }
+                          })
+                          .map((clothingIcon) => {
+                            const genericName = clothingIcon.replace(
+                              'Cycling',
+                              '',
+                            );
+                            const settings =
+                              sortedOrderList.female[genericName];
+                            const quantityForTheSize = settings[size.value];
 
-                          // Only return bike or normal clothes, never both;
-                          if (clothingIcons[key].isCycling !== isCycling) {
-                            return false;
-                          }
-
-                          return true;
-                        })
-                        .map((clothingIcon) => {
-                          const genericName = clothingIcon.replace(
-                            'Cycling',
-                            '',
-                          );
-                          const settings = sortedOrderList.female[genericName];
-                          const quantityForTheSize = settings[size.code];
-
-                          return (
-                            <td
-                              key={clothingIcon}
-                              className={
-                                isEmptyClothingSettings(settings)
-                                  ? 'd-none'
-                                  : ''
-                              }>
-                              {quantityForTheSize > 0 ? quantityForTheSize : ''}
-                            </td>
-                          );
-                        })}
-                    </tr>
-                  ))}
+                            return (
+                              <td
+                                key={clothingIcon}
+                                className={
+                                  isEmptyClothingSettings(settings)
+                                    ? 'd-none'
+                                    : ''
+                                }>
+                                {quantityForTheSize > 0
+                                  ? quantityForTheSize
+                                  : ''}
+                              </td>
+                            );
+                          })}
+                      </tr>
+                    ))}
                 </tbody>
               </TableContentCentered>
             </Col>
@@ -765,12 +883,12 @@ const Report = () => {
                       className={
                         isEmptyClothingWithSize(
                           sortedOrderList.childish,
-                          size.code,
+                          size.value,
                         )
                           ? 'd-none'
                           : ''
                       }>
-                      <td>{Translator(size.code)}</td>
+                      <td>{Translator(size.value)}</td>
                       {Object.keys(clothingIcons)
                         .filter((key) => {
                           // Always return no variant clothes
@@ -792,7 +910,7 @@ const Report = () => {
                           );
                           const settings =
                             sortedOrderList.childish[genericName];
-                          const quantityForTheSize = settings[size.code];
+                          const quantityForTheSize = settings[size.value];
 
                           return (
                             <td
@@ -814,17 +932,26 @@ const Report = () => {
 
             <Col xs="6">
               <h5>{Translator('ANNOTATIONS').toUpperCase()}</h5>
-              <AnnotationContainer>
-                {orderListItemsNotes.split('\n').map((line) => (
-                  <span style={{display: 'block'}} key={btoa(line)}>
-                    {line}
-                  </span>
-                ))}
-              </AnnotationContainer>
+              <Form.Control
+                value={orderListItemsNotes}
+                onChange={({target}) => setOrderListItemsNotes(target.value)}
+                as="textarea"
+                maxLength={560}
+                style={{
+                  color: '#000',
+                  fontSize: '18px',
+                  height: '395px',
+                  resize: 'none',
+                  border: '1px solid #ccc',
+                  borderRadius: '10px',
+                  padding: '25px 20px',
+                }}
+              />
             </Col>
           </Row>
         </div>
 
+        {/* BOTTOM PIECES COUNT */}
         {consolidatedCounting !== null && (
           <Row>
             <Col xs="4">

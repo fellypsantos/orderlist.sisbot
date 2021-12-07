@@ -39,11 +39,12 @@
   "INSTRUCTIONS_FILENAME": "Instrucciones",
 
   "PROCESSING_REPORT_TITLE": "Informe de procesamiento",
-  "CLIENT": "Cliente:",
-  "REQUEST_DATE": "Fecha de solicitud:",
-  "DELIVERY_DATE": "Fecha de entrega:",
-  "REPONSIBLE": "Responsable:",
-  "ANNOTATIONS": "Anotaciones:",
+  "SERVICE_ORDER": "Orden de Servicio",
+  "CLIENT": "Cliente",
+  "REQUEST_DATE": "Fecha de solicitud",
+  "DELIVERY_DATE": "Fecha de entrega",
+  "REPONSIBLE": "Responsable",
+  "ANNOTATIONS": "Anotaciones",
 
   "GRAND_TOTAL": "Grand Total",
   "TOTAL_RECEIVED": "Total Recibido",
@@ -64,7 +65,6 @@
   "SAVE_CHANGES": "Guardar cambios",
   "CONFIRM": "Confirmar",
   "GOBACK": "Regresa",
-  "EDIT_REPORT_HEADER": "Encabezamiento",
   "PRINT": "Imprimir",
   "DOWNLOAD": "Descargar",
   "UPLOAD": "Subir",
@@ -73,8 +73,7 @@
   "TAKE_SCREENSHOT": "Captura de pantalla",
   "TAKING_SCREENSHOT": "Capturando ...",
   "REPORT": "Reporte",
-  "NOTES": "Comentarios",
-  "PHOTO": "Photo",
+  "PHOTO": "Layout",
   "SEND_MAIL": "Enviar",
 
   "SIZE": "Tamaño",
@@ -84,13 +83,6 @@
   "PIECES": "Piezas",
   "PRICE": "Precio",
   "PRICES": "Precios",
-
-  "TITLE": "Título",
-  "DESCRIPTION": "Descripción",
-  "EDIT_LABELS": "Editar etiquetas",
-  "LABEL": "Etiqueta",
-  "LABELS": "Etiquetas",
-  "DARK_LIGHT": "Oscuro/Claro",
 
   "SENDING_MAIL": "Enviando, espera un segundo...",
   "EMAIL_SENT": "¡Hecho! Lista enviada.",
@@ -115,6 +107,7 @@
   "REPORT_LAYOUT_IMAGE": "Foto de diseño",
   "UNTITLED": "Presupuesto sin título",
   "GENERATE_LINK": "Generar Enlace",
+  "COPY_LINK": "Copiar Link",
   "BUDGET_IDENTIFICATION": "Identificación",
   "COMPANY_EMAIL": "Correo electrónico de la empresa",
 
@@ -132,9 +125,6 @@
   "FINAL_VALUE": "Valor Final",
   "PROCEED_WITH_CAUTION": "¡Proceda con precaución!",
   "ASK_FILENAME": "¿Cuál es el nombre del archivo?",
-  "PRODUCTION_NOTES": "Notas de Producción",
-  "PRODUCTION_NOTES_DESCRIPTION": "Describe tus datos a producción.",
-  "PRODUCTION_NOTES_PLACEHOLDER": "Escriba aquí...",
 
   "CHOOSE_CLOTHES_ADD": "Elige la Ropa",
   "CHOOSE_CLOTHES_EDIT": "Modo de Edición",
@@ -163,6 +153,7 @@
   "TOAST_AXIOS_ERROR": "Ocurrió un error de conexión",
   "TOAST_DATA_LOADED_FROM_SERVER": "Los datos se cargaron desde el servidor.",
   "TOAST_REDIRECTING": "Redirecionando...",
+  "TOAST_COPIED_TO_CLIPBOARD": "Copiado al portapapeles.",
 
   "INSTRUCTIONS_CONTENT": "Hola,\n\nEsta lista de pedidos se creó utilizando el sitio web oneformes.com.\n¿Sabías que puedes automatizar tu producción usando esta lista?\n\nEche un vistazo a cómo funciona visitando nuestro canal de YouTube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstrucciones\n\nSISBot lee el archivo .csv para automatizar las producciones de CorelDraw.\n.bkp se puede importar en list.oneformes.com para restaurar la lista de pedidos y realizar cambios.\n\n\nGenere informes de producción.\nEvite errores y desperdicios.\nAutomatiza trabajos repetitivos.\nTenga una visión amplia de la lista de pedidos.\n\n\nSaludos\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

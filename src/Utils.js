@@ -16,57 +16,51 @@ export default {
     currentPrices,
     clothingSizes,
     orderItemClothingSettings,
-    genderPriceTable,
   ) => {
     if (currentPrices === null) return false;
-
-    let targetPriceTable;
 
     // console.warn('* * * CONFERÊNCIA * * *');
     // console.log('currentPrices', currentPrices);
     // console.log('clothingSizes', clothingSizes);
     // console.log('orderItemClothingSettings', orderItemClothingSettings);
-    // console.log('genderPriceTable', genderPriceTable);
+    // // console.log('genderPriceTable', genderPriceTable);
     // console.warn('* * * CONFERÊNCIA FINALIZADA * * *');
 
-    switch (genderPriceTable) {
-      case 'MALE':
-        // console.log('selected: priceTableMale');
-        targetPriceTable = currentPrices.priceTableMale;
-        break;
-      case 'FEMALE':
-        // console.log('selected: priceTableFemale');
-        targetPriceTable = currentPrices.priceTableFemale;
-        break;
-      case 'CHILDISH':
-        // console.log('selected: priceTableChildish');
-        targetPriceTable = currentPrices.priceTableChildish;
-        break;
-      default:
-    }
-
     // CONVERT PRICES TO ARRAY
-    const pricesList = Object.keys(targetPriceTable).map(
-      (clothePriceListItem) => targetPriceTable[clothePriceListItem],
-    );
+    const convertPriceTableToArray = (arrTarget) =>
+      Object.keys(arrTarget).map(
+        (clothePriceListItem) => arrTarget[clothePriceListItem],
+      );
+
+    const arrPriceTable = {
+      male: convertPriceTableToArray(currentPrices.priceTableMale),
+      female: convertPriceTableToArray(currentPrices.priceTableFemale),
+      childish: convertPriceTableToArray(currentPrices.priceTableChildish),
+    };
 
     let totalPrice = 0;
+    const CHILDISH_START_INDEX = 19;
 
     // SUM THE PRICES
     orderItemClothingSettings.map((item) => {
       const result =
-        clothingSizes.find((theSize) => theSize.code === item.size) || null;
+        clothingSizes.find((theSize) => theSize.value === item.size) || null;
 
       if (result === null) return false;
 
       const clotheID = item.id - 1;
-      const selectedPriceList = pricesList[clotheID];
-      const subtractionValue = result.target === 'TEEN' ? 10 : 1;
+      const theGender = item.gender.toLowerCase();
+      const selectedPriceList = arrPriceTable[theGender][clotheID];
+
+      const subtractionValue =
+        result.gender === 'CHILDISH' ? CHILDISH_START_INDEX : 1;
+
       const pricePerSize = selectedPriceList[result.id - subtractionValue];
 
       totalPrice += pricePerSize * item.quantity;
       return item;
     });
+
     return totalPrice;
   },
 
@@ -155,5 +149,11 @@ export default {
       : calculator;
 
     return valueToReturn;
+  },
+
+  ParseGenderToIndex: (theGender) => {
+    if (theGender === 'MALE') return 0;
+    if (theGender === 'FEMALE') return 1;
+    if (theGender === 'CHILDISH') return 2;
   },
 };

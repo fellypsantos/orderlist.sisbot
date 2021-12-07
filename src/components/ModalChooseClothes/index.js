@@ -1,17 +1,17 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {useToasts} from 'react-toast-notifications';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Select from 'react-select';
 
 import {v4 as uuidv4} from 'uuid';
-import {faPen, faUser, faVenusMars} from '@fortawesome/free-solid-svg-icons';
+import {faPen, faUser} from '@fortawesome/free-solid-svg-icons';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 import FormTextInput from '../FormTextInput';
-import FormInputSelect from '../FormInputSelect';
 
 const ModalChooseClothes = () => {
   const {
@@ -28,18 +28,55 @@ const ModalChooseClothes = () => {
     currentClothingPrices,
     editMode,
     setEditMode,
-    genderOptions,
     isCycling,
     settings,
     shouldFiter,
   } = useContext(OrderListContext);
 
+  const [clothingSizesDropDown, setClothingSizesDropDown] = useState([]);
+
+  useEffect(() => {
+    const maleSizes = [];
+    const femaleSizes = [];
+    const childSizes = [];
+
+    // GENERATE DATA SEPARATED BY GROUPS IN DROPDOWN
+    clothingSizes.forEach((item) => {
+      const addItem = {...item, label: Translator(item.value)};
+
+      if (item.gender === 'MALE') maleSizes.push(addItem);
+      if (item.gender === 'FEMALE') femaleSizes.push(addItem);
+      if (item.gender === 'CHILDISH') childSizes.push(addItem);
+
+      const groupedDropDown = [
+        {
+          label: Translator('MALE'),
+          options: maleSizes,
+        },
+        {
+          label: Translator('FEMALE'),
+          options: femaleSizes,
+        },
+        {
+          label: Translator('CHILDISH'),
+          options: childSizes,
+        },
+      ];
+
+      setClothingSizesDropDown(groupedDropDown);
+    });
+  }, [Translator]);
+
   const {addToast} = useToasts();
 
+  const getTargetOrderItemToManipulate = () =>
+    editMode.enabled ? editMode.orderItem : tempOrderItem;
+
   const handleChangeClotingSettings = (
-    newValue,
+    newSize,
+    newGender,
+    newQuantity,
     clotheIndex,
-    propertyToChange,
   ) => {
     const targetClothingSettings = editMode.enabled
       ? editMode.orderItem.clothingSettings
@@ -61,9 +98,9 @@ const ModalChooseClothes = () => {
           // found the clothe to update
           return {
             ...item,
-            size: propertyToChange === 'size' ? newValue : item.size,
-            quantity:
-              propertyToChange === 'quantity' ? newValue : item.quantity,
+            size: newSize !== undefined ? newSize : item.size,
+            gender: newGender !== undefined ? newGender : item.gender,
+            quantity: newQuantity !== undefined ? newQuantity : item.quantity,
           };
         }
 
@@ -75,6 +112,41 @@ const ModalChooseClothes = () => {
     if (!editMode.enabled) {
       setTempOrderItem({
         ...tempOrderItem,
+        clothingSettings: updatedClothingSettings,
+      });
+    } else {
+      setEditMode({
+        enabled: true,
+        orderItem: {
+          ...editMode.orderItem,
+          clothingSettings: updatedClothingSettings,
+        },
+      });
+    }
+  };
+
+  const handleClearClothingSettings = (clotheIndex) => {
+    const targetOrderItem = getTargetOrderItemToManipulate();
+    const updatedClothingSettings = targetOrderItem.clothingSettings.map(
+      (item) => {
+        if (item.id - 1 === clotheIndex) {
+          console.log('FOUND!', item);
+          return {
+            ...item,
+            gender: '',
+            size: '',
+            quantity: 0,
+          };
+        }
+
+        return item;
+      },
+    );
+
+    // UPDATE CORRECT STATE
+    if (!editMode.enabled) {
+      setTempOrderItem({
+        ...targetOrderItem,
         clothingSettings: updatedClothingSettings,
       });
     } else {
@@ -108,7 +180,6 @@ const ModalChooseClothes = () => {
       currentClothingPrices,
       clothingSizes,
       tempOrderItem.clothingSettings,
-      tempOrderItem.gender,
     );
 
     // UPDATE MAIN LIST
@@ -203,16 +274,6 @@ const ModalChooseClothes = () => {
     });
   };
 
-  const handleChangeEditGender = (e) => {
-    setEditMode({
-      enabled: true,
-      orderItem: {
-        ...editMode.orderItem,
-        gender: e.target.value.trim(),
-      },
-    });
-  };
-
   const handleEditOrderItem = () => {
     const updatedOrderItem = editMode.orderItem;
 
@@ -282,14 +343,25 @@ const ModalChooseClothes = () => {
     }
   };
 
-  const csGetSizeByID = (theID, orderItem) =>
-    orderItem.clothingSettings[theID - 1].size;
+  const csGetSizeByID = (theID, colorOnly = false) => {
+    const targetOrderItem = getTargetOrderItemToManipulate();
+    const theSize = targetOrderItem.clothingSettings[theID - 1].size;
+    const theGender = targetOrderItem.clothingSettings[theID - 1].gender;
+    const theGenderIndex = Utils.ParseGenderToIndex(theGender);
+
+    if (theSize === '' || theGender === '') return false;
+
+    // Filter to get previews selected value in <Select> elemment
+    const theValue = clothingSizesDropDown[theGenderIndex].options.filter(
+      (option) => option.value === theSize,
+    );
+
+    const theColor = theValue.length > 0 ? theValue[0].color : '#fff';
+    return colorOnly ? theColor : theValue;
+  };
 
   const csGetQuantityByID = (theID, orderItem) =>
     orderItem.clothingSettings[theID - 1].quantity;
-
-  const getTargetOrderItemToManipulate = () =>
-    editMode.enabled ? editMode.orderItem : tempOrderItem;
 
   return (
     <Modal show={modalClothesOpened} onHide={handleOnHide}>
@@ -338,18 +410,6 @@ const ModalChooseClothes = () => {
                   />
                 </Col>
               </Row>
-
-              <Row>
-                <Col>
-                  <FormInputSelect
-                    label={`${Translator('GENDER')}:`}
-                    icon={faVenusMars}
-                    value={editMode.orderItem.gender}
-                    arrOptions={genderOptions}
-                    onChange={handleChangeEditGender}
-                  />
-                </Col>
-              </Row>
             </>
           )}
 
@@ -391,82 +451,54 @@ const ModalChooseClothes = () => {
             })
             .map((key) => (
               <Row className="align-items-center" key={key}>
-                {/* ICON */}
+                {/* DRAW THE ICONS */}
                 <Col xs={2}>
                   <img src={clothingIcons[key].icon} alt="clothe icon" />
                 </Col>
 
                 {/* SIZE */}
                 <Col xs={5}>
-                  <Form.Control
-                    as="select"
-                    className="my-1 mr-sm-2"
-                    custom
-                    value={csGetSizeByID(
-                      clothingIcons[key].id,
-                      getTargetOrderItemToManipulate(),
-                    )}
-                    onChange={(e) => {
-                      handleChangeClotingSettings(
-                        e.target.value,
-                        clothingIcons[key].id,
-                        'size',
-                      );
-                    }}>
-                    <option value="">{Translator('NONE')}</option>
-
-                    {clothingSizes.map((size, index) => {
-                      const adjustedKey = key.replace('Cycling', '');
-                      const currentGender = getTargetOrderItemToManipulate()
-                        .gender;
-
-                      if (currentGender === 'CHILDISH') {
-                        // RENDER ONLY CHILDISH SIZES
-                        // console.log('render only childish sizes');
-                        if (size.target === 'ADULT') return false;
-                      }
-
-                      if (
-                        currentGender === 'MALE' ||
-                        currentGender === 'FEMALE'
-                      ) {
-                        // RENDER ONLY ADULT SIZES
-                        if (size.target === 'TEEN') return false;
-                      }
-
-                      // CHECK EMPTY PRICE
-                      if (shouldFiter) {
-                        const targetPriceTable = Utils.GetPriceTableByGender(
-                          currentClothingPrices,
-                          currentGender,
+                  <Select
+                    isClearable
+                    options={clothingSizesDropDown}
+                    value={csGetSizeByID(clothingIcons[key].id)}
+                    onChange={(selectedItem) => {
+                      if (selectedItem !== null) {
+                        const previewsQuantity = csGetQuantityByID(
+                          clothingIcons[key].id,
+                          getTargetOrderItemToManipulate(),
                         );
 
-                        const returnSchema = targetPriceTable[adjustedKey].map(
-                          (priceItem) => priceItem > 0,
+                        handleChangeClotingSettings(
+                          selectedItem.value || null,
+                          selectedItem.gender,
+                          // AUTOMATICALLY SET QUANTITY TO 1
+                          // IF IT'S ZERO WHEN SELECT SOME CLOTHE SIZE
+                          previewsQuantity === 0 ? 1 : previewsQuantity,
+                          clothingIcons[key].id,
                         );
-
-                        // INDEX WILL CHANGE ACCORDING TO GENDER
-                        // CHILDISH STARTS AT INDEX 9 AND NOT 0 AS DEFAULT
-                        // SO NEED SUBTRACT THIS NUMBER TO GET INDEX 0
-                        const ajustedIndex =
-                          currentGender === 'CHILDISH' ? index - 9 : index;
-
-                        // NOT RENDER EMPTY PRICES
-                        const shouldRender = returnSchema[ajustedIndex];
-                        if (!shouldRender) return;
+                      } else {
+                        const theClotheIndex = clothingIcons[key].id - 1;
+                        handleClearClothingSettings(theClotheIndex);
                       }
+                    }}
+                    styles={{
+                      control: (styles) => ({
+                        ...styles,
+                        backgroundColor: csGetSizeByID(
+                          clothingIcons[key].id,
+                          true,
+                        ),
+                      }),
 
-                      // RENDER THE <OPTION>
-                      return (
-                        <option
-                          key={size.id}
-                          value={size.code}
-                          data-id={size.id}>
-                          {Translator(size.code)}
-                        </option>
-                      );
-                    })}
-                  </Form.Control>
+                      option: (styles, {data, isFocused}) => ({
+                        backgroundColor: isFocused ? '#eee' : data.color,
+                        padding: 5,
+                        cursor: 'pointer',
+                      }),
+                    }}
+                  />
+                  {/* END SELECT */}
                 </Col>
 
                 {/* QUANTITY */}
@@ -481,9 +513,10 @@ const ModalChooseClothes = () => {
                     )}
                     onChange={(e) => {
                       handleChangeClotingSettings(
+                        undefined,
+                        undefined,
                         parseInt(e.target.value),
                         clothingIcons[key].id,
-                        'quantity',
                       );
                     }}>
                     <option value={0}>0 {Translator('PIECES')}</option>

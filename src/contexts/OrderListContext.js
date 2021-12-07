@@ -31,22 +31,21 @@ i18n.changeLanguage();
 const initialTempOrderItem = {
   name: '',
   number: '',
-  gender: 'MALE',
   payment: {
     paid: false,
     value: 0,
   },
   clothingSettings: [
-    {id: 1, name: 'tshirt', size: '', quantity: 0},
-    {id: 1, name: 'tshirtCycling', size: '', quantity: 0},
-    {id: 2, name: 'tshirtLong', size: '', quantity: 0},
-    {id: 2, name: 'tshirtLongCycling', size: '', quantity: 0},
-    {id: 3, name: 'shorts', size: '', quantity: 0},
-    {id: 3, name: 'shortsCycling', size: '', quantity: 0},
-    {id: 4, name: 'pants', size: '', quantity: 0},
-    {id: 4, name: 'pantsCycling', size: '', quantity: 0},
-    {id: 5, name: 'tanktop', size: '', quantity: 0},
-    {id: 6, name: 'vest', size: '', quantity: 0},
+    {id: 1, name: 'tshirt', size: '', gender: '', quantity: 0},
+    {id: 1, name: 'tshirtCycling', size: '', gender: '', quantity: 0},
+    {id: 2, name: 'tshirtLong', size: '', gender: '', quantity: 0},
+    {id: 2, name: 'tshirtLongCycling', size: '', gender: '', quantity: 0},
+    {id: 3, name: 'shorts', size: '', gender: '', quantity: 0},
+    {id: 3, name: 'shortsCycling', size: '', gender: '', quantity: 0},
+    {id: 4, name: 'pants', size: '', gender: '', quantity: 0},
+    {id: 4, name: 'pantsCycling', size: '', gender: '', quantity: 0},
+    {id: 5, name: 'tanktop', size: '', gender: '', quantity: 0},
+    {id: 6, name: 'vest', size: '', gender: '', quantity: 0},
   ],
 };
 
@@ -102,29 +101,99 @@ const OrderListProvider = ({children}) => {
   });
 
   const [clothingSizes] = useState([
-    {id: 1, code: 'T-PP', target: 'ADULT'},
-    {id: 2, code: 'T-P', target: 'ADULT'},
-    {id: 3, code: 'T-M', target: 'ADULT'},
-    {id: 4, code: 'T-G', target: 'ADULT'},
-    {id: 5, code: 'T-GG', target: 'ADULT'},
-    {id: 6, code: 'T-XG', target: 'ADULT'},
-    {id: 7, code: 'T-2XG', target: 'ADULT'},
-    {id: 8, code: 'T-3XG', target: 'ADULT'},
-    {id: 9, code: 'T-4XG', target: 'ADULT'},
-    {id: 10, code: 'T-2A', target: 'TEEN'},
-    {id: 11, code: 'T-4A', target: 'TEEN'},
-    {id: 12, code: 'T-6A', target: 'TEEN'},
-    {id: 13, code: 'T-8A', target: 'TEEN'},
-    {id: 14, code: 'T-10A', target: 'TEEN'},
-    {id: 15, code: 'T-12A', target: 'TEEN'},
-    {id: 16, code: 'T-14A', target: 'TEEN'},
-    {id: 17, code: 'T-16A', target: 'TEEN'},
-  ]);
+    {id: 1, value: 'T-PP', gender: 'MALE', color: '#c6dbff'},
+    {id: 2, value: 'T-P', gender: 'MALE', color: '#c6dbff'},
+    {id: 3, value: 'T-M', gender: 'MALE', color: '#c6dbff'},
+    {id: 4, value: 'T-G', gender: 'MALE', color: '#c6dbff'},
+    {id: 5, value: 'T-GG', gender: 'MALE', color: '#c6dbff'},
+    {id: 6, value: 'T-XG', gender: 'MALE', color: '#c6dbff'},
+    {id: 7, value: 'T-2XG', gender: 'MALE', color: '#c6dbff'},
+    {id: 8, value: 'T-3XG', gender: 'MALE', color: '#c6dbff'},
+    {id: 9, value: 'T-4XG', gender: 'MALE', color: '#c6dbff'},
 
-  const [genderOptions] = useState([
-    {id: 1, code: 'MALE'},
-    {id: 2, code: 'FEMALE'},
-    {id: 3, code: 'CHILDISH'},
+    {id: 10, value: 'T-PP', gender: 'FEMALE', color: '#fdd6ff'},
+    {id: 11, value: 'T-P', gender: 'FEMALE', color: '#fdd6ff'},
+    {id: 12, value: 'T-M', gender: 'FEMALE', color: '#fdd6ff'},
+    {id: 13, value: 'T-G', gender: 'FEMALE', color: '#fdd6ff'},
+    {
+      id: 14,
+      value: 'T-GG',
+      gender: 'FEMALE',
+      color: '#fdd6ff',
+    },
+    {
+      id: 15,
+      value: 'T-XG',
+      gender: 'FEMALE',
+      color: '#fdd6ff',
+    },
+    {
+      id: 16,
+      value: 'T-2XG',
+      gender: 'FEMALE',
+      color: '#fdd6ff',
+    },
+    {
+      id: 17,
+      value: 'T-3XG',
+      gender: 'FEMALE',
+      color: '#fdd6ff',
+    },
+    {
+      id: 18,
+      value: 'T-4XG',
+      gender: 'FEMALE',
+      color: '#fdd6ff',
+    },
+
+    {
+      id: 19,
+      value: 'T-2A',
+      gender: 'CHILDISH',
+      color: '#d3ffdf',
+    },
+    {
+      id: 20,
+      value: 'T-4A',
+      gender: 'CHILDISH',
+      color: '#d3ffdf',
+    },
+    {
+      id: 21,
+      value: 'T-6A',
+      gender: 'CHILDISH',
+      color: '#d3ffdf',
+    },
+    {
+      id: 22,
+      value: 'T-8A',
+      gender: 'CHILDISH',
+      color: '#d3ffdf',
+    },
+    {
+      id: 23,
+      value: 'T-10A',
+      gender: 'CHILDISH',
+      color: '#d3ffdf',
+    },
+    {
+      id: 24,
+      value: 'T-12A',
+      gender: 'CHILDISH',
+      color: '#d3ffdf',
+    },
+    {
+      id: 25,
+      value: 'T-14A',
+      gender: 'CHILDISH',
+      color: '#d3ffdf',
+    },
+    {
+      id: 26,
+      value: 'T-16A',
+      gender: 'CHILDISH',
+      color: '#d3ffdf',
+    },
   ]);
 
   const [initialStateTempOrderItem] = useState(initialTempOrderItem);
@@ -224,7 +293,6 @@ const OrderListProvider = ({children}) => {
         currentClothingPrices,
         clothingSizes,
         orderItem.clothingSettings,
-        orderItem.gender,
       );
       return orderItem;
     });
@@ -433,7 +501,6 @@ const OrderListProvider = ({children}) => {
     updateLanguage,
     clothingIcons,
     clothingSizes,
-    genderOptions,
     modalClothesOpened,
     setModalClothesOpened,
     initialStateTempOrderItem,
