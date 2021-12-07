@@ -69,6 +69,9 @@ const ModalChooseClothes = () => {
 
   const {addToast} = useToasts();
 
+  const getTargetOrderItemToManipulate = () =>
+    editMode.enabled ? editMode.orderItem : tempOrderItem;
+
   const handleChangeClotingSettings = (
     newSize,
     newGender,
@@ -78,13 +81,6 @@ const ModalChooseClothes = () => {
     const targetClothingSettings = editMode.enabled
       ? editMode.orderItem.clothingSettings
       : tempOrderItem.clothingSettings;
-
-    console.log(
-      'running handleChangeClotingSettings',
-      newSize,
-      newGender,
-      newQuantity,
-    );
 
     // update clothing settins
     const updatedClothingSettings = targetClothingSettings
@@ -116,6 +112,43 @@ const ModalChooseClothes = () => {
     if (!editMode.enabled) {
       setTempOrderItem({
         ...tempOrderItem,
+        clothingSettings: updatedClothingSettings,
+      });
+    } else {
+      setEditMode({
+        enabled: true,
+        orderItem: {
+          ...editMode.orderItem,
+          clothingSettings: updatedClothingSettings,
+        },
+      });
+    }
+  };
+
+  const handleClearClothingSettings = (clotheIndex) => {
+    const targetOrderItem = getTargetOrderItemToManipulate();
+    const updatedClothingSettings = targetOrderItem.clothingSettings.map(
+      (item) => {
+        if (item.id - 1 === clotheIndex) {
+          console.log('FOUND!', item);
+          return {
+            ...item,
+            gender: '',
+            size: '',
+            quantity: 0,
+          };
+        }
+
+        return item;
+      },
+    );
+
+    console.log('updatedClothingSettings', updatedClothingSettings);
+
+    // UPDATE CORRECT STATE
+    if (!editMode.enabled) {
+      setTempOrderItem({
+        ...targetOrderItem,
         clothingSettings: updatedClothingSettings,
       });
     } else {
@@ -312,10 +345,7 @@ const ModalChooseClothes = () => {
     }
   };
 
-  const getTargetOrderItemToManipulate = () =>
-    editMode.enabled ? editMode.orderItem : tempOrderItem;
-
-  const csGetSizeByID = (theID) => {
+  const csGetSizeByID = (theID, colorOnly = false) => {
     const targetOrderItem = getTargetOrderItemToManipulate();
     const theSize = targetOrderItem.clothingSettings[theID - 1].size;
     const theGender = targetOrderItem.clothingSettings[theID - 1].gender;
@@ -328,7 +358,8 @@ const ModalChooseClothes = () => {
       (option) => option.value === theSize,
     );
 
-    return theValue;
+    const theColor = theValue.length > 0 ? theValue[0].color : '#fff';
+    return colorOnly ? theColor : theValue;
   };
 
   const csGetQuantityByID = (theID, orderItem) =>
@@ -430,23 +461,38 @@ const ModalChooseClothes = () => {
                 {/* SIZE */}
                 <Col xs={5}>
                   <Select
+                    isClearable
                     options={clothingSizesDropDown}
                     value={csGetSizeByID(clothingIcons[key].id)}
                     onChange={(selectedItem) => {
-                      const previewsQuantity = csGetQuantityByID(
-                        clothingIcons[key].id,
-                        getTargetOrderItemToManipulate(),
-                      );
+                      if (selectedItem !== null) {
+                        const previewsQuantity = csGetQuantityByID(
+                          clothingIcons[key].id,
+                          getTargetOrderItemToManipulate(),
+                        );
 
-                      handleChangeClotingSettings(
-                        selectedItem.value,
-                        selectedItem.gender,
-                        // AUTOMATICALLY SET QUANTITY TO 1 IF IT'S ZERO WHEN SELECT SOME CLOTHE SIZE
-                        previewsQuantity === 0 ? 1 : previewsQuantity,
-                        clothingIcons[key].id,
-                      );
+                        handleChangeClotingSettings(
+                          selectedItem.value || null,
+                          selectedItem.gender,
+                          // AUTOMATICALLY SET QUANTITY TO 1
+                          // IF IT'S ZERO WHEN SELECT SOME CLOTHE SIZE
+                          previewsQuantity === 0 ? 1 : previewsQuantity,
+                          clothingIcons[key].id,
+                        );
+                      } else {
+                        const theClotheIndex = clothingIcons[key].id - 1;
+                        handleClearClothingSettings(theClotheIndex);
+                      }
                     }}
                     styles={{
+                      control: (styles) => ({
+                        ...styles,
+                        backgroundColor: csGetSizeByID(
+                          clothingIcons[key].id,
+                          true,
+                        ),
+                      }),
+
                       option: (styles, {data, isFocused}) => ({
                         backgroundColor: isFocused ? '#F1FFCE' : data.color,
                         padding: 5,

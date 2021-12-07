@@ -39,6 +39,7 @@ export default {
     };
 
     let totalPrice = 0;
+    const CHILDISH_START_INDEX = 19;
 
     // SUM THE PRICES
     orderItemClothingSettings.map((item) => {
@@ -48,15 +49,18 @@ export default {
       if (result === null) return false;
 
       const clotheID = item.id - 1;
-      const selectedPriceList =
-        arrPriceTable[item.gender.toLowerCase()][clotheID];
+      const theGender = item.gender.toLowerCase();
+      const selectedPriceList = arrPriceTable[theGender][clotheID];
 
-      const subtractionValue = result.gender === 'CHILDISH' ? 10 : 1;
+      const subtractionValue =
+        result.gender === 'CHILDISH' ? CHILDISH_START_INDEX : 1;
+
       const pricePerSize = selectedPriceList[result.id - subtractionValue];
 
       totalPrice += pricePerSize * item.quantity;
       return item;
     });
+
     return totalPrice;
   },
 
