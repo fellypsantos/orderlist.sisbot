@@ -8,7 +8,6 @@ import {
   faArrowLeft,
   faCamera,
   faFilePdf,
-  faPenAlt,
   faPrint,
   faCommentAlt,
 } from '@fortawesome/free-solid-svg-icons';
@@ -25,9 +24,7 @@ const ReportMenu = () => {
   const {Translator, orderListItemsNotes, setOrderListItemsNotes} = useContext(
     OrderListContext,
   );
-  const {setModalEditHeaderOpen, setModalVisibleImageSelection} = useContext(
-    ReportContext,
-  );
+  const {setModalVisibleImageSelection} = useContext(ReportContext);
 
   const [notesModalVisible, setNotesModalVisible] = useState(false);
 
@@ -75,18 +72,6 @@ const ReportMenu = () => {
             <FontAwesomeIcon icon={faArrowLeft} />
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('GOBACK')}
-            </span>
-          </Button>
-
-          {/* EDIT HEADER */}
-          <Button
-            variant="secondary"
-            className="mr-2"
-            size="sm"
-            onClick={() => setModalEditHeaderOpen(true)}>
-            <FontAwesomeIcon icon={faPenAlt} />
-            <span className="ml-1 d-none d-md-inline-block">
-              {Translator('EDIT_REPORT_HEADER')}
             </span>
           </Button>
 
