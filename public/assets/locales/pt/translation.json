@@ -73,7 +73,7 @@
   "TAKE_SCREENSHOT": "Print Screen",
   "TAKING_SCREENSHOT": "Capturando...",
   "REPORT": "Relatório",
-  "PHOTO": "Foto",
+  "PHOTO": "Layout",
   "SEND_MAIL": "Enviar",
 
   "SIZE": "Tamanho",
@@ -107,6 +107,7 @@
   "REPORT_LAYOUT_IMAGE": "Foto do Layout",
   "UNTITLED": "Orçamento sem título",
   "GENERATE_LINK": "Gerar Link",
+  "COPY_LINK": "Copiar Link",
   "BUDGET_IDENTIFICATION": "Identificação",
   "COMPANY_EMAIL": "E-mail da email",
 
@@ -152,6 +153,7 @@
   "TOAST_AXIOS_ERROR": "Ocorreu um erro na conexão.",
   "TOAST_DATA_LOADED_FROM_SERVER": "Os dados foram carregados do servidor.",
   "TOAST_REDIRECTING": "Redirecionando...",
+  "TOAST_COPIED_TO_CLIPBOARD": "Copiado para a área de transferência.",
 
   "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site list.oneformes.com\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useHistory} from 'react-router-dom';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import hash from 'object-hash';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
@@ -9,9 +10,12 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
 
 import {
   faArrowLeft,
+  faCopy,
   faDownload,
   faLink,
   faUpload,
@@ -44,6 +48,7 @@ const BussinessPricing = () => {
   } = useContext(OrderListContext);
 
   const [projectName, setProjectName] = useState('');
+  const [generatedLink, setGeneratedLink] = useState('');
   const history = useHistory();
 
   const [priceTableMale, setPriceTableMale] = useState({
@@ -121,12 +126,8 @@ const BussinessPricing = () => {
     })
       .then((response) => response.text())
       .then((responseText) => {
-        const generatedLink = document.getElementById('generatedLink');
         const generatedURL = `${window.location.origin}/${window.location.hash}?query=${responseText}`;
-
-        generatedLink.setAttribute('href', generatedURL);
-        generatedLink.setAttribute('class', 'mt-2 d-flex');
-        generatedLink.textContent = generatedURL;
+        setGeneratedLink(generatedURL);
       });
   };
 
@@ -362,6 +363,13 @@ const BussinessPricing = () => {
       setCompanyEmail('');
       return false;
     }
+  };
+
+  const handleOnCopy = () => {
+    addToast(Translator('TOAST_COPIED_TO_CLIPBOARD'), {
+      autoDismiss: true,
+      appearance: 'success',
+    });
   };
 
   return (
@@ -635,22 +643,36 @@ const BussinessPricing = () => {
         </Tab>
       </Tabs>
 
-      {/* GERAR LINK */}
+      {/* SHOW GENERATED LINK */}
       <div
-        className="d-flex"
+        className={generatedLink !== '' ? 'd-flex' : 'd-none'}
+        style={{justifyContent: 'center', alignItems: 'center'}}>
+        <InputGroup className="mb-2">
+          <InputGroup.Prepend>
+            <InputGroup.Text>
+              <FontAwesomeIcon icon={faLink} />
+            </InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl className="text-center" value={generatedLink} />
+          <InputGroup.Append>
+            <CopyToClipboard text={generatedLink} onCopy={handleOnCopy}>
+              <Button variant="secondary" size="sm">
+                <FontAwesomeIcon icon={faCopy} />
+                <span className="ml-1">{Translator('COPY_LINK')}</span>
+              </Button>
+            </CopyToClipboard>
+          </InputGroup.Append>
+        </InputGroup>
+      </div>
+
+      {/* TRIGGER LINK GENERATION */}
+      <div
+        className="d-flex mt-2"
         style={{justifyContent: 'center', alignItems: 'center'}}>
         <Button variant="secondary" size="sm" onClick={generateLink}>
           <FontAwesomeIcon icon={faLink} />
           <span className="ml-1">{Translator('GENERATE_LINK')}</span>
         </Button>
-      </div>
-
-      <div
-        className="d-flex"
-        style={{justifyContent: 'center', alignItems: 'center'}}>
-        <a href="/#" id="generatedLink" className="mt-2 d-none">
-          Link
-        </a>
       </div>
     </div>
   );
