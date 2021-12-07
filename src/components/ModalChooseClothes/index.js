@@ -143,8 +143,6 @@ const ModalChooseClothes = () => {
       },
     );
 
-    console.log('updatedClothingSettings', updatedClothingSettings);
-
     // UPDATE CORRECT STATE
     if (!editMode.enabled) {
       setTempOrderItem({
@@ -494,7 +492,7 @@ const ModalChooseClothes = () => {
                       }),
 
                       option: (styles, {data, isFocused}) => ({
-                        backgroundColor: isFocused ? '#F1FFCE' : data.color,
+                        backgroundColor: isFocused ? '#eee' : data.color,
                         padding: 5,
                         cursor: 'pointer',
                       }),
