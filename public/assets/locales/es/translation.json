@@ -73,7 +73,6 @@
   "TAKE_SCREENSHOT": "Captura de pantalla",
   "TAKING_SCREENSHOT": "Capturando ...",
   "REPORT": "Reporte",
-  "NOTES": "Comentarios",
   "PHOTO": "Photo",
   "SEND_MAIL": "Enviar",
 
@@ -125,9 +124,6 @@
   "FINAL_VALUE": "Valor Final",
   "PROCEED_WITH_CAUTION": "¡Proceda con precaución!",
   "ASK_FILENAME": "¿Cuál es el nombre del archivo?",
-  "PRODUCTION_NOTES": "Notas de Producción",
-  "PRODUCTION_NOTES_DESCRIPTION": "Describe tus datos a producción.",
-  "PRODUCTION_NOTES_PLACEHOLDER": "Escriba aquí...",
 
   "CHOOSE_CLOTHES_ADD": "Elige la Ropa",
   "CHOOSE_CLOTHES_EDIT": "Modo de Edición",

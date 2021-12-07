@@ -14,7 +14,6 @@ import 'moment/min/locales';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
 import TableContentCentered from '../../components/TableContentCentered';
-import {AnnotationContainer} from '../../components/AnnotationsBox/styles';
 import PenField from '../../components/PenField';
 import ReportHeader from '../../components/ReportHeader';
 import ReportMenu from '../../components/ReportMenu';
@@ -26,6 +25,7 @@ const Report = () => {
   const {
     orderListItems,
     orderListItemsNotes,
+    setOrderListItemsNotes,
     clothingIcons,
     clothingSizes,
     Translator,
@@ -599,7 +599,7 @@ const Report = () => {
                 printOnly
                 label={Translator('DELIVERY_DATE')}
                 value={
-                  orderDate !== null
+                  deliveryDate !== null
                     ? moment(deliveryDate)
                         .locale(Translator('MOMENTJS'))
                         .format('LL')
@@ -932,13 +932,21 @@ const Report = () => {
 
             <Col xs="6">
               <h5>{Translator('ANNOTATIONS').toUpperCase()}</h5>
-              <AnnotationContainer>
-                {orderListItemsNotes.split('\n').map((line) => (
-                  <span style={{display: 'block'}} key={btoa(line)}>
-                    {line}
-                  </span>
-                ))}
-              </AnnotationContainer>
+              <Form.Control
+                value={orderListItemsNotes}
+                onChange={({target}) => setOrderListItemsNotes(target.value)}
+                as="textarea"
+                maxLength={620}
+                style={{
+                  color: '#000',
+                  fontSize: '18px',
+                  height: '445px',
+                  resize: 'none',
+                  border: '1px solid #ccc',
+                  borderRadius: '10px',
+                  padding: '25px 20px',
+                }}
+              />
             </Col>
           </Row>
         </div>

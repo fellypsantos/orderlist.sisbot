@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {useHistory} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,24 +9,17 @@ import {
   faCamera,
   faFilePdf,
   faPrint,
-  faCommentAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import {useToasts} from 'react-toast-notifications';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import {ReportContext} from '../../contexts/ReportContext';
-import ModalTextInput from '../ModalTextInput';
 
 const ReportMenu = () => {
   const history = useHistory();
-  const {addToast} = useToasts();
-  const {Translator, orderListItemsNotes, setOrderListItemsNotes} = useContext(
-    OrderListContext,
-  );
-  const {setModalVisibleImageSelection} = useContext(ReportContext);
 
-  const [notesModalVisible, setNotesModalVisible] = useState(false);
+  const {Translator} = useContext(OrderListContext);
+  const {setModalVisibleImageSelection} = useContext(ReportContext);
 
   const handleGeneratePDF = () => {
     html2canvas(document.getElementById('report')).then((canvas) => {
@@ -38,29 +31,8 @@ const ReportMenu = () => {
     });
   };
 
-  const handleCloseAnnotations = () => {
-    setNotesModalVisible(false);
-    addToast(Translator('TOAST_NOTES_UPDATED'), {
-      appearance: 'success',
-      autoDismiss: true,
-    });
-  };
-
   return (
     <div>
-      {/* ANNOTATIONS */}
-      <ModalTextInput
-        isOpen={notesModalVisible}
-        useTextarea
-        title={Translator('PRODUCTION_NOTES')}
-        inputTextContent={orderListItemsNotes}
-        labelContent={Translator('PRODUCTION_NOTES_DESCRIPTION')}
-        placeholderContent={Translator('PRODUCTION_NOTES_PLACEHOLDER')}
-        handleChange={(e) => setOrderListItemsNotes(e.target.value)}
-        handleConfirm={handleCloseAnnotations}
-        handleClose={handleCloseAnnotations}
-      />
-
       <Row className="mt-4 mb-2 hide-on-print">
         <Col className="d-flex justify-content-end">
           {/* BACK */}
@@ -84,21 +56,6 @@ const ReportMenu = () => {
             <FontAwesomeIcon icon={faCamera} />
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('PHOTO')}
-            </span>
-          </Button>
-
-          {/* NOTES */}
-          <Button
-            variant="secondary"
-            className="mr-2"
-            size="sm"
-            onClick={() => setNotesModalVisible(true)}>
-            <FontAwesomeIcon
-              icon={faCommentAlt}
-              color={orderListItemsNotes.length > 0 ? '#f1c40f' : '#fff'}
-            />
-            <span className="ml-1 d-none d-md-inline-block">
-              {Translator('NOTES')}
             </span>
           </Button>
 

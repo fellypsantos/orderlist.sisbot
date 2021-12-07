@@ -198,19 +198,6 @@ const TableOrdersMenu = () => {
               {Translator('REPORT')}
             </span>
           </Button>
-
-          {/* <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => setNotesModalVisible(true)}>
-            <FontAwesomeIcon
-              icon={faCommentAlt}
-              color={orderListItemsNotes.length > 0 ? '#f1c40f' : '#fff'}
-            />
-            <span className="ml-1 d-none d-md-inline-block">
-              {Translator('NOTES')}
-            </span>
-          </Button> */}
         </Col>
       </Row>
     </>
