@@ -936,11 +936,11 @@ const Report = () => {
                 value={orderListItemsNotes}
                 onChange={({target}) => setOrderListItemsNotes(target.value)}
                 as="textarea"
-                maxLength={620}
+                maxLength={560}
                 style={{
                   color: '#000',
                   fontSize: '18px',
-                  height: '445px',
+                  height: '395px',
                   resize: 'none',
                   border: '1px solid #ccc',
                   borderRadius: '10px',
