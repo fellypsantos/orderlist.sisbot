@@ -13,25 +13,6 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 import FormTextInput from '../FormTextInput';
 
-const sample = {
-  tshirt: [
-    {
-      label: 'MASULINO',
-      options: [
-        {label: 'PP', value: 'T-PP'},
-        {label: 'M', value: 'T-M'},
-      ],
-    },
-    {
-      label: 'FEMININO',
-      options: [
-        {label: 'PP', value: 'T-PP'},
-        {label: 'P', value: 'T-P'},
-      ],
-    },
-  ],
-};
-
 const ModalChooseClothes = () => {
   const {
     clothingIcons,
@@ -70,99 +51,140 @@ const ModalChooseClothes = () => {
 
     const defaultArraySample = [
       {
-        label: 'MASCULINO',
+        label: Translator('MALE'),
         options: [],
       },
       {
-        label: 'FEMININO',
+        label: Translator('FEMALE'),
         options: [],
       },
       {
-        label: 'INFANTIL',
+        label: Translator('CHILDISH'),
         options: [],
       },
     ];
 
-    /** MAIN LIST THAT HOLDS FILTERED */
-    const dbGroupedDropDown = {
-      tshirt: JSON.parse(JSON.stringify(defaultArraySample)),
-      tshirtLong: JSON.parse(JSON.stringify(defaultArraySample)),
-      shorts: JSON.parse(JSON.stringify(defaultArraySample)),
-      pants: JSON.parse(JSON.stringify(defaultArraySample)),
-      tanktop: JSON.parse(JSON.stringify(defaultArraySample)),
-      vest: JSON.parse(JSON.stringify(defaultArraySample)),
-    };
+    /**
+     *  GENERATE NO FILTERED DATA
+     */
+    if (!shouldFilter) {
+      console.warn('🔶 LISTA NÃO SERÁ FILTRADA');
 
-    // LOOP THROUGH EACH CLOTHE
-    Object.keys(clothingIcons)
-      .filter(filterCycling)
-      .map((theClothe) => {
-        console.warn('🟪 Generate options sizes to: ', theClothe);
+      const maleSizes = [];
+      const femaleSizes = [];
+      const childSizes = [];
 
-        // LOOP THROUGH ALL SIZES TO THIS CLOTHE
-        clothingSizes.forEach((theSize) => {
-          /* * * * * * * * * * * * * * * * * * * * *
-           * GENERATE OPTIONS FOR MALE
-           * * * * * * * * * * * * * * * * * * * * */
-          if (theSize.gender === 'MALE') {
-            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
-            const targetPrices = currentClothingPrices.priceTableMale;
-            const currentPrice = targetPrices[theClothe][theSize.priceIndex];
-            const newOption = {
-              label: Translator(theSize.value),
-              value: theSize.value,
-            };
+      clothingSizes.forEach((item) => {
+        const addItem = {...item, label: Translator(item.value)};
 
-            // NOW SAVE IT TO MAIN LIST
-            if (currentPrice > 0) {
-              dbGroupedDropDown[theClothe][targetIndex].options.push(newOption);
-            }
-          } else if (theSize.gender === 'FEMALE') {
+        if (item.gender === 'MALE') maleSizes.push(addItem);
+        if (item.gender === 'FEMALE') femaleSizes.push(addItem);
+        if (item.gender === 'CHILDISH') childSizes.push(addItem);
+
+        const groupedDropDown = [
+          {
+            label: Translator('MALE'),
+            options: maleSizes,
+          },
+          {
+            label: Translator('FEMALE'),
+            options: femaleSizes,
+          },
+          {
+            label: Translator('CHILDISH'),
+            options: childSizes,
+          },
+        ];
+
+        setClothingSizesDropDown(groupedDropDown);
+      });
+    } else {
+      console.warn('✅ FILTRO DE LISTA ATIVADO');
+      /** MAIN LIST THAT HOLDS FILTERED */
+      const dbGroupedDropDown = {
+        tshirt: JSON.parse(JSON.stringify(defaultArraySample)),
+        tshirtLong: JSON.parse(JSON.stringify(defaultArraySample)),
+        shorts: JSON.parse(JSON.stringify(defaultArraySample)),
+        pants: JSON.parse(JSON.stringify(defaultArraySample)),
+        tanktop: JSON.parse(JSON.stringify(defaultArraySample)),
+        vest: JSON.parse(JSON.stringify(defaultArraySample)),
+      };
+
+      // LOOP THROUGH EACH CLOTHE
+      Object.keys(clothingIcons)
+        .filter(filterCycling)
+        .map((theClothe) => {
+          // LOOP THROUGH ALL SIZES TO THIS CLOTHE
+          clothingSizes.forEach((theSize) => {
             /* * * * * * * * * * * * * * * * * * * * *
-             * GENERATE OPTIONS FOR FEMALE
+             * GENERATE OPTIONS FOR MALE
              * * * * * * * * * * * * * * * * * * * * */
-            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
-            const targetPrices = currentClothingPrices.priceTableFemale;
-            const currentPrice = targetPrices[theClothe][theSize.priceIndex];
-            const newOption = {
-              label: Translator(theSize.value),
-              value: theSize.value,
-            };
+            if (theSize.gender === 'MALE') {
+              const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+              const targetPrices = currentClothingPrices.priceTableMale;
+              const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+              const newOption = {
+                ...theSize,
+                label: Translator(theSize.value),
+              };
 
-            // NOW SAVE IT TO MAIN LIST
-            if (currentPrice > 0) {
-              dbGroupedDropDown[theClothe][targetIndex].options.push(newOption);
-            }
-          } else if (theSize.gender === 'CHILDISH') {
-            /* * * * * * * * * * * * * * * * * * * * *
-             * GENERATE OPTIONS FOR CHILDISH
-             * * * * * * * * * * * * * * * * * * * * */
-            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
-            const targetPrices = currentClothingPrices.priceTableChildish;
-            const currentPrice = targetPrices[theClothe][theSize.priceIndex];
-            const newOption = {
-              label: Translator(theSize.value),
-              value: theSize.value,
-            };
+              // NOW SAVE IT TO MAIN LIST
+              if (currentPrice > 0) {
+                dbGroupedDropDown[theClothe][targetIndex].options.push(
+                  newOption,
+                );
+              }
+            } else if (theSize.gender === 'FEMALE') {
+              /* * * * * * * * * * * * * * * * * * * * *
+               * GENERATE OPTIONS FOR FEMALE
+               * * * * * * * * * * * * * * * * * * * * */
+              const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+              const targetPrices = currentClothingPrices.priceTableFemale;
+              const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+              const newOption = {
+                ...theSize,
+                label: Translator(theSize.value),
+              };
 
-            // NOW SAVE IT TO MAIN LIST
-            if (currentPrice > 0) {
-              dbGroupedDropDown[theClothe][targetIndex].options.push(newOption);
+              // NOW SAVE IT TO MAIN LIST
+              if (currentPrice > 0) {
+                dbGroupedDropDown[theClothe][targetIndex].options.push(
+                  newOption,
+                );
+              }
+            } else if (theSize.gender === 'CHILDISH') {
+              /* * * * * * * * * * * * * * * * * * * * *
+               * GENERATE OPTIONS FOR CHILDISH
+               * * * * * * * * * * * * * * * * * * * * */
+              const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+              const targetPrices = currentClothingPrices.priceTableChildish;
+              const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+              const newOption = {
+                ...theSize,
+                label: Translator(theSize.value),
+              };
+
+              // NOW SAVE IT TO MAIN LIST
+              if (currentPrice > 0) {
+                dbGroupedDropDown[theClothe][targetIndex].options.push(
+                  newOption,
+                );
+              }
             }
-          }
+          });
         });
 
-        // SAVE THE PROGRESS FOR THE CURRENT CLOTHE
-        console.warn('✅ SAVE DATA FOR CURRENT CLOTHE: ', theClothe);
-        console.log('💥 MAIN ', dbGroupedDropDown);
-        setClothingSizesDropDown(dbGroupedDropDown);
-      });
+      // FILTERED DATA
+      setClothingSizesDropDown(dbGroupedDropDown);
+    }
   }, [Translator, modalClothesOpened]);
 
   const {addToast} = useToasts();
 
-  const getTargetOrderItemToManipulate = () =>
-    editMode.enabled ? editMode.orderItem : tempOrderItem;
+  const getTargetOrderItemToManipulate = () => {
+    const selected = editMode.enabled ? editMode.orderItem : tempOrderItem;
+    return selected;
+  };
 
   const handleChangeClotingSettings = (
     newSize,
@@ -435,32 +457,41 @@ const ModalChooseClothes = () => {
     }
   };
 
-  const csGetSizeByID = (theID, clotheName, colorOnly = false) => {
+  const csGetSizeByID = (theID, clotheName = '', colorOnly = false) => {
     if (!modalClothesOpened) return false;
 
-    // const targetOrderItem = getTargetOrderItemToManipulate();
+    const targetOrderItem = getTargetOrderItemToManipulate();
+    const filteredClotheSettings = targetOrderItem.clothingSettings.filter(
+      (item) => {
+        // Always return no variant clothes, index 4 = Tanktop | index 5 = vest
+        if (item.id > 4) return true;
 
-    // const settingsForClothes = targetOrderItem.clothingSettings.filter(
-    //   (item) => {
-    //     if (item.name.includes('Cycling') !== isCycling) return false;
-    //     return true;
-    //   },
-    // );
+        // Only return bike or normal clothes, never both;
+        if (item.name.includes('Cycling') !== isCycling) return false;
 
-    // const theSize = settingsForClothes[theID - 1].size;
-    // const theGender = settingsForClothes[theID - 1].gender;
-    // const theGenderIndex = Utils.ParseGenderToIndex(theGender);
-    // console.log('theGender', theGender);
+        return true;
+      },
+    );
 
-    // if (theSize === '' || theGender === '') return false;
+    // console.log('filteredClotheSettings', filteredClotheSettings);
 
-    // // Filter to get previews selected value in <Select> elemment
-    // const theValue = clothingSizesDropDown[clotheName][
-    //   theGenderIndex
-    // ].options.filter((option) => option.value === theSize);
+    const theSize = filteredClotheSettings[theID - 1].size;
+    const theGender = filteredClotheSettings[theID - 1].gender;
+    const theGenderIndex = Utils.ParseGenderToIndex(theGender);
 
-    // const theColor = theValue.length > 0 ? theValue[0].color : '#fff';
-    // return colorOnly ? theColor : theValue;
+    if (theSize === '' || theGender === '') return false;
+
+    // Filter to get previews selected value in <Select> elemment
+    const targetListOptions = shouldFilter
+      ? clothingSizesDropDown[clotheName]
+      : clothingSizesDropDown;
+
+    const theValue = targetListOptions[theGenderIndex].options.filter(
+      (option) => option.value === theSize,
+    );
+
+    const theColor = theValue.length > 0 ? theValue[0].color : '#fff';
+    return colorOnly ? theColor : theValue;
   };
 
   const csGetQuantityByID = (theID, orderItem) =>
@@ -570,7 +601,12 @@ const ModalChooseClothes = () => {
                   <Select
                     isClearable
                     // options={sample[key]}
-                    options={clothingSizesDropDown[key]}
+                    options={
+                      !shouldFilter
+                        ? clothingSizesDropDown
+                        : clothingSizesDropDown[key]
+                    }
+                    value={csGetSizeByID(clothingIcons[key].id, key)}
                     onChange={(selectedItem) => {
                       if (selectedItem !== null) {
                         const previewsQuantity = csGetQuantityByID(
