@@ -114,6 +114,8 @@ const ModalChooseClothes = () => {
       Object.keys(clothingIcons)
         .filter(filterCycling)
         .map((theClothe) => {
+          const safeClotheName = theClothe.replace('Cycling', '');
+
           // LOOP THROUGH ALL SIZES TO THIS CLOTHE
           clothingSizes.forEach((theSize) => {
             /* * * * * * * * * * * * * * * * * * * * *
@@ -122,7 +124,10 @@ const ModalChooseClothes = () => {
             if (theSize.gender === 'MALE') {
               const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
               const targetPrices = currentClothingPrices.priceTableMale;
-              const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+
+              const currentPrice =
+                targetPrices[safeClotheName][theSize.priceIndex];
+
               const newOption = {
                 ...theSize,
                 label: Translator(theSize.value),
@@ -130,7 +135,7 @@ const ModalChooseClothes = () => {
 
               // NOW SAVE IT TO MAIN LIST
               if (currentPrice > 0) {
-                dbGroupedDropDown[theClothe][targetIndex].options.push(
+                dbGroupedDropDown[safeClotheName][targetIndex].options.push(
                   newOption,
                 );
               }
@@ -140,7 +145,8 @@ const ModalChooseClothes = () => {
                * * * * * * * * * * * * * * * * * * * * */
               const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
               const targetPrices = currentClothingPrices.priceTableFemale;
-              const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+              const currentPrice =
+                targetPrices[safeClotheName][theSize.priceIndex];
               const newOption = {
                 ...theSize,
                 label: Translator(theSize.value),
@@ -148,7 +154,7 @@ const ModalChooseClothes = () => {
 
               // NOW SAVE IT TO MAIN LIST
               if (currentPrice > 0) {
-                dbGroupedDropDown[theClothe][targetIndex].options.push(
+                dbGroupedDropDown[safeClotheName][targetIndex].options.push(
                   newOption,
                 );
               }
@@ -158,7 +164,8 @@ const ModalChooseClothes = () => {
                * * * * * * * * * * * * * * * * * * * * */
               const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
               const targetPrices = currentClothingPrices.priceTableChildish;
-              const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+              const currentPrice =
+                targetPrices[safeClotheName][theSize.priceIndex];
               const newOption = {
                 ...theSize,
                 label: Translator(theSize.value),
@@ -166,7 +173,7 @@ const ModalChooseClothes = () => {
 
               // NOW SAVE IT TO MAIN LIST
               if (currentPrice > 0) {
-                dbGroupedDropDown[theClothe][targetIndex].options.push(
+                dbGroupedDropDown[safeClotheName][targetIndex].options.push(
                   newOption,
                 );
               }
@@ -457,7 +464,7 @@ const ModalChooseClothes = () => {
     }
   };
 
-  const csGetSizeByID = (theID, clotheName = '', colorOnly = false) => {
+  const csGetSizeByID = (theID, pClotheName = '', colorOnly = false) => {
     if (!modalClothesOpened) return false;
 
     const targetOrderItem = getTargetOrderItemToManipulate();
@@ -473,8 +480,7 @@ const ModalChooseClothes = () => {
       },
     );
 
-    // console.log('filteredClotheSettings', filteredClotheSettings);
-
+    const clotheName = pClotheName.replace('Cycling', '');
     const theSize = filteredClotheSettings[theID - 1].size;
     const theGender = filteredClotheSettings[theID - 1].gender;
     const theGenderIndex = Utils.ParseGenderToIndex(theGender);
@@ -589,101 +595,107 @@ const ModalChooseClothes = () => {
               // TO SELECT IT SIZE
               return sumResult > 0;
             })
-            .map((key) => (
-              <Row className="align-items-center" key={key}>
-                {/* DRAW THE ICONS */}
-                <Col xs={2}>
-                  <img src={clothingIcons[key].icon} alt="clothe icon" />
-                </Col>
+            .map((key) => {
+              const safeClotheName = key.replace('Cycling', '');
 
-                {/* SIZE */}
-                <Col xs={5}>
-                  <Select
-                    isClearable
-                    // options={sample[key]}
-                    options={
-                      !shouldFilter
-                        ? clothingSizesDropDown
-                        : clothingSizesDropDown[key]
-                    }
-                    value={csGetSizeByID(clothingIcons[key].id, key)}
-                    onChange={(selectedItem) => {
-                      if (selectedItem !== null) {
-                        const previewsQuantity = csGetQuantityByID(
-                          clothingIcons[key].id,
-                          getTargetOrderItemToManipulate(),
-                        );
+              return (
+                <Row className="align-items-center" key={key}>
+                  {/* DRAW THE ICONS */}
+                  <Col xs={2}>
+                    <img src={clothingIcons[key].icon} alt="clothe icon" />
+                  </Col>
 
-                        handleChangeClotingSettings(
-                          selectedItem.value || null,
-                          selectedItem.gender,
-                          // AUTOMATICALLY SET QUANTITY TO 1
-                          // IF IT'S ZERO WHEN SELECT SOME CLOTHE SIZE
-                          previewsQuantity === 0 ? 1 : previewsQuantity,
-                          clothingIcons[key].id,
-                        );
-                      } else {
-                        const theClotheIndex = clothingIcons[key].id - 1;
-                        handleClearClothingSettings(theClotheIndex);
+                  {/* SIZE */}
+                  <Col xs={5}>
+                    <Select
+                      isClearable
+                      options={
+                        !shouldFilter
+                          ? clothingSizesDropDown
+                          : clothingSizesDropDown[safeClotheName]
                       }
-                    }}
-                    styles={{
-                      control: (styles) => ({
-                        ...styles,
-                        backgroundColor: csGetSizeByID(
-                          clothingIcons[key].id,
-                          key,
-                          true,
-                          '<Select /> styles',
-                        ),
-                      }),
-
-                      option: (styles, {data, isFocused}) => ({
-                        backgroundColor: isFocused ? '#eee' : data.color,
-                        padding: 5,
-                        cursor: 'pointer',
-                      }),
-                    }}
-                  />
-                  {/* END SELECT */}
-                </Col>
-
-                {/* QUANTITY */}
-                <Col xs={5}>
-                  <Form.Control
-                    as="select"
-                    className="my-1 mr-sm-2"
-                    custom
-                    value={csGetQuantityByID(
-                      clothingIcons[key].id,
-                      getTargetOrderItemToManipulate(),
-                    )}
-                    onChange={(e) => {
-                      handleChangeClotingSettings(
-                        undefined,
-                        undefined,
-                        parseInt(e.target.value),
+                      value={csGetSizeByID(
                         clothingIcons[key].id,
-                      );
-                    }}>
-                    <option value={0}>0 {Translator('PIECES')}</option>
-                    {[...Array(settings.maxQuantityPerClothe).keys()].map(
-                      (quantity) => {
-                        const trueQuantity = quantity + 1;
-                        return (
-                          <option key={trueQuantity} value={trueQuantity}>
-                            {trueQuantity}{' '}
-                            {trueQuantity === 1
-                              ? Translator('PIECE')
-                              : Translator('PIECES')}
-                          </option>
+                        safeClotheName,
+                      )}
+                      onChange={(selectedItem) => {
+                        if (selectedItem !== null) {
+                          const previewsQuantity = csGetQuantityByID(
+                            clothingIcons[key].id,
+                            getTargetOrderItemToManipulate(),
+                          );
+
+                          handleChangeClotingSettings(
+                            selectedItem.value || null,
+                            selectedItem.gender,
+                            // AUTOMATICALLY SET QUANTITY TO 1
+                            // IF IT'S ZERO WHEN SELECT SOME CLOTHE SIZE
+                            previewsQuantity === 0 ? 1 : previewsQuantity,
+                            clothingIcons[key].id,
+                          );
+                        } else {
+                          const theClotheIndex = clothingIcons[key].id - 1;
+                          handleClearClothingSettings(theClotheIndex);
+                        }
+                      }}
+                      styles={{
+                        control: (styles) => ({
+                          ...styles,
+                          backgroundColor: csGetSizeByID(
+                            clothingIcons[key].id,
+                            key,
+                            true,
+                            '<Select /> styles',
+                          ),
+                        }),
+
+                        option: (styles, {data, isFocused}) => ({
+                          backgroundColor: isFocused ? '#eee' : data.color,
+                          padding: 5,
+                          cursor: 'pointer',
+                        }),
+                      }}
+                    />
+                    {/* END SELECT */}
+                  </Col>
+
+                  {/* QUANTITY */}
+                  <Col xs={5}>
+                    <Form.Control
+                      as="select"
+                      className="my-1 mr-sm-2"
+                      custom
+                      value={csGetQuantityByID(
+                        clothingIcons[key].id,
+                        getTargetOrderItemToManipulate(),
+                      )}
+                      onChange={(e) => {
+                        handleChangeClotingSettings(
+                          undefined,
+                          undefined,
+                          parseInt(e.target.value),
+                          clothingIcons[key].id,
                         );
-                      },
-                    )}
-                  </Form.Control>
-                </Col>
-              </Row>
-            ))}
+                      }}>
+                      <option value={0}>0 {Translator('PIECES')}</option>
+                      {[...Array(settings.maxQuantityPerClothe).keys()].map(
+                        (quantity) => {
+                          const trueQuantity = quantity + 1;
+                          return (
+                            <option key={trueQuantity} value={trueQuantity}>
+                              {trueQuantity}{' '}
+                              {trueQuantity === 1
+                                ? Translator('PIECE')
+                                : Translator('PIECES')}
+                            </option>
+                          );
+                        },
+                      )}
+                    </Form.Control>
+                  </Col>
+                </Row>
+              );
+            })}
         </div>
       </Modal.Body>
       <Modal.Footer>
