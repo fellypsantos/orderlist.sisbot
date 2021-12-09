@@ -37,7 +37,7 @@ const ReportMenu = () => {
         <Col className="d-flex justify-content-end">
           {/* BACK */}
           <Button
-            variant="secondary"
+            variant="primary"
             className="mr-2"
             size="sm"
             onClick={() => history.goBack()}>

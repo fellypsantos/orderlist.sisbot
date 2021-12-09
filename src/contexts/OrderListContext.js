@@ -101,46 +101,51 @@ const OrderListProvider = ({children}) => {
   });
 
   const [clothingSizes] = useState([
-    {id: 1, value: 'T-PP', gender: 'MALE', color: '#c6dbff'},
-    {id: 2, value: 'T-P', gender: 'MALE', color: '#c6dbff'},
-    {id: 3, value: 'T-M', gender: 'MALE', color: '#c6dbff'},
-    {id: 4, value: 'T-G', gender: 'MALE', color: '#c6dbff'},
-    {id: 5, value: 'T-GG', gender: 'MALE', color: '#c6dbff'},
-    {id: 6, value: 'T-XG', gender: 'MALE', color: '#c6dbff'},
-    {id: 7, value: 'T-2XG', gender: 'MALE', color: '#c6dbff'},
-    {id: 8, value: 'T-3XG', gender: 'MALE', color: '#c6dbff'},
-    {id: 9, value: 'T-4XG', gender: 'MALE', color: '#c6dbff'},
+    {id: 1, priceIndex: 0, value: 'T-PP', gender: 'MALE', color: '#c6dbff'},
+    {id: 2, priceIndex: 1, value: 'T-P', gender: 'MALE', color: '#c6dbff'},
+    {id: 3, priceIndex: 2, value: 'T-M', gender: 'MALE', color: '#c6dbff'},
+    {id: 4, priceIndex: 3, value: 'T-G', gender: 'MALE', color: '#c6dbff'},
+    {id: 5, priceIndex: 4, value: 'T-GG', gender: 'MALE', color: '#c6dbff'},
+    {id: 6, priceIndex: 5, value: 'T-XG', gender: 'MALE', color: '#c6dbff'},
+    {id: 7, priceIndex: 6, value: 'T-2XG', gender: 'MALE', color: '#c6dbff'},
+    {id: 8, priceIndex: 7, value: 'T-3XG', gender: 'MALE', color: '#c6dbff'},
+    {id: 9, priceIndex: 8, value: 'T-4XG', gender: 'MALE', color: '#c6dbff'},
 
-    {id: 10, value: 'T-PP', gender: 'FEMALE', color: '#fdd6ff'},
-    {id: 11, value: 'T-P', gender: 'FEMALE', color: '#fdd6ff'},
-    {id: 12, value: 'T-M', gender: 'FEMALE', color: '#fdd6ff'},
-    {id: 13, value: 'T-G', gender: 'FEMALE', color: '#fdd6ff'},
+    {id: 10, priceIndex: 0, value: 'T-PP', gender: 'FEMALE', color: '#fdd6ff'},
+    {id: 11, priceIndex: 1, value: 'T-P', gender: 'FEMALE', color: '#fdd6ff'},
+    {id: 12, priceIndex: 2, value: 'T-M', gender: 'FEMALE', color: '#fdd6ff'},
+    {id: 13, priceIndex: 3, value: 'T-G', gender: 'FEMALE', color: '#fdd6ff'},
     {
       id: 14,
+      priceIndex: 4,
       value: 'T-GG',
       gender: 'FEMALE',
       color: '#fdd6ff',
     },
     {
       id: 15,
+      priceIndex: 5,
       value: 'T-XG',
       gender: 'FEMALE',
       color: '#fdd6ff',
     },
     {
       id: 16,
+      priceIndex: 6,
       value: 'T-2XG',
       gender: 'FEMALE',
       color: '#fdd6ff',
     },
     {
       id: 17,
+      priceIndex: 7,
       value: 'T-3XG',
       gender: 'FEMALE',
       color: '#fdd6ff',
     },
     {
       id: 18,
+      priceIndex: 8,
       value: 'T-4XG',
       gender: 'FEMALE',
       color: '#fdd6ff',
@@ -148,48 +153,56 @@ const OrderListProvider = ({children}) => {
 
     {
       id: 19,
+      priceIndex: 0,
       value: 'T-2A',
       gender: 'CHILDISH',
       color: '#d3ffdf',
     },
     {
       id: 20,
+      priceIndex: 1,
       value: 'T-4A',
       gender: 'CHILDISH',
       color: '#d3ffdf',
     },
     {
       id: 21,
+      priceIndex: 2,
       value: 'T-6A',
       gender: 'CHILDISH',
       color: '#d3ffdf',
     },
     {
       id: 22,
+      priceIndex: 3,
       value: 'T-8A',
       gender: 'CHILDISH',
       color: '#d3ffdf',
     },
     {
       id: 23,
+      priceIndex: 4,
       value: 'T-10A',
       gender: 'CHILDISH',
       color: '#d3ffdf',
     },
     {
       id: 24,
+      priceIndex: 5,
       value: 'T-12A',
       gender: 'CHILDISH',
       color: '#d3ffdf',
     },
     {
       id: 25,
+      priceIndex: 6,
       value: 'T-14A',
       gender: 'CHILDISH',
       color: '#d3ffdf',
     },
     {
       id: 26,
+      priceIndex: 7,
       value: 'T-16A',
       gender: 'CHILDISH',
       color: '#d3ffdf',
@@ -202,7 +215,7 @@ const OrderListProvider = ({children}) => {
 
   const [screenshotMode, setScreenshotMode] = useState(false);
 
-  const [shouldFiter, setShouldFilter] = useState(false);
+  const [shouldFilter, setShouldFilter] = useState(false);
 
   const [tempOrderItem, setTempOrderItem] = useState(initialTempOrderItem);
 
@@ -490,11 +503,11 @@ const OrderListProvider = ({children}) => {
       'sisbot.settings',
       JSON.stringify({
         ...settings,
-        filterEnabled: shouldFiter,
+        filterEnabled: shouldFilter,
         isDashboardVisible: showDashboard,
       }),
     );
-  }, [settings, shouldFiter, showDashboard]);
+  }, [settings, shouldFilter, showDashboard]);
 
   const ContextValues = {
     Translator,
@@ -528,7 +541,7 @@ const OrderListProvider = ({children}) => {
     setSettings,
     lastChangeI18Next,
     setLastChangeI18Next,
-    shouldFiter,
+    shouldFilter,
     setShouldFilter,
     listName,
     setListName,

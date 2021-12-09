@@ -30,47 +30,168 @@ const ModalChooseClothes = () => {
     setEditMode,
     isCycling,
     settings,
-    shouldFiter,
+    shouldFilter,
   } = useContext(OrderListContext);
 
   const [clothingSizesDropDown, setClothingSizesDropDown] = useState([]);
 
+  const filterCycling = (key) => {
+    // Always return no variant clothes
+    if (clothingIcons[key].isCycling === undefined) return true;
+
+    // Only return bike or normal clothes, never both;
+    if (clothingIcons[key].isCycling !== isCycling) return false;
+
+    return true;
+  };
+
   useEffect(() => {
-    const maleSizes = [];
-    const femaleSizes = [];
-    const childSizes = [];
+    if (currentClothingPrices === null) return false; // PREVENT ERROR
+    if (!modalClothesOpened) return false;
 
-    // GENERATE DATA SEPARATED BY GROUPS IN DROPDOWN
-    clothingSizes.forEach((item) => {
-      const addItem = {...item, label: Translator(item.value)};
+    const defaultArraySample = [
+      {
+        label: Translator('MALE'),
+        options: [],
+      },
+      {
+        label: Translator('FEMALE'),
+        options: [],
+      },
+      {
+        label: Translator('CHILDISH'),
+        options: [],
+      },
+    ];
 
-      if (item.gender === 'MALE') maleSizes.push(addItem);
-      if (item.gender === 'FEMALE') femaleSizes.push(addItem);
-      if (item.gender === 'CHILDISH') childSizes.push(addItem);
+    /**
+     *  GENERATE NO FILTERED DATA
+     */
+    if (!shouldFilter) {
+      console.warn('🔶 LISTA NÃO SERÁ FILTRADA');
 
-      const groupedDropDown = [
-        {
-          label: Translator('MALE'),
-          options: maleSizes,
-        },
-        {
-          label: Translator('FEMALE'),
-          options: femaleSizes,
-        },
-        {
-          label: Translator('CHILDISH'),
-          options: childSizes,
-        },
-      ];
+      const maleSizes = [];
+      const femaleSizes = [];
+      const childSizes = [];
 
-      setClothingSizesDropDown(groupedDropDown);
-    });
-  }, [Translator]);
+      clothingSizes.forEach((item) => {
+        const addItem = {...item, label: Translator(item.value)};
+
+        if (item.gender === 'MALE') maleSizes.push(addItem);
+        if (item.gender === 'FEMALE') femaleSizes.push(addItem);
+        if (item.gender === 'CHILDISH') childSizes.push(addItem);
+
+        const groupedDropDown = [
+          {
+            label: Translator('MALE'),
+            options: maleSizes,
+          },
+          {
+            label: Translator('FEMALE'),
+            options: femaleSizes,
+          },
+          {
+            label: Translator('CHILDISH'),
+            options: childSizes,
+          },
+        ];
+
+        setClothingSizesDropDown(groupedDropDown);
+      });
+    } else {
+      console.warn('✅ FILTRO DE LISTA ATIVADO');
+      /** MAIN LIST THAT HOLDS FILTERED */
+      const dbGroupedDropDown = {
+        tshirt: JSON.parse(JSON.stringify(defaultArraySample)),
+        tshirtLong: JSON.parse(JSON.stringify(defaultArraySample)),
+        shorts: JSON.parse(JSON.stringify(defaultArraySample)),
+        pants: JSON.parse(JSON.stringify(defaultArraySample)),
+        tanktop: JSON.parse(JSON.stringify(defaultArraySample)),
+        vest: JSON.parse(JSON.stringify(defaultArraySample)),
+      };
+
+      // LOOP THROUGH EACH CLOTHE
+      Object.keys(clothingIcons)
+        .filter(filterCycling)
+        .map((theClothe) => {
+          const safeClotheName = theClothe.replace('Cycling', '');
+
+          // LOOP THROUGH ALL SIZES TO THIS CLOTHE
+          clothingSizes.forEach((theSize) => {
+            /* * * * * * * * * * * * * * * * * * * * *
+             * GENERATE OPTIONS FOR MALE
+             * * * * * * * * * * * * * * * * * * * * */
+            if (theSize.gender === 'MALE') {
+              const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+              const targetPrices = currentClothingPrices.priceTableMale;
+
+              const currentPrice =
+                targetPrices[safeClotheName][theSize.priceIndex];
+
+              const newOption = {
+                ...theSize,
+                label: Translator(theSize.value),
+              };
+
+              // NOW SAVE IT TO MAIN LIST
+              if (currentPrice > 0) {
+                dbGroupedDropDown[safeClotheName][targetIndex].options.push(
+                  newOption,
+                );
+              }
+            } else if (theSize.gender === 'FEMALE') {
+              /* * * * * * * * * * * * * * * * * * * * *
+               * GENERATE OPTIONS FOR FEMALE
+               * * * * * * * * * * * * * * * * * * * * */
+              const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+              const targetPrices = currentClothingPrices.priceTableFemale;
+              const currentPrice =
+                targetPrices[safeClotheName][theSize.priceIndex];
+              const newOption = {
+                ...theSize,
+                label: Translator(theSize.value),
+              };
+
+              // NOW SAVE IT TO MAIN LIST
+              if (currentPrice > 0) {
+                dbGroupedDropDown[safeClotheName][targetIndex].options.push(
+                  newOption,
+                );
+              }
+            } else if (theSize.gender === 'CHILDISH') {
+              /* * * * * * * * * * * * * * * * * * * * *
+               * GENERATE OPTIONS FOR CHILDISH
+               * * * * * * * * * * * * * * * * * * * * */
+              const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+              const targetPrices = currentClothingPrices.priceTableChildish;
+              const currentPrice =
+                targetPrices[safeClotheName][theSize.priceIndex];
+              const newOption = {
+                ...theSize,
+                label: Translator(theSize.value),
+              };
+
+              // NOW SAVE IT TO MAIN LIST
+              if (currentPrice > 0) {
+                dbGroupedDropDown[safeClotheName][targetIndex].options.push(
+                  newOption,
+                );
+              }
+            }
+          });
+        });
+
+      // FILTERED DATA
+      setClothingSizesDropDown(dbGroupedDropDown);
+    }
+  }, [Translator, modalClothesOpened]);
 
   const {addToast} = useToasts();
 
-  const getTargetOrderItemToManipulate = () =>
-    editMode.enabled ? editMode.orderItem : tempOrderItem;
+  const getTargetOrderItemToManipulate = () => {
+    const selected = editMode.enabled ? editMode.orderItem : tempOrderItem;
+    return selected;
+  };
 
   const handleChangeClotingSettings = (
     newSize,
@@ -343,16 +464,35 @@ const ModalChooseClothes = () => {
     }
   };
 
-  const csGetSizeByID = (theID, colorOnly = false) => {
+  const csGetSizeByID = (theID, pClotheName = '', colorOnly = false) => {
+    if (!modalClothesOpened) return false;
+
     const targetOrderItem = getTargetOrderItemToManipulate();
-    const theSize = targetOrderItem.clothingSettings[theID - 1].size;
-    const theGender = targetOrderItem.clothingSettings[theID - 1].gender;
+    const filteredClotheSettings = targetOrderItem.clothingSettings.filter(
+      (item) => {
+        // Always return no variant clothes, index 4 = Tanktop | index 5 = vest
+        if (item.id > 4) return true;
+
+        // Only return bike or normal clothes, never both;
+        if (item.name.includes('Cycling') !== isCycling) return false;
+
+        return true;
+      },
+    );
+
+    const clotheName = pClotheName.replace('Cycling', '');
+    const theSize = filteredClotheSettings[theID - 1].size;
+    const theGender = filteredClotheSettings[theID - 1].gender;
     const theGenderIndex = Utils.ParseGenderToIndex(theGender);
 
     if (theSize === '' || theGender === '') return false;
 
     // Filter to get previews selected value in <Select> elemment
-    const theValue = clothingSizesDropDown[theGenderIndex].options.filter(
+    const targetListOptions = shouldFilter
+      ? clothingSizesDropDown[clotheName]
+      : clothingSizesDropDown;
+
+    const theValue = targetListOptions[theGenderIndex].options.filter(
       (option) => option.value === theSize,
     );
 
@@ -421,122 +561,141 @@ const ModalChooseClothes = () => {
 
           {Object.keys(clothingIcons)
             // FILTER BY ICONS
-            .filter((key) => {
-              // Always return no variant clothes
-              if (clothingIcons[key].isCycling === undefined) return true;
-
-              // Only return bike or normal clothes, never both;
-              if (clothingIcons[key].isCycling !== isCycling) return false;
-
-              return true;
-            })
+            .filter(filterCycling)
             // FILTER BY EMPTY PRICES
             .filter((key) => {
               if (currentClothingPrices === null) return false;
 
-              if (!shouldFiter) return true;
+              if (!shouldFilter) return true;
 
-              const theGender = tempOrderItem.gender;
-              const targetPriceTable = Utils.GetPriceTableByGender(
-                currentClothingPrices,
-                theGender,
+              const {
+                priceTableMale,
+                priceTableFemale,
+                priceTableChildish,
+              } = currentClothingPrices;
+
+              const clotheName = key.replace('Cycling', '');
+              const clothePriceMale = priceTableMale[clotheName];
+              const clothePriceFemale = priceTableFemale[clotheName];
+              const clothePriceChildish = priceTableChildish[clotheName];
+
+              // JOIN ALL PRICES FOR SAME CLOTHE
+              // FROM ALL GENDERS
+              const mergedClothingPrices = [].concat(
+                clothePriceMale,
+                clothePriceFemale,
+                clothePriceChildish,
               );
 
-              let totalValueOfCurrentClothe = 0;
-              targetPriceTable[key.replace('Cycling', '')].map((price) => {
-                totalValueOfCurrentClothe += price;
-                return price;
-              });
-              return totalValueOfCurrentClothe > 0;
+              const sumResult = mergedClothingPrices.reduce(
+                (total, num) => total + num,
+              );
+
+              // DECIDES TO RENDER OR NOT THE CLOTHE ON SCREEN
+              // TO SELECT IT SIZE
+              return sumResult > 0;
             })
-            .map((key) => (
-              <Row className="align-items-center" key={key}>
-                {/* DRAW THE ICONS */}
-                <Col xs={2}>
-                  <img src={clothingIcons[key].icon} alt="clothe icon" />
-                </Col>
+            .map((key) => {
+              const safeClotheName = key.replace('Cycling', '');
 
-                {/* SIZE */}
-                <Col xs={5}>
-                  <Select
-                    isClearable
-                    options={clothingSizesDropDown}
-                    value={csGetSizeByID(clothingIcons[key].id)}
-                    onChange={(selectedItem) => {
-                      if (selectedItem !== null) {
-                        const previewsQuantity = csGetQuantityByID(
-                          clothingIcons[key].id,
-                          getTargetOrderItemToManipulate(),
-                        );
+              return (
+                <Row className="align-items-center" key={key}>
+                  {/* DRAW THE ICONS */}
+                  <Col xs={2}>
+                    <img src={clothingIcons[key].icon} alt="clothe icon" />
+                  </Col>
 
-                        handleChangeClotingSettings(
-                          selectedItem.value || null,
-                          selectedItem.gender,
-                          // AUTOMATICALLY SET QUANTITY TO 1
-                          // IF IT'S ZERO WHEN SELECT SOME CLOTHE SIZE
-                          previewsQuantity === 0 ? 1 : previewsQuantity,
-                          clothingIcons[key].id,
-                        );
-                      } else {
-                        const theClotheIndex = clothingIcons[key].id - 1;
-                        handleClearClothingSettings(theClotheIndex);
+                  {/* SIZE */}
+                  <Col xs={5}>
+                    <Select
+                      isClearable
+                      options={
+                        !shouldFilter
+                          ? clothingSizesDropDown
+                          : clothingSizesDropDown[safeClotheName]
                       }
-                    }}
-                    styles={{
-                      control: (styles) => ({
-                        ...styles,
-                        backgroundColor: csGetSizeByID(
-                          clothingIcons[key].id,
-                          true,
-                        ),
-                      }),
-
-                      option: (styles, {data, isFocused}) => ({
-                        backgroundColor: isFocused ? '#eee' : data.color,
-                        padding: 5,
-                        cursor: 'pointer',
-                      }),
-                    }}
-                  />
-                  {/* END SELECT */}
-                </Col>
-
-                {/* QUANTITY */}
-                <Col xs={5}>
-                  <Form.Control
-                    as="select"
-                    className="my-1 mr-sm-2"
-                    custom
-                    value={csGetQuantityByID(
-                      clothingIcons[key].id,
-                      getTargetOrderItemToManipulate(),
-                    )}
-                    onChange={(e) => {
-                      handleChangeClotingSettings(
-                        undefined,
-                        undefined,
-                        parseInt(e.target.value),
+                      value={csGetSizeByID(
                         clothingIcons[key].id,
-                      );
-                    }}>
-                    <option value={0}>0 {Translator('PIECES')}</option>
-                    {[...Array(settings.maxQuantityPerClothe).keys()].map(
-                      (quantity) => {
-                        const trueQuantity = quantity + 1;
-                        return (
-                          <option key={trueQuantity} value={trueQuantity}>
-                            {trueQuantity}{' '}
-                            {trueQuantity === 1
-                              ? Translator('PIECE')
-                              : Translator('PIECES')}
-                          </option>
+                        safeClotheName,
+                      )}
+                      onChange={(selectedItem) => {
+                        if (selectedItem !== null) {
+                          const previewsQuantity = csGetQuantityByID(
+                            clothingIcons[key].id,
+                            getTargetOrderItemToManipulate(),
+                          );
+
+                          handleChangeClotingSettings(
+                            selectedItem.value || null,
+                            selectedItem.gender,
+                            // AUTOMATICALLY SET QUANTITY TO 1
+                            // IF IT'S ZERO WHEN SELECT SOME CLOTHE SIZE
+                            previewsQuantity === 0 ? 1 : previewsQuantity,
+                            clothingIcons[key].id,
+                          );
+                        } else {
+                          const theClotheIndex = clothingIcons[key].id - 1;
+                          handleClearClothingSettings(theClotheIndex);
+                        }
+                      }}
+                      styles={{
+                        control: (styles) => ({
+                          ...styles,
+                          backgroundColor: csGetSizeByID(
+                            clothingIcons[key].id,
+                            key,
+                            true,
+                            '<Select /> styles',
+                          ),
+                        }),
+
+                        option: (styles, {data, isFocused}) => ({
+                          backgroundColor: isFocused ? '#eee' : data.color,
+                          padding: 5,
+                          cursor: 'pointer',
+                        }),
+                      }}
+                    />
+                    {/* END SELECT */}
+                  </Col>
+
+                  {/* QUANTITY */}
+                  <Col xs={5}>
+                    <Form.Control
+                      as="select"
+                      className="my-1 mr-sm-2"
+                      custom
+                      value={csGetQuantityByID(
+                        clothingIcons[key].id,
+                        getTargetOrderItemToManipulate(),
+                      )}
+                      onChange={(e) => {
+                        handleChangeClotingSettings(
+                          undefined,
+                          undefined,
+                          parseInt(e.target.value),
+                          clothingIcons[key].id,
                         );
-                      },
-                    )}
-                  </Form.Control>
-                </Col>
-              </Row>
-            ))}
+                      }}>
+                      <option value={0}>0 {Translator('PIECES')}</option>
+                      {[...Array(settings.maxQuantityPerClothe).keys()].map(
+                        (quantity) => {
+                          const trueQuantity = quantity + 1;
+                          return (
+                            <option key={trueQuantity} value={trueQuantity}>
+                              {trueQuantity}{' '}
+                              {trueQuantity === 1
+                                ? Translator('PIECE')
+                                : Translator('PIECES')}
+                            </option>
+                          );
+                        },
+                      )}
+                    </Form.Control>
+                  </Col>
+                </Row>
+              );
+            })}
         </div>
       </Modal.Body>
       <Modal.Footer>
