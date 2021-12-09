@@ -10,7 +10,7 @@ import {
   faFilePdf,
   faPrint,
 } from '@fortawesome/free-solid-svg-icons';
-import html2canvas from 'html2canvas';
+import html2canvas from '@nidi/html2canvas';
 import jsPDF from 'jspdf';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import {ReportContext} from '../../contexts/ReportContext';
