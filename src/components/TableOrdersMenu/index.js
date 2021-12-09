@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import html2canvas from 'html2canvas';
+import html2canvas from '@nidi/html2canvas';
 
 import {
   faCamera,

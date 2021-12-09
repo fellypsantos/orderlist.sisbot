@@ -11,6 +11,16 @@ import {
 import Utils from '../../Utils';
 import {OrderListContext} from '../../contexts/OrderListContext';
 
+import flagBR from '../../images/icons/flag-br.svg';
+import flagUS from '../../images/icons/flag-us.svg';
+import flagES from '../../images/icons/flag-es.svg';
+
+const flagList = {
+  br: flagBR,
+  us: flagUS,
+  es: flagES,
+};
+
 const systemLanguages = [
   {id: 1, code: 'pt', countryIconID: 'br', title: 'Português'},
   {id: 2, code: 'en', countryIconID: 'us', title: 'English'},
@@ -46,8 +56,11 @@ export default function LanguageChanger() {
             <DropdownContentItem
               key={language.id}
               onClick={() => updateLanguage(language.code)}>
-              <span
-                className={`flag-icon flag-icon-${language.countryIconID}`}
+              <img
+                src={flagList[language.countryIconID]}
+                alt="flag"
+                width={25}
+                style={{marginRight: 5}}
               />
               <span>{language.title}</span>
             </DropdownContentItem>

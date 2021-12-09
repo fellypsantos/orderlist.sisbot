@@ -4,7 +4,6 @@ import {ToastProvider} from 'react-toast-notifications';
 import {Switch, Route, HashRouter} from 'react-router-dom';
 
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import 'flag-icon-css/css/flag-icon.min.css';
 
 import {NavbarContainer, MainContentContainer} from './styles';
 import NavbarLeftContent from '../NavbarLeftContent';
