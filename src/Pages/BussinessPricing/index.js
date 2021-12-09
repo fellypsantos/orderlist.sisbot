@@ -41,7 +41,7 @@ const BussinessPricing = () => {
     setOrderListItems,
     setSettings,
     settings,
-    shouldFiter,
+    shouldFilter,
     setShouldFilter,
     companyEmail,
     setCompanyEmail,
@@ -120,7 +120,7 @@ const BussinessPricing = () => {
         priceTableChildish,
         settings: {
           ...settings,
-          filterEnabled: shouldFiter,
+          filterEnabled: shouldFilter,
         },
       }),
     })
@@ -258,7 +258,7 @@ const BussinessPricing = () => {
 
     const updated = selectedPriceTable[theClotheName].map((item, index) => {
       if (index === indexPrice) {
-        if (newPrice === '') return '0';
+        if (newPrice === '') return 0;
 
         const thePriceSanitizedV1 = newPrice.replace(settings.coinPrefix, '');
         const thePriceSanitizedV2 = thePriceSanitizedV1.replace('$', '');
@@ -329,7 +329,7 @@ const BussinessPricing = () => {
         priceTableChildish,
         settings: {
           ...settings,
-          filterEnabled: shouldFiter,
+          filterEnabled: shouldFilter,
         },
       }),
     );
@@ -380,7 +380,7 @@ const BussinessPricing = () => {
           {/* BACK */}
           <Button
             className="mr-2"
-            variant="secondary"
+            variant="primary"
             size="sm"
             onClick={() => history.push('/')}>
             <FontAwesomeIcon icon={faArrowLeft} />

@@ -13,7 +13,7 @@ const ModalSettings = () => {
     setSettingsOpen,
     settings,
     setSettings,
-    shouldFiter,
+    shouldFilter,
     setShouldFilter,
   } = useContext(OrderListContext);
 
@@ -80,8 +80,8 @@ const ModalSettings = () => {
         <Form.Check
           type="checkbox"
           label={Translator('SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE')}
-          checked={shouldFiter}
-          onChange={() => setShouldFilter(!shouldFiter)}
+          checked={shouldFilter}
+          onChange={() => setShouldFilter(!shouldFilter)}
         />
       </Modal.Body>
       <Modal.Footer>

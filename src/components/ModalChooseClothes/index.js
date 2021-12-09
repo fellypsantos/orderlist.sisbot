@@ -13,6 +13,25 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 import FormTextInput from '../FormTextInput';
 
+const sample = {
+  tshirt: [
+    {
+      label: 'MASULINO',
+      options: [
+        {label: 'PP', value: 'T-PP'},
+        {label: 'M', value: 'T-M'},
+      ],
+    },
+    {
+      label: 'FEMININO',
+      options: [
+        {label: 'PP', value: 'T-PP'},
+        {label: 'P', value: 'T-P'},
+      ],
+    },
+  ],
+};
+
 const ModalChooseClothes = () => {
   const {
     clothingIcons,
@@ -30,42 +49,115 @@ const ModalChooseClothes = () => {
     setEditMode,
     isCycling,
     settings,
-    shouldFiter,
+    shouldFilter,
   } = useContext(OrderListContext);
 
   const [clothingSizesDropDown, setClothingSizesDropDown] = useState([]);
 
+  const filterCycling = (key) => {
+    // Always return no variant clothes
+    if (clothingIcons[key].isCycling === undefined) return true;
+
+    // Only return bike or normal clothes, never both;
+    if (clothingIcons[key].isCycling !== isCycling) return false;
+
+    return true;
+  };
+
   useEffect(() => {
-    const maleSizes = [];
-    const femaleSizes = [];
-    const childSizes = [];
+    if (currentClothingPrices === null) return false; // PREVENT ERROR
+    if (!modalClothesOpened) return false;
 
-    // GENERATE DATA SEPARATED BY GROUPS IN DROPDOWN
-    clothingSizes.forEach((item) => {
-      const addItem = {...item, label: Translator(item.value)};
+    const defaultArraySample = [
+      {
+        label: 'MASCULINO',
+        options: [],
+      },
+      {
+        label: 'FEMININO',
+        options: [],
+      },
+      {
+        label: 'INFANTIL',
+        options: [],
+      },
+    ];
 
-      if (item.gender === 'MALE') maleSizes.push(addItem);
-      if (item.gender === 'FEMALE') femaleSizes.push(addItem);
-      if (item.gender === 'CHILDISH') childSizes.push(addItem);
+    /** MAIN LIST THAT HOLDS FILTERED */
+    const dbGroupedDropDown = {
+      tshirt: JSON.parse(JSON.stringify(defaultArraySample)),
+      tshirtLong: JSON.parse(JSON.stringify(defaultArraySample)),
+      shorts: JSON.parse(JSON.stringify(defaultArraySample)),
+      pants: JSON.parse(JSON.stringify(defaultArraySample)),
+      tanktop: JSON.parse(JSON.stringify(defaultArraySample)),
+      vest: JSON.parse(JSON.stringify(defaultArraySample)),
+    };
 
-      const groupedDropDown = [
-        {
-          label: Translator('MALE'),
-          options: maleSizes,
-        },
-        {
-          label: Translator('FEMALE'),
-          options: femaleSizes,
-        },
-        {
-          label: Translator('CHILDISH'),
-          options: childSizes,
-        },
-      ];
+    // LOOP THROUGH EACH CLOTHE
+    Object.keys(clothingIcons)
+      .filter(filterCycling)
+      .map((theClothe) => {
+        console.warn('🟪 Generate options sizes to: ', theClothe);
 
-      setClothingSizesDropDown(groupedDropDown);
-    });
-  }, [Translator]);
+        // LOOP THROUGH ALL SIZES TO THIS CLOTHE
+        clothingSizes.forEach((theSize) => {
+          /* * * * * * * * * * * * * * * * * * * * *
+           * GENERATE OPTIONS FOR MALE
+           * * * * * * * * * * * * * * * * * * * * */
+          if (theSize.gender === 'MALE') {
+            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+            const targetPrices = currentClothingPrices.priceTableMale;
+            const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+            const newOption = {
+              label: Translator(theSize.value),
+              value: theSize.value,
+            };
+
+            // NOW SAVE IT TO MAIN LIST
+            if (currentPrice > 0) {
+              dbGroupedDropDown[theClothe][targetIndex].options.push(newOption);
+            }
+          } else if (theSize.gender === 'FEMALE') {
+            /* * * * * * * * * * * * * * * * * * * * *
+             * GENERATE OPTIONS FOR FEMALE
+             * * * * * * * * * * * * * * * * * * * * */
+            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+            const targetPrices = currentClothingPrices.priceTableFemale;
+            const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+            const newOption = {
+              label: Translator(theSize.value),
+              value: theSize.value,
+            };
+
+            // NOW SAVE IT TO MAIN LIST
+            if (currentPrice > 0) {
+              dbGroupedDropDown[theClothe][targetIndex].options.push(newOption);
+            }
+          } else if (theSize.gender === 'CHILDISH') {
+            /* * * * * * * * * * * * * * * * * * * * *
+             * GENERATE OPTIONS FOR CHILDISH
+             * * * * * * * * * * * * * * * * * * * * */
+            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+            const targetPrices = currentClothingPrices.priceTableChildish;
+            const currentPrice = targetPrices[theClothe][theSize.priceIndex];
+            const newOption = {
+              label: Translator(theSize.value),
+              value: theSize.value,
+            };
+
+            // NOW SAVE IT TO MAIN LIST
+            if (currentPrice > 0) {
+              dbGroupedDropDown[theClothe][targetIndex].options.push(newOption);
+            }
+          }
+        });
+
+        // SAVE THE PROGRESS FOR THE CURRENT CLOTHE
+        console.warn('✅ SAVE DATA FOR CURRENT CLOTHE: ', theClothe);
+        console.log('💥 MAIN ', dbGroupedDropDown);
+        setClothingSizesDropDown(dbGroupedDropDown);
+      });
+  }, [Translator, modalClothesOpened]);
 
   const {addToast} = useToasts();
 
@@ -343,21 +435,32 @@ const ModalChooseClothes = () => {
     }
   };
 
-  const csGetSizeByID = (theID, colorOnly = false) => {
-    const targetOrderItem = getTargetOrderItemToManipulate();
-    const theSize = targetOrderItem.clothingSettings[theID - 1].size;
-    const theGender = targetOrderItem.clothingSettings[theID - 1].gender;
-    const theGenderIndex = Utils.ParseGenderToIndex(theGender);
+  const csGetSizeByID = (theID, clotheName, colorOnly = false) => {
+    if (!modalClothesOpened) return false;
 
-    if (theSize === '' || theGender === '') return false;
+    // const targetOrderItem = getTargetOrderItemToManipulate();
 
-    // Filter to get previews selected value in <Select> elemment
-    const theValue = clothingSizesDropDown[theGenderIndex].options.filter(
-      (option) => option.value === theSize,
-    );
+    // const settingsForClothes = targetOrderItem.clothingSettings.filter(
+    //   (item) => {
+    //     if (item.name.includes('Cycling') !== isCycling) return false;
+    //     return true;
+    //   },
+    // );
 
-    const theColor = theValue.length > 0 ? theValue[0].color : '#fff';
-    return colorOnly ? theColor : theValue;
+    // const theSize = settingsForClothes[theID - 1].size;
+    // const theGender = settingsForClothes[theID - 1].gender;
+    // const theGenderIndex = Utils.ParseGenderToIndex(theGender);
+    // console.log('theGender', theGender);
+
+    // if (theSize === '' || theGender === '') return false;
+
+    // // Filter to get previews selected value in <Select> elemment
+    // const theValue = clothingSizesDropDown[clotheName][
+    //   theGenderIndex
+    // ].options.filter((option) => option.value === theSize);
+
+    // const theColor = theValue.length > 0 ? theValue[0].color : '#fff';
+    // return colorOnly ? theColor : theValue;
   };
 
   const csGetQuantityByID = (theID, orderItem) =>
@@ -421,33 +524,39 @@ const ModalChooseClothes = () => {
 
           {Object.keys(clothingIcons)
             // FILTER BY ICONS
-            .filter((key) => {
-              // Always return no variant clothes
-              if (clothingIcons[key].isCycling === undefined) return true;
-
-              // Only return bike or normal clothes, never both;
-              if (clothingIcons[key].isCycling !== isCycling) return false;
-
-              return true;
-            })
+            .filter(filterCycling)
             // FILTER BY EMPTY PRICES
             .filter((key) => {
               if (currentClothingPrices === null) return false;
 
-              if (!shouldFiter) return true;
+              if (!shouldFilter) return true;
 
-              const theGender = tempOrderItem.gender;
-              const targetPriceTable = Utils.GetPriceTableByGender(
-                currentClothingPrices,
-                theGender,
+              const {
+                priceTableMale,
+                priceTableFemale,
+                priceTableChildish,
+              } = currentClothingPrices;
+
+              const clotheName = key.replace('Cycling', '');
+              const clothePriceMale = priceTableMale[clotheName];
+              const clothePriceFemale = priceTableFemale[clotheName];
+              const clothePriceChildish = priceTableChildish[clotheName];
+
+              // JOIN ALL PRICES FOR SAME CLOTHE
+              // FROM ALL GENDERS
+              const mergedClothingPrices = [].concat(
+                clothePriceMale,
+                clothePriceFemale,
+                clothePriceChildish,
               );
 
-              let totalValueOfCurrentClothe = 0;
-              targetPriceTable[key.replace('Cycling', '')].map((price) => {
-                totalValueOfCurrentClothe += price;
-                return price;
-              });
-              return totalValueOfCurrentClothe > 0;
+              const sumResult = mergedClothingPrices.reduce(
+                (total, num) => total + num,
+              );
+
+              // DECIDES TO RENDER OR NOT THE CLOTHE ON SCREEN
+              // TO SELECT IT SIZE
+              return sumResult > 0;
             })
             .map((key) => (
               <Row className="align-items-center" key={key}>
@@ -460,8 +569,8 @@ const ModalChooseClothes = () => {
                 <Col xs={5}>
                   <Select
                     isClearable
-                    options={clothingSizesDropDown}
-                    value={csGetSizeByID(clothingIcons[key].id)}
+                    // options={sample[key]}
+                    options={clothingSizesDropDown[key]}
                     onChange={(selectedItem) => {
                       if (selectedItem !== null) {
                         const previewsQuantity = csGetQuantityByID(
@@ -487,7 +596,9 @@ const ModalChooseClothes = () => {
                         ...styles,
                         backgroundColor: csGetSizeByID(
                           clothingIcons[key].id,
+                          key,
                           true,
+                          '<Select /> styles',
                         ),
                       }),
 
