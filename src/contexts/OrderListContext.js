@@ -471,6 +471,49 @@ const OrderListProvider = ({children}) => {
     );
   }, [listName, orderListItemsNotes, isCycling]);
 
+  useEffect(() => {
+    if (orderListItems.length === 0) return false;
+
+    const convertionType = isCycling ? 'CYCLING' : 'NORMAL';
+    console.log('✔ CONVERTING ALL CLOTHES TO : ', convertionType);
+
+    const convertedOrderList = orderListItems.map((orderItem) => {
+      const theClothes = orderItem.clothingSettings;
+
+      const convertedClothingSettings = theClothes.map((clotheItem) => {
+        // 🔁 CONVERT TO CYCLING
+        if (isCycling && !clotheItem.name.toLowerCase().includes('cycling')) {
+          if (clotheItem.id >= 1 && clotheItem.id <= 4) {
+            return {
+              ...clotheItem,
+              name: `${clotheItem.name}Cycling`,
+            };
+          }
+        }
+
+        // 🔁 CONVERT TO NORMAL
+        if (!isCycling && clotheItem.name.toLowerCase().includes('cycling')) {
+          if (clotheItem.id >= 1 && clotheItem.id <= 4) {
+            return {
+              ...clotheItem,
+              name: clotheItem.name.replace('Cycling', ''),
+            };
+          }
+        }
+        return clotheItem;
+      });
+
+      return {
+        ...orderItem,
+        clothingSettings: convertedClothingSettings,
+      };
+    });
+
+    setOrderListItems(convertedOrderList);
+    console.log('❤ ', orderListItems);
+    console.log('❤ FINISHED');
+  }, [isCycling]);
+
   // UPDATE TABLE ROWS WHEN PRICE CHANGES
   useEffect(() => {
     if (orderListItems.length === 0) return;

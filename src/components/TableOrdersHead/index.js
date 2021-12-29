@@ -11,13 +11,8 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 
 const TableOrdersHead = () => {
-  const {
-    clothingIcons,
-    screenshotMode,
-    Translator,
-    isCycling,
-    orderListItems,
-  } = useContext(OrderListContext);
+  const {clothingIcons, screenshotMode, Translator, isCycling, orderListItems} =
+    useContext(OrderListContext);
 
   const [totalOfPieces, setTotalOfPieces] = useState(0);
 

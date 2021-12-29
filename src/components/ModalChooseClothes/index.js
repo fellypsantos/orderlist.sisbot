@@ -95,7 +95,6 @@ const ModalChooseClothes = () => {
             options: childSizes,
           },
         ];
-
         setClothingSizesDropDown(groupedDropDown);
       });
     } else {
@@ -466,6 +465,7 @@ const ModalChooseClothes = () => {
 
   const csGetSizeByID = (theID, pClotheName = '', colorOnly = false) => {
     if (!modalClothesOpened) return false;
+    if (clothingSizesDropDown.length === 0) return false;
 
     const targetOrderItem = getTargetOrderItemToManipulate();
     const filteredClotheSettings = targetOrderItem.clothingSettings.filter(
@@ -568,11 +568,8 @@ const ModalChooseClothes = () => {
 
               if (!shouldFilter) return true;
 
-              const {
-                priceTableMale,
-                priceTableFemale,
-                priceTableChildish,
-              } = currentClothingPrices;
+              const {priceTableMale, priceTableFemale, priceTableChildish} =
+                currentClothingPrices;
 
               const clotheName = key.replace('Cycling', '');
               const clothePriceMale = priceTableMale[clotheName];

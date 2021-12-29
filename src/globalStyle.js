@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .color-flat-red {
-    color: #f03434;
+    color: #f03434 !important;
   }
 
   .paid {

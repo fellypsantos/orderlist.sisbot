@@ -138,7 +138,6 @@ export default {
       orderItem.clothingSettings.map((theClothe) => {
         const clotheName = theClothe.name.replace('Cycling', '');
         const clotheQty = theClothe.quantity;
-
         calculator[clotheName] += clotheQty; // CALCULATE
       });
     });
