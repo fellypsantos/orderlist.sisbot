@@ -87,8 +87,12 @@ const Main = () => {
     const csvFullData = [];
 
     orderListItems.map((orderItem) => {
+      const firstClothe = orderItem.clothingSettings.filter(
+        (item) => item.gender !== '',
+      )[0];
+
       const csvDataToJoin = [];
-      const sisbotGenderTranslated = sisbotGender[orderItem.gender];
+      const sisbotGenderTranslated = sisbotGender[firstClothe.gender];
       csvDataToJoin.push(sisbotGenderTranslated);
       csvDataToJoin.push(orderItem.name);
       csvDataToJoin.push(orderItem.number);
@@ -96,7 +100,7 @@ const Main = () => {
       orderItem.clothingSettings.map((theClothe) => {
         // ADJUST SIZE FOR CHILDISH (IT CAME WITH WORK ANOS|YEARS|ANÕS)
         const theSize =
-          orderItem.gender === 'CHILDISH'
+          firstClothe.gender === 'CHILDISH'
             ? Translator(theClothe.size).replace(/ anos| years old| años/i, '')
             : Translator(theClothe.size);
 
