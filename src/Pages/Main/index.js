@@ -10,6 +10,7 @@ import {
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Dropdown from 'react-bootstrap/Dropdown';
 import JSZip from 'jszip';
 import axios from 'axios';
 
@@ -45,9 +46,9 @@ const Main = () => {
   const [HCaptchaToken, setHCaptchaToken] = useState('');
   const [requestLoading, setRequestLoading] = useState(null);
   const [zipFileName, setZIPFileName] = useState('');
-  const [showModalConfirmDownload, setShowModalConfirmDownload] = useState(
-    false,
-  );
+  const [groupFilesBySize, setGroupFilesBySize] = useState(false);
+  const [showModalConfirmDownload, setShowModalConfirmDownload] =
+    useState(false);
 
   const [clientName, setClientName] = useState('');
   const [targetEmail, setTargetEmail] = useState(companyEmail);
@@ -64,6 +65,47 @@ const Main = () => {
     setClientName('');
     setTargetEmail('');
     setHCaptchaToken('');
+  };
+
+  const canSeparateListBySize = () => {
+    let invalidOrderItemToSeparate = 0;
+
+    // LOOP THROUGH EACH ORDER ITEM
+    orderListItems.forEach((orderItem) => {
+      // REMOVE EMPTY CLOTHES FROM CHECKING
+      const validClothes = orderItem.clothingSettings.filter(
+        (clotheItem) => clotheItem.quantity > 0,
+      );
+
+      let lastClotheSize = null;
+      let validationPassed = true;
+
+      // COUNT INVALID CLOTHES IN CURRENT ORDER ITEM
+      validClothes.forEach((clotheItem) => {
+        // UPDATE CONTROL VARIABLE IN FIRST LOOP
+        if (lastClotheSize === null) lastClotheSize = clotheItem.size;
+
+        // ORDER ITEM HAS MANY SIZES
+        if (clotheItem.size !== lastClotheSize) validationPassed = false;
+      });
+
+      if (!validationPassed) invalidOrderItemToSeparate += 1;
+    });
+
+    // INVALID CLOTHES FOUND
+    if (invalidOrderItemToSeparate > 0) {
+      addToast(
+        'Não é possível gerar listas separadas por tamanho, cada linha de pedido deve ter o mesmo tamanho nas peças de roupa. ',
+        {
+          autoDismiss: true,
+          appearance: 'error',
+        },
+      );
+
+      return false;
+    }
+
+    return true;
   };
 
   const generateZip = async () => {
@@ -84,64 +126,127 @@ const Main = () => {
       VEST: 'CSVID_VEST',
     };
 
-    const csvFullData = [];
+    let csvFullData = [];
 
-    orderListItems.map((orderItem) => {
-      const firstClothe = orderItem.clothingSettings.filter(
-        (item) => item.gender !== '',
-      )[0];
+    const prepareCSVFile = (targetOrderList) => {
+      targetOrderList.forEach((orderItem) => {
+        const firstClothe = orderItem.clothingSettings.filter(
+          (item) => item.gender !== '',
+        )[0];
 
-      const csvDataToJoin = [];
-      const sisbotGenderTranslated = sisbotGender[firstClothe.gender];
-      csvDataToJoin.push(sisbotGenderTranslated);
-      csvDataToJoin.push(orderItem.name);
-      csvDataToJoin.push(orderItem.number);
+        const csvDataToJoin = [];
+        const sisbotGenderTranslated = sisbotGender[firstClothe.gender];
+        csvDataToJoin.push(sisbotGenderTranslated);
+        csvDataToJoin.push(orderItem.name);
+        csvDataToJoin.push(orderItem.number);
 
-      orderItem.clothingSettings.map((theClothe) => {
-        // ADJUST SIZE FOR CHILDISH (IT CAME WITH WORK ANOS|YEARS|ANÕS)
-        const theSize =
-          firstClothe.gender === 'CHILDISH'
-            ? Translator(theClothe.size).replace(/ anos| years old| años/i, '')
-            : Translator(theClothe.size);
+        orderItem.clothingSettings.map((theClothe) => {
+          // ADJUST SIZE FOR CHILDISH (IT CAME WITH WORD ANOS|YEARS|ANÕS)
+          const theSize =
+            firstClothe.gender === 'CHILDISH'
+              ? Translator(theClothe.size).replace(
+                  / anos| years old| años/i,
+                  '',
+                )
+              : Translator(theClothe.size);
 
-        csvDataToJoin.push(
-          `${Translator(sisbotClothingID[theClothe.name.toUpperCase()])}=${
-            theClothe.quantity > 0 ? `${theClothe.quantity}-${theSize}` : ''
-          }`,
-        );
-        return theClothe;
+          csvDataToJoin.push(
+            `${Translator(sisbotClothingID[theClothe.name.toUpperCase()])}=${
+              theClothe.quantity > 0 ? `${theClothe.quantity}-${theSize}` : ''
+            }`,
+          );
+          return theClothe;
+        });
+
+        const csvRow = csvDataToJoin.join(',');
+        csvFullData.push(csvRow);
       });
 
-      const csvRow = csvDataToJoin.join(',');
-      csvFullData.push(csvRow);
-      return orderItem;
-    });
+      const csvHeader = [];
+      csvHeader.push(Translator('CSVID_GENDER'));
+      csvHeader.push(Translator('CSVID_NAME'));
+      csvHeader.push(Translator('CSVID_NUMBER'));
+      csvHeader.push(Translator('CSVID_TSHIRT'));
+      csvHeader.push(Translator('CSVID_TSHIRTLONG'));
+      csvHeader.push(Translator('CSVID_SHORTS'));
+      csvHeader.push(Translator('CSVID_PANTS'));
+      csvHeader.push(Translator('CSVID_TANKTOP'));
+      csvHeader.push(Translator('CSVID_VEST'));
 
-    const csvHeader = [];
-    csvHeader.push(Translator('CSVID_GENDER'));
-    csvHeader.push(Translator('CSVID_NAME'));
-    csvHeader.push(Translator('CSVID_NUMBER'));
-    csvHeader.push(Translator('CSVID_TSHIRT'));
-    csvHeader.push(Translator('CSVID_TSHIRTLONG'));
-    csvHeader.push(Translator('CSVID_SHORTS'));
-    csvHeader.push(Translator('CSVID_PANTS'));
-    csvHeader.push(Translator('CSVID_TANKTOP'));
-    csvHeader.push(Translator('CSVID_VEST'));
+      // ADD CSV HEADER
+      csvFullData.unshift(csvHeader.join(','));
+    };
 
-    // ADD CSV HEADER
-    csvFullData.unshift(csvHeader.join(','));
+    /**
+     *  GENERATE SINGLE CSV FILE
+     */
+    if (!groupFilesBySize) {
+      prepareCSVFile(orderListItems);
 
-    // ADD FILES TO ZIP
-    zip.file(`${Translator('MAIN_TITLE')}.csv`, csvFullData.join('\n'));
-    zip.file('list.bkp', btoa(localStorage.getItem('sisbot')));
-    zip.file(
-      `${Translator('INSTRUCTIONS_FILENAME')}.txt`,
-      `${Translator('INSTRUCTIONS_CONTENT')}`,
-    );
+      // ADD FILES TO ZIP
+      zip.file(`${Translator('MAIN_TITLE')}.csv`, csvFullData.join('\n'));
+      zip.file('list.bkp', btoa(localStorage.getItem('sisbot')));
+      zip.file(
+        `${Translator('INSTRUCTIONS_FILENAME')}.txt`,
+        `${Translator('INSTRUCTIONS_CONTENT')}`,
+      );
 
-    // DOWNLOAD ZIP
-    const blobContent = await zip.generateAsync({type: 'blob'});
-    return blobContent;
+      // DOWNLOAD ZIP
+      const blobContent = await zip.generateAsync({type: 'blob'});
+      return blobContent;
+    }
+
+    /**
+     *  GENERATE CSV FILES GROUPED BY SIZE
+     */
+    if (groupFilesBySize) {
+      // EACH SIZE WILL GENERATE A CSV FILE IF NOT EMPTY
+      const orderItemGroupedBySize = {
+        'T-PP': [],
+        'T-P': [],
+        'T-M': [],
+        'T-G': [],
+        'T-GG': [],
+        'T-XG': [],
+        'T-2XG': [],
+        'T-3XG': [],
+        'T-4XG': [],
+      };
+
+      if (canSeparateListBySize()) {
+        // ORGANIZE ORDER ITEM SEPARATING EACH ITEM AS INDIVIDUAL ARRAY FOR THAT SIZE
+        orderListItems.forEach((orderItem) => {
+          const noEmptyClothes = orderItem.clothingSettings.filter(
+            (clotheItem) => clotheItem.quantity > 0,
+          );
+
+          const selectedSize = noEmptyClothes[0].size;
+          orderItemGroupedBySize[selectedSize].push(orderItem);
+        });
+
+        // NOW THE SIZES ARE SEPARATED, LOOP THROUGH IT GENERATING CSV's
+        Object.keys(orderItemGroupedBySize).forEach(async (key) => {
+          const group = orderItemGroupedBySize[key];
+          if (group.length === 0) return false;
+          prepareCSVFile(group);
+
+          // ADD FILES TO ZIP
+          zip.file(`${Translator(key)}.csv`, csvFullData.join('\n'));
+          csvFullData = []; // CLEAR TO NEXT PROCESSING
+        }); // FINISHED GROUP PROCESSING
+
+        // ADD EXTRA FILES
+        zip.file('list.bkp', btoa(localStorage.getItem('sisbot')));
+        zip.file(
+          `${Translator('INSTRUCTIONS_FILENAME')}.txt`,
+          `${Translator('INSTRUCTIONS_CONTENT')}`,
+        );
+
+        // DOWNLOAD ZIP
+        const blobContent = await zip.generateAsync({type: 'blob'});
+        return blobContent;
+      }
+    }
   };
 
   const handleDownload = async (confirmed = false) => {
@@ -152,10 +257,22 @@ const Main = () => {
 
     const safeFilename =
       zipFileName === '' ? Translator('MAIN_TITLE') : zipFileName;
-    const zipData = await generateZip();
-    saveAs(zipData, `${safeFilename}.zip`);
 
+    const zipData = await generateZip();
+
+    // VALIDATE ZIP DATA
+    if (zipData === undefined || zipData === null) {
+      addToast(Translator('Falha na geração do arquivo ZIP.'), {
+        autoDismiss: true,
+        appearance: 'error',
+      });
+
+      return;
+    }
+
+    saveAs(zipData, `${safeFilename}.zip`);
     setShowModalConfirmDownload(false);
+    setGroupFilesBySize(false);
     setZIPFileName('');
 
     addToast(Translator('TOAST_DOWNLOAD_COMPLETE'), {
@@ -243,12 +360,46 @@ const Main = () => {
     }
   };
 
+  const DropDownButtonToDownload = () => (
+    <Dropdown className="mr-2 d-inline-block">
+      <Dropdown.Toggle variant="success" size="sm">
+        <FontAwesomeIcon icon={faDownload} className="mr-1" />
+        {Translator('DOWNLOAD')}
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item onClick={() => handleDownload(false)}>
+          {Translator('DOWNLOAD_DEFAULT')}
+        </Dropdown.Item>
+        <Dropdown.Item
+          onClick={() => {
+            setGroupFilesBySize(true);
+            handleDownload(false);
+          }}>
+          {Translator('DOWNLOAD_GROUP_BY_SIZE')}
+        </Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+
+  const SendEmailButton = () => (
+    <Button
+      className="mr-2"
+      variant="primary"
+      size="sm"
+      onClick={() => setShowModalSendMail(true)}>
+      <FontAwesomeIcon icon={faEnvelope} />
+      <span className="ml-1 d-none d-md-inline-block">
+        {Translator('SEND_MAIL')}
+      </span>
+    </Button>
+  );
+
   return (
     <>
       <FormAddOrderItem />
 
       {/* CONTROL PANEL CAN SHOW/HIDE */}
-      {/* @NEW_CODE_POSITION */}
       <ControlPanel>
         <Row>
           <Col xs="12" sm="6">
@@ -263,27 +414,9 @@ const Main = () => {
 
           {/* DASHBOARD BUTTONS */}
           <Col className="text-right mb-4">
-            <Button
-              variant="success"
-              className="mr-2"
-              size="sm"
-              onClick={() => handleDownload()}>
-              <FontAwesomeIcon icon={faDownload} />
-              <span className="ml-1 d-none d-md-inline-block">
-                {Translator('DOWNLOAD')}
-              </span>
-            </Button>
+            <DropDownButtonToDownload />
 
-            <Button
-              variant="primary"
-              className="mr-2"
-              size="sm"
-              onClick={() => setShowModalSendMail(true)}>
-              <FontAwesomeIcon icon={faEnvelope} />
-              <span className="ml-1 d-none d-md-inline-block">
-                {Translator('SEND_MAIL')}
-              </span>
-            </Button>
+            <SendEmailButton />
 
             <Button
               className="mr-2"
@@ -320,7 +453,7 @@ const Main = () => {
         labelContent={Translator('ASK_FILENAME')}
         placeholderContent={Translator('MAIN_TITLE')}
         handleChange={(e) => setZIPFileName(e.target.value)}
-        handleConfirm={() => handleDownload(true)}
+        handleConfirm={() => handleDownload(true, groupFilesBySize)}
         handleClose={handleCLoseModalTextInput}
       />
 
@@ -337,41 +470,14 @@ const Main = () => {
         hcaptchaSolved={(responseToken) => setHCaptchaToken(responseToken)}
       />
 
-      {/*
-           CODE WAS MOVED TO NEW UI CONCEPT
-           IN CASE IT'S NOT ACCEPTED
-           BRING IT BACK HERE
-           NEW POSITION IS AT @NEW_CODE_POSITION
-           SEARCH FOR IT
-      */}
-
       {/* MAIN TABLE SHOWN ORDERS */}
       <TableOrderList />
 
       {/* NEW POSITION FOR MAIN BUTTONS */}
       <Row className="mt-2">
-        <Col className="text-center">
-          <Button
-            variant="success"
-            className="mr-2"
-            size="sm"
-            onClick={() => handleDownload()}>
-            <FontAwesomeIcon icon={faDownload} />
-            <span className="ml-1 d-none d-md-inline-block">
-              {Translator('DOWNLOAD')}
-            </span>
-          </Button>
-
-          <Button
-            variant="primary"
-            className="mr-2"
-            size="sm"
-            onClick={() => setShowModalSendMail(true)}>
-            <FontAwesomeIcon icon={faEnvelope} />
-            <span className="ml-1 d-none d-md-inline-block">
-              {Translator('SEND_MAIL')}
-            </span>
-          </Button>
+        <Col className="d-flex justify-content-center">
+          <DropDownButtonToDownload />
+          <SendEmailButton />
         </Col>
       </Row>
     </>

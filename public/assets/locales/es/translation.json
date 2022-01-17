@@ -67,6 +67,8 @@
   "GOBACK": "Regresa",
   "PRINT": "Imprimir",
   "DOWNLOAD": "Descargar",
+  "DOWNLOAD_DEFAULT": "Lista predeterminada",
+  "DOWNLOAD_GROUP_BY_SIZE": "Lista separada por tamaño",
   "UPLOAD": "Subir",
   "SAVE_PDF": " Guardar PDF",
   "PAID": "Pagado",
@@ -154,6 +156,7 @@
   "TOAST_DATA_LOADED_FROM_SERVER": "Los datos se cargaron desde el servidor.",
   "TOAST_REDIRECTING": "Redirecionando...",
   "TOAST_COPIED_TO_CLIPBOARD": "Copiado al portapapeles.",
+  "TOAST_FAILED_GENERATE_ZIP": "No se pudo generar el archivo ZIP.",
 
   "INSTRUCTIONS_CONTENT": "Hola,\n\nEsta lista de pedidos se creó utilizando el sitio web oneformes.com.\n¿Sabías que puedes automatizar tu producción usando esta lista?\n\nEche un vistazo a cómo funciona visitando nuestro canal de YouTube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstrucciones\n\nSISBot lee el archivo .csv para automatizar las producciones de CorelDraw.\n.bkp se puede importar en list.oneformes.com para restaurar la lista de pedidos y realizar cambios.\n\n\nGenere informes de producción.\nEvite errores y desperdicios.\nAutomatiza trabajos repetitivos.\nTenga una visión amplia de la lista de pedidos.\n\n\nSaludos\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }
