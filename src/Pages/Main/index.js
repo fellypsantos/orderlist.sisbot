@@ -211,6 +211,14 @@ const Main = () => {
         'T-2XG': [],
         'T-3XG': [],
         'T-4XG': [],
+        'T-2A': [],
+        'T-4A': [],
+        'T-6A': [],
+        'T-8A': [],
+        'T-10A': [],
+        'T-12A': [],
+        'T-14A': [],
+        'T-16A': [],
       };
 
       if (canSeparateListBySize()) {
@@ -221,6 +229,7 @@ const Main = () => {
           );
 
           const selectedSize = noEmptyClothes[0].size;
+          console.log('selectedSize', selectedSize);
           orderItemGroupedBySize[selectedSize].push(orderItem);
         });
 
