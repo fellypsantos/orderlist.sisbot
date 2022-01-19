@@ -40,6 +40,7 @@ const Main = () => {
     listName,
     setListName,
     companyEmail,
+    modalSequencialListOpen,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -478,7 +479,7 @@ const Main = () => {
       />
 
       {/* GENERATE SEQUENCIAL LIST */}
-      <ModalSequencialList isOpen />
+      <ModalSequencialList isOpen={modalSequencialListOpen} />
 
       {/* MAIN TABLE SHOWN ORDERS */}
       <TableOrderList />

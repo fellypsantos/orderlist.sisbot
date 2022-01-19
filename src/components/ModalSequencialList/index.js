@@ -6,16 +6,13 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Select from 'react-select';
 
 import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 
-export default function ModalSequencialList({
-  isOpen = false,
-  handleConfirm,
-  handleClose,
-}) {
-  const {Translator, clothingIcons, isCycling, clothingSizes} =
+export default function ModalSequencialList({isOpen = false}) {
+  const {Translator, clothingIcons, isCycling, setModalSequencialListOpen} =
     useContext(OrderListContext);
 
   const [checkboxList, setCheckboxList] = useState([
@@ -27,13 +24,29 @@ export default function ModalSequencialList({
     false,
   ]);
 
+  const handleClose = () => {
+    const defaultOptions = checkboxList.map(() => false);
+    setCheckboxList(defaultOptions);
+    setModalSequencialListOpen(false);
+  };
+
+  const handleConfirm = () => {
+    console.log('NEED_IMPLEMENT');
+  };
+
   const handleChangeSwitch = (value, index) => {
     const updated = checkboxList.map((it, idx) => (idx === index ? value : it));
     setCheckboxList(updated);
   };
 
+  const options = [
+    {value: 'chocolate', label: 'Chocolate'},
+    {value: 'strawberry', label: 'Strawberry'},
+    {value: 'vanilla', label: 'Vanilla'},
+  ];
+
   return (
-    <Modal show={false} onHide={handleClose}>
+    <Modal show={isOpen} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>Lista Sequencial</Modal.Title>
       </Modal.Header>
@@ -47,7 +60,7 @@ export default function ModalSequencialList({
           <Row className="mt-4 mb-2">
             {Utils.FilterClothesByMode(clothingIcons, isCycling).map(
               (key, index) => (
-                <Col xs={4} sm={2} className="mb-4">
+                <Col xs={4} sm={2} className="mb-4" key={key}>
                   <div className="d-flex flex-column align-items-center">
                     <img
                       className="mb-2"
@@ -68,42 +81,29 @@ export default function ModalSequencialList({
             )}
           </Row>
           <Row>
-            <Col xs={12} sm={6}>
+            <Col xs={12} sm={4}>
               <Form.Group>
                 <Form.Label>Número Inicial</Form.Label>
                 <Form.Control type="number" placeholder="1" />
               </Form.Group>
             </Col>
 
-            <Col xs={12} sm={6}>
+            <Col xs={12} sm={4}>
               <Form.Group>
                 <Form.Label>Número Final</Form.Label>
                 <Form.Control type="number" placeholder="10" />
               </Form.Group>
             </Col>
 
-            <Col xs={12} sm={6}>
+            <Col xs={12} sm={4}>
               <Form.Group>
                 <Form.Label>Gênero</Form.Label>
-                <Form.Control
-                  as="select"
-                  className="my-1 mr-sm-2"
-                  custom
-                  value={1}
-                  onChange={() => {}}>
-                  <option value={0}>0 {Translator('PIECES')}</option>
-
-                  {clothingSizes.map((theSize) => (
-                    <option value={theSize.value}>{theSize.value}</option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-            </Col>
-
-            <Col xs={12} sm={6}>
-              <Form.Group>
-                <Form.Label>Tamanho</Form.Label>
-                <Form.Control type="text" placeholder="GG" />
+                <Select
+                  isClearable
+                  options={options}
+                  value="b"
+                  onChange={() => {}}
+                />
               </Form.Group>
             </Col>
           </Row>

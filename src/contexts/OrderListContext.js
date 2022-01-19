@@ -209,6 +209,8 @@ const OrderListProvider = ({children}) => {
     },
   ]);
 
+  const [clothingSizesDropDown, setClothingSizesDropDown] = useState([]);
+
   const [initialStateTempOrderItem] = useState(initialTempOrderItem);
 
   const [currentClothingPrices, setCurrentClothingPrices] = useState(null);
@@ -315,6 +317,7 @@ const OrderListProvider = ({children}) => {
 
   // Control modal with list of clothes
   const [modalClothesOpened, setModalClothesOpened] = useState(false);
+  const [modalSequencialListOpen, setModalSequencialListOpen] = useState(false);
 
   const updateLanguage = (countryCode) => {
     i18n.changeLanguage(countryCode);
@@ -418,6 +421,9 @@ const OrderListProvider = ({children}) => {
     setLastChangeI18Next(new Date());
   }, []);
 
+  // * * * * * * * * * * * * * * * * * * * * * * *
+  // * * * * * * * orderListItems * * * * * * * *
+  // * * * * * * * * * * * * * * * * * * * * * * *
   useEffect(() => {
     // KEEP LOCALSTORAGE UPDATED
     const currentLocalStorage = JSON.parse(localStorage.getItem('sisbot'));
@@ -552,13 +558,157 @@ const OrderListProvider = ({children}) => {
     );
   }, [settings, shouldFilter, showDashboard]);
 
+  useEffect(() => {
+    if (currentClothingPrices === null) return false; // PREVENT ERROR
+    if (!modalClothesOpened && !modalSequencialListOpen) return false;
+
+    console.log('ORDER_LIST_CONTEXT', 'filter');
+
+    const defaultArraySample = [
+      {
+        label: Translator('MALE'),
+        options: [],
+      },
+      {
+        label: Translator('FEMALE'),
+        options: [],
+      },
+      {
+        label: Translator('CHILDISH'),
+        options: [],
+      },
+    ];
+
+    /**
+     *  GENERATE NO FILTERED DATA
+     */
+    if (!shouldFilter) {
+      console.warn('🔶 LISTA NÃO SERÁ FILTRADA');
+
+      const maleSizes = [];
+      const femaleSizes = [];
+      const childSizes = [];
+
+      clothingSizes.forEach((item) => {
+        const addItem = {...item, label: Translator(item.value)};
+
+        if (item.gender === 'MALE') maleSizes.push(addItem);
+        if (item.gender === 'FEMALE') femaleSizes.push(addItem);
+        if (item.gender === 'CHILDISH') childSizes.push(addItem);
+
+        const groupedDropDown = [
+          {
+            label: Translator('MALE'),
+            options: maleSizes,
+          },
+          {
+            label: Translator('FEMALE'),
+            options: femaleSizes,
+          },
+          {
+            label: Translator('CHILDISH'),
+            options: childSizes,
+          },
+        ];
+        setClothingSizesDropDown(groupedDropDown);
+      });
+    } else {
+      console.warn('✅ FILTRO DE LISTA ATIVADO');
+      /** MAIN LIST THAT HOLDS FILTERED */
+      const dbGroupedDropDown = {
+        tshirt: JSON.parse(JSON.stringify(defaultArraySample)),
+        tshirtLong: JSON.parse(JSON.stringify(defaultArraySample)),
+        shorts: JSON.parse(JSON.stringify(defaultArraySample)),
+        pants: JSON.parse(JSON.stringify(defaultArraySample)),
+        tanktop: JSON.parse(JSON.stringify(defaultArraySample)),
+        vest: JSON.parse(JSON.stringify(defaultArraySample)),
+      };
+
+      // LOOP THROUGH EACH CLOTHE
+      Utils.FilterClothesByMode(clothingIcons, isCycling).map((theClothe) => {
+        const safeClotheName = theClothe.replace('Cycling', '');
+
+        // LOOP THROUGH ALL SIZES TO THIS CLOTHE
+        clothingSizes.forEach((theSize) => {
+          /* * * * * * * * * * * * * * * * * * * * *
+           * GENERATE OPTIONS FOR MALE
+           * * * * * * * * * * * * * * * * * * * * */
+          if (theSize.gender === 'MALE') {
+            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+            const targetPrices = currentClothingPrices.priceTableMale;
+
+            const currentPrice =
+              targetPrices[safeClotheName][theSize.priceIndex];
+
+            const newOption = {
+              ...theSize,
+              label: Translator(theSize.value),
+            };
+
+            // NOW SAVE IT TO MAIN LIST
+            if (currentPrice > 0) {
+              dbGroupedDropDown[safeClotheName][targetIndex].options.push(
+                newOption,
+              );
+            }
+          } else if (theSize.gender === 'FEMALE') {
+            /* * * * * * * * * * * * * * * * * * * * *
+             * GENERATE OPTIONS FOR FEMALE
+             * * * * * * * * * * * * * * * * * * * * */
+            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+            const targetPrices = currentClothingPrices.priceTableFemale;
+            const currentPrice =
+              targetPrices[safeClotheName][theSize.priceIndex];
+            const newOption = {
+              ...theSize,
+              label: Translator(theSize.value),
+            };
+
+            // NOW SAVE IT TO MAIN LIST
+            if (currentPrice > 0) {
+              dbGroupedDropDown[safeClotheName][targetIndex].options.push(
+                newOption,
+              );
+            }
+          } else if (theSize.gender === 'CHILDISH') {
+            /* * * * * * * * * * * * * * * * * * * * *
+             * GENERATE OPTIONS FOR CHILDISH
+             * * * * * * * * * * * * * * * * * * * * */
+            const targetIndex = Utils.ParseGenderToIndex(theSize.gender);
+            const targetPrices = currentClothingPrices.priceTableChildish;
+            const currentPrice =
+              targetPrices[safeClotheName][theSize.priceIndex];
+            const newOption = {
+              ...theSize,
+              label: Translator(theSize.value),
+            };
+
+            // NOW SAVE IT TO MAIN LIST
+            if (currentPrice > 0) {
+              dbGroupedDropDown[safeClotheName][targetIndex].options.push(
+                newOption,
+              );
+            }
+          }
+        });
+      });
+
+      // FILTERED DATA
+      setClothingSizesDropDown(dbGroupedDropDown);
+    }
+  }, [Translator, modalClothesOpened, modalSequencialListOpen]);
+
   const ContextValues = {
     Translator,
     updateLanguage,
     clothingIcons,
     clothingSizes,
+    clothingSizesDropDown,
+    setClothingSizesDropDown,
     modalClothesOpened,
     setModalClothesOpened,
+    modalSequencialListOpen,
+    setModalSequencialListOpen,
     initialStateTempOrderItem,
     tempOrderItem,
     setTempOrderItem,

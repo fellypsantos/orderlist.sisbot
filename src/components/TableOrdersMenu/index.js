@@ -32,6 +32,7 @@ const TableOrdersMenu = () => {
     setIsCycling,
     Translator,
     setOrderListItemsNotes,
+    setModalSequencialListOpen,
   } = useContext(OrderListContext);
 
   const [confirmClearOrderItems, setConfirmClearOrderItems] = useState(false);
@@ -126,8 +127,6 @@ const TableOrdersMenu = () => {
     });
   };
 
-  const handleOpenSequencialPopup = () => {};
-
   return (
     <>
       {/* DELETE ALL */}
@@ -157,7 +156,7 @@ const TableOrdersMenu = () => {
             variant="secondary"
             className="mr-2"
             size="sm"
-            onClick={handleOpenSequencialPopup}>
+            onClick={() => setModalSequencialListOpen(true)}>
             <FontAwesomeIcon icon={faBolt} />
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('SEQUENCY')}
