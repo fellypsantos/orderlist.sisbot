@@ -69,6 +69,7 @@
   "DOWNLOAD": "Baixar",
   "DOWNLOAD_DEFAULT": "Lista padrão",
   "DOWNLOAD_GROUP_BY_SIZE": "Listas separadas por tamanho",
+  "SEQUENCY": "Sequência",
   "UPLOAD": "Importar",
   "SAVE_PDF": " Salvar PDF",
   "PAID": "Pago",
@@ -157,6 +158,7 @@
   "TOAST_REDIRECTING": "Redirecionando...",
   "TOAST_COPIED_TO_CLIPBOARD": "Copiado para a área de transferência.",
   "TOAST_FAILED_GENERATE_ZIP": "Falha na geração do arquivo ZIP.",
+  "TOAST_CANT_SEPARATE_BY_SIZE": "Não é possível gerar listas separadas por tamanho, cada linha de pedido deve ter o mesmo tamanho nas peças de roupa.",
 
   "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site list.oneformes.com\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

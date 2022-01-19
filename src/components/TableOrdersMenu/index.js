@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 import html2canvas from '@nidi/html2canvas';
 
 import {
+  faBolt,
   faCamera,
   faDollarSign,
   faEraser,
@@ -125,6 +126,8 @@ const TableOrdersMenu = () => {
     });
   };
 
+  const handleOpenSequencialPopup = () => {};
+
   return (
     <>
       {/* DELETE ALL */}
@@ -147,6 +150,17 @@ const TableOrdersMenu = () => {
             <FontAwesomeIcon icon={faUpload} />
             <span className="ml-1 d-none d-md-inline-block">
               {Translator('UPLOAD')}
+            </span>
+          </Button>
+
+          <Button
+            variant="secondary"
+            className="mr-2"
+            size="sm"
+            onClick={handleOpenSequencialPopup}>
+            <FontAwesomeIcon icon={faBolt} />
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('SEQUENCY')}
             </span>
           </Button>
 

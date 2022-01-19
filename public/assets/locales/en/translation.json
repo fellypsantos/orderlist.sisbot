@@ -70,6 +70,7 @@
   "DOWNLOAD_DEFAULT": "Default list",
   "DOWNLOAD_GROUP_BY_SIZE": "List separated by size",
   "UPLOAD": "Upload",
+  "SEQUENCY": "Sequência",
   "SAVE_PDF": " Save PDF",
   "PAID": "Paid",
   "TAKE_SCREENSHOT": "Screenshot",
@@ -157,6 +158,7 @@
   "TOAST_REDIRECTING": "Redirecting...",
   "TOAST_COPIED_TO_CLIPBOARD": "Copied to clipboard.",
   "TOAST_FAILED_GENERATE_ZIP": "Failed to generate ZIP file.",
+  "TOAST_CANT_SEPARATE_BY_SIZE": "Can't generate separate list for each size, because each order item line must have same size for all clothes.",
 
   "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at list.oneformes.com to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
 }
