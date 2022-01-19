@@ -560,9 +560,8 @@ const OrderListProvider = ({children}) => {
 
   useEffect(() => {
     if (currentClothingPrices === null) return false; // PREVENT ERROR
-    if (!modalClothesOpened && !modalSequencialListOpen) return false;
-
-    console.log('ORDER_LIST_CONTEXT', 'filter');
+    // RUN FILTER WITH SETTINGS WINDOW IS CLOSING
+    if (!modalClothesOpened && isSettingsOpen) return false;
 
     const defaultArraySample = [
       {
@@ -696,7 +695,7 @@ const OrderListProvider = ({children}) => {
       // FILTERED DATA
       setClothingSizesDropDown(dbGroupedDropDown);
     }
-  }, [Translator, modalClothesOpened, modalSequencialListOpen]);
+  }, [Translator, modalClothesOpened, isSettingsOpen]);
 
   const ContextValues = {
     Translator,
