@@ -21,6 +21,7 @@ export default function ModalSequencialList({isOpen = false}) {
     currentClothingPrices,
     isCycling,
     tempOrderItem,
+    orderListItems,
     setOrderListItems,
     setModalSequencialListOpen,
     modalSequencialListOpen,
@@ -129,7 +130,7 @@ export default function ModalSequencialList({isOpen = false}) {
     }
 
     // ADD ALL NEW ORDER ITEMS TO MAIN LIST
-    setOrderListItems(listOfGeneratedOrderItems);
+    setOrderListItems([...orderListItems, ...listOfGeneratedOrderItems]);
 
     addToast(Translator('TOAST_SEQUENCIAL_LIST_WAS_GENERATED'), {
       autoDismiss: true,
