@@ -64,6 +64,7 @@
   "DELETE": "Borrar",
   "SAVE_CHANGES": "Guardar cambios",
   "CONFIRM": "Confirmar",
+  "GENERATE": "Gerar",
   "GOBACK": "Regresa",
   "PRINT": "Imprimir",
   "DOWNLOAD": "Descargar",
@@ -135,6 +136,12 @@
   "CLOTHING_PRICES": "Precios de Ropa",
   "SETUP_UNIT_PRICE": "Configura el valor unitario de cada pieza.",
 
+  "SEQUENCIAL_LIST": "Lista secuencial",
+  "SEQUENCIAL_LIST_DESCRIPTION": "Seleccione a continuación qué ropa se utilizará para cada elemento de la lista secuencial.",
+  "SEQUENCY_START_NUMBER": "Núm. inicio",
+  "SEQUENCY_END_NUMBER": "Núm. final",
+  "SEQUENCY_WARNING_FILTER_DISABLED": "El filtro de ropa sin presupuesto queda deshabilitado por defecto en la pantalla actual.",
+
   "EMAIL_BODY": "Se adjunta el archivo zip con la lista de pedidos.",
 
   "LINK_EXPIRED": "El enlace ya caducó.",
@@ -159,6 +166,11 @@
   "TOAST_COPIED_TO_CLIPBOARD": "Copiado al portapapeles.",
   "TOAST_FAILED_GENERATE_ZIP": "No se pudo generar el archivo ZIP.",
   "TOAST_CANT_SEPARATE_BY_SIZE": "No se puede generar una lista separada para cada talla, porque cada línea de pedido debe tener la misma talla para todas las prendas.",
+  "TOAST_SELECT_SOME_CLOTHE": "Selecione qualquer peça de roupa antes de continuar.",
+  "TOAST_RANGE_CONFLICT": "El número inicial y final no puede ser el mismo.",
+  "TOAST_RANGE_INVALID": "El número de inicio es mayor que el número final, no se puede generar una secuencia.",
+  "TOAST_NO_SIZE_SELECTED": "Seleccione cualquier tamaño para la lista secuencial.",
+  "TOAST_SEQUENCIAL_LIST_WAS_GENERATED": "¡Su lista secuencial se generó con éxito!",
 
   "INSTRUCTIONS_CONTENT": "Hola,\n\nEsta lista de pedidos se creó utilizando el sitio web oneformes.com.\n¿Sabías que puedes automatizar tu producción usando esta lista?\n\nEche un vistazo a cómo funciona visitando nuestro canal de YouTube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstrucciones\n\nSISBot lee el archivo .csv para automatizar las producciones de CorelDraw.\n.bkp se puede importar en list.oneformes.com para restaurar la lista de pedidos y realizar cambios.\n\n\nGenere informes de producción.\nEvite errores y desperdicios.\nAutomatiza trabajos repetitivos.\nTenga una visión amplia de la lista de pedidos.\n\n\nSaludos\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }
