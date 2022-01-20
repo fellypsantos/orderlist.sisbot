@@ -64,12 +64,14 @@
   "DELETE": "Delete",
   "SAVE_CHANGES": "Save changes",
   "CONFIRM": "Confirm",
+  "GENERATE": "Generate",
   "GOBACK": "Go Back",
   "PRINT": "Print",
   "DOWNLOAD": "Download",
   "DOWNLOAD_DEFAULT": "Default list",
   "DOWNLOAD_GROUP_BY_SIZE": "List separated by size",
   "UPLOAD": "Upload",
+  "SEQUENCY": "Sequency",
   "SAVE_PDF": " Save PDF",
   "PAID": "Paid",
   "TAKE_SCREENSHOT": "Screenshot",
@@ -134,6 +136,12 @@
   "CLOTHING_PRICES": "Clothing Prices",
   "SETUP_UNIT_PRICE": "Setup the unitary value of each piece.",
 
+  "SEQUENCIAL_LIST": "Sequential List",
+  "SEQUENCIAL_LIST_DESCRIPTION": "Select below which clothes will be used for each item of sequential list.",
+  "SEQUENCY_START_NUMBER": "Start num.",
+  "SEQUENCY_END_NUMBER": "End num.",
+  "SEQUENCY_WARNING_FILTER_DISABLED": "The filter for clothes without budget stays disabled by default in current screen.",
+
   "EMAIL_BODY": "Attached is the zip file with the list of orders.",
 
   "LINK_EXPIRED": "Link already expired.",
@@ -157,6 +165,12 @@
   "TOAST_REDIRECTING": "Redirecting...",
   "TOAST_COPIED_TO_CLIPBOARD": "Copied to clipboard.",
   "TOAST_FAILED_GENERATE_ZIP": "Failed to generate ZIP file.",
+  "TOAST_CANT_SEPARATE_BY_SIZE": "Can't generate separate list for each size, because each order item line must have same size for all clothes.",
+  "TOAST_SELECT_SOME_CLOTHE": "Select any clothing piece before continue.",
+  "TOAST_RANGE_CONFLICT": "Start and end number can't be the same.",
+  "TOAST_RANGE_INVALID": "Start number is greater than final number, can't generate a sequence.",
+  "TOAST_NO_SIZE_SELECTED": "Select any size to sequential list.",
+  "TOAST_SEQUENCIAL_LIST_WAS_GENERATED": "Your sequential list was successfully generated!",
 
   "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at list.oneformes.com to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
 }

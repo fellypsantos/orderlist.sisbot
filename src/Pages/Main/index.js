@@ -26,6 +26,7 @@ import Utils from '../../Utils';
 import ModalSendViaEmail from '../../components/ModalSendViaEmail';
 import {CustomInputAsHeaderText} from '../BussinessPricing/styles';
 import ControlPanel from '../../components/ControlPanel';
+import ModalSequencialList from '../../components/ModalSequencialList';
 
 // const HCAPTCHA_SERVER_CHECK = 'http://localhost/hcaptcha/';
 const HCAPTCHA_SERVER_CHECK = 'https://list.oneformes.com/hcaptcha/';
@@ -39,6 +40,7 @@ const Main = () => {
     listName,
     setListName,
     companyEmail,
+    modalSequencialListOpen,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -94,13 +96,10 @@ const Main = () => {
 
     // INVALID CLOTHES FOUND
     if (invalidOrderItemToSeparate > 0) {
-      addToast(
-        'Não é possível gerar listas separadas por tamanho, cada linha de pedido deve ter o mesmo tamanho nas peças de roupa. ',
-        {
-          autoDismiss: true,
-          appearance: 'error',
-        },
-      );
+      addToast(Translator('TOAST_CANT_SEPARATE_BY_SIZE'), {
+        autoDismiss: true,
+        appearance: 'error',
+      });
 
       return false;
     }
@@ -373,7 +372,9 @@ const Main = () => {
     <Dropdown className="mr-2 d-inline-block">
       <Dropdown.Toggle variant="success" size="sm">
         <FontAwesomeIcon icon={faDownload} className="mr-1" />
-        {Translator('DOWNLOAD')}
+        <span className="d-none d-md-inline-block">
+          {Translator('DOWNLOAD')}
+        </span>
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
@@ -411,7 +412,7 @@ const Main = () => {
       {/* CONTROL PANEL CAN SHOW/HIDE */}
       <ControlPanel>
         <Row>
-          <Col xs="12" sm="6">
+          <Col xs="12" sm="5">
             {/* INPUT FOR LIST NAME */}
             <CustomInputAsHeaderText
               type="text"
@@ -478,6 +479,9 @@ const Main = () => {
         requestLoading={requestLoading}
         hcaptchaSolved={(responseToken) => setHCaptchaToken(responseToken)}
       />
+
+      {/* GENERATE SEQUENCIAL LIST */}
+      <ModalSequencialList isOpen={modalSequencialListOpen} />
 
       {/* MAIN TABLE SHOWN ORDERS */}
       <TableOrderList />

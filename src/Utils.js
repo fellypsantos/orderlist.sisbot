@@ -155,4 +155,15 @@ export default {
     if (theGender === 'FEMALE') return 1;
     if (theGender === 'CHILDISH') return 2;
   },
+
+  FilterClothesByMode: (clothingIcons, isCycling) =>
+    Object.keys(clothingIcons).filter((key) => {
+      // Always return no variant clothes
+      if (clothingIcons[key].isCycling === undefined) return true;
+
+      // Only return bike or normal clothes, never both;
+      if (clothingIcons[key].isCycling !== isCycling) return false;
+
+      return true;
+    }),
 };
