@@ -372,7 +372,9 @@ const Main = () => {
     <Dropdown className="mr-2 d-inline-block">
       <Dropdown.Toggle variant="success" size="sm">
         <FontAwesomeIcon icon={faDownload} className="mr-1" />
-        {Translator('DOWNLOAD')}
+        <span className="d-none d-md-inline-block">
+          {Translator('DOWNLOAD')}
+        </span>
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
@@ -410,7 +412,7 @@ const Main = () => {
       {/* CONTROL PANEL CAN SHOW/HIDE */}
       <ControlPanel>
         <Row>
-          <Col xs="12" sm="6">
+          <Col xs="12" sm="5">
             {/* INPUT FOR LIST NAME */}
             <CustomInputAsHeaderText
               type="text"
