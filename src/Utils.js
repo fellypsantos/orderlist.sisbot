@@ -66,7 +66,9 @@ export default {
 
   GetTotalColumnsTableOrderListItems: (tableElement) => {
     if (tableElement !== null) {
-      const columnCount = tableElement.children[0].children[2].children.length;
+      const iconsIndex = 3;
+      const columnCount =
+        tableElement.children[0].children[iconsIndex].children.length;
       return columnCount;
     }
 

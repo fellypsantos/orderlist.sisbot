@@ -223,6 +223,8 @@ const OrderListProvider = ({children}) => {
 
   const [orderListItems, setOrderListItems] = useState([]);
 
+  const [paidOrderItems, setPaidOrderItems] = useState([]);
+
   const [listName, setListName] = useState('');
 
   const [companyEmail, setCompanyEmail] = useState('');
@@ -713,6 +715,8 @@ const OrderListProvider = ({children}) => {
     setTempOrderItem,
     orderListItems,
     setOrderListItems,
+    paidOrderItems,
+    setPaidOrderItems,
     currentClothingPrices,
     setCurrentClothingPrices,
     dashboardData,

@@ -11,6 +11,7 @@ const TableOrdersBody = () => {
   const {
     orderListItems,
     setOrderListItems,
+    setPaidOrderItems,
     Translator,
     screenshotMode,
     dashboardData,
@@ -41,6 +42,13 @@ const TableOrdersBody = () => {
       return orderItem;
     });
 
+    // COLLECT SELECTED ROWS TO FURTHER DELETION
+    const selectedRowsID = [];
+    updatedOrderListItems.forEach((orderItem) => {
+      if (orderItem.payment.paid) selectedRowsID.push(orderItem.id);
+    });
+
+    setPaidOrderItems(selectedRowsID);
     setOrderListItems(updatedOrderListItems);
   };
 
