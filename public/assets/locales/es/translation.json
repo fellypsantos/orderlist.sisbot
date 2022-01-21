@@ -62,6 +62,7 @@
   "CLEAR": "Limpiar",
   "CLOSE": "Cerrar",
   "DELETE": "Borrar",
+  "DELETE_SELECTED": "Eliminar seleccionado",
   "SAVE_CHANGES": "Guardar cambios",
   "CONFIRM": "Confirmar",
   "GENERATE": "Gerar",
@@ -118,6 +119,7 @@
   "CONFIRM_DELETE_ITEM": "¿Realmente desea eliminar este artículo de la lista de pedidos?",
   "CONFIRM_DELETE_ITEM_MODAL": "¿Realmente desea eliminar el elemento seleccionado?",
   "CONFIRM_DELETE_ALL_ORDERITEMS": "¿Está seguro de que desea borrar completamente su lista de pedidos? No se puede deshacer.",
+  "CONFIRM_DELETE_SELECTED_ITEMS": "¿Está seguro de que desea eliminar los elementos seleccionados de la lista? Esta acción no se puede deshacer.",
 
   "HEADER_PHRASE_NO_NAME": "Seleccione lo que necesita para este nuevo pedido.",
   "HEADER_PHRASE_WITH_NAME": "Seleccione lo que necesita para ",
@@ -143,6 +145,7 @@
   "SEQUENCY_WARNING_FILTER_DISABLED": "El filtro de ropa sin presupuesto queda deshabilitado por defecto en la pantalla actual.",
 
   "EMAIL_BODY": "Se adjunta el archivo zip con la lista de pedidos.",
+  "WARNING": "Advertencia!",
 
   "LINK_EXPIRED": "El enlace ya caducó.",
   "TOAST_EMPTY_LIST": "¡Lista vacía! Nada que añadir por ahora.",
@@ -171,6 +174,7 @@
   "TOAST_RANGE_INVALID": "El número de inicio es mayor que el número final, no se puede generar una secuencia.",
   "TOAST_NO_SIZE_SELECTED": "Seleccione cualquier tamaño para la lista secuencial.",
   "TOAST_SEQUENCIAL_LIST_WAS_GENERATED": "¡Su lista secuencial se generó con éxito!",
+  "TOAST_SELECTED_ITEMS_DELETED": "¡Hecho! Los artículos seleccionados se han eliminado de la lista de pedidos.",
 
   "INSTRUCTIONS_CONTENT": "Hola,\n\nEsta lista de pedidos se creó utilizando el sitio web oneformes.com.\n¿Sabías que puedes automatizar tu producción usando esta lista?\n\nEche un vistazo a cómo funciona visitando nuestro canal de YouTube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstrucciones\n\nSISBot lee el archivo .csv para automatizar las producciones de CorelDraw.\n.bkp se puede importar en list.oneformes.com para restaurar la lista de pedidos y realizar cambios.\n\n\nGenere informes de producción.\nEvite errores y desperdicios.\nAutomatiza trabajos repetitivos.\nTenga una visión amplia de la lista de pedidos.\n\n\nSaludos\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

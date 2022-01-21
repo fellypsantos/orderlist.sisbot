@@ -62,6 +62,7 @@
   "CLEAR": "Limpar",
   "CLOSE": "Fechar",
   "DELETE": "Excluir",
+  "DELETE_SELECTED": "Excluir Selecionados",
   "SAVE_CHANGES": "Salvar alterações",
   "CONFIRM": "Confirmar",
   "GENERATE": "Gerar",
@@ -118,6 +119,7 @@
   "CONFIRM_DELETE_ITEM": "Quer mesmo excluir esse item da lista de pedidos?",
   "CONFIRM_DELETE_ITEM_MODAL": "Deseja mesmo excluir o item selecionado?",
   "CONFIRM_DELETE_ALL_ORDERITEMS": "Tem certeza que deseja limpar completamente a sua lista de pedidos? Isso não pode ser desfeito!",
+  "CONFIRM_DELETE_SELECTED_ITEMS": "Tem certeza que deseja excluir da lista os pedidos selecionados? Isso não pode ser desfeito!",
 
   "HEADER_PHRASE_NO_NAME": "Selecione o que precisa para essa nova ordem.",
   "HEADER_PHRASE_WITH_NAME": "Selecione o que precisa para ",
@@ -143,6 +145,7 @@
   "SEQUENCY_WARNING_FILTER_DISABLED": "Filtro de roupas sem orçamento fica desativado por padrão nesta tela.",
 
   "EMAIL_BODY": "Segue em anexo o arquivo zip com a lista de pedidos.",
+  "WARNING": "Atenção!",
 
   "LINK_EXPIRED": "Esse link já expirou.",
   "TOAST_EMPTY_LIST": "Lista vazia! Não há nada para adicionar até o momento.",
@@ -171,6 +174,7 @@
   "TOAST_RANGE_INVALID": "O número inicial é maior que o número final, não é possível gerar uma sequência.",
   "TOAST_NO_SIZE_SELECTED": "Selecione um tamanho para a lista sequencial.",
   "TOAST_SEQUENCIAL_LIST_WAS_GENERATED": "Sua lista foi gerada com sucesso.",
+  "TOAST_SELECTED_ITEMS_DELETED": "Feito! Os itens selecionados foram removidos da sua lista de pedidos.",
 
   "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site list.oneformes.com\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

@@ -6,6 +6,7 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 import ModalConfirmDialog from '../ModalConfirmDialog';
 import Clickable from '../Clickable';
 import Utils from '../../Utils';
+import ButtonDeleteSelectedItems from '../ButtonDeleteSelectedItems';
 
 const TableOrdersBody = () => {
   const {
@@ -187,8 +188,10 @@ const TableOrdersBody = () => {
         )}
       </tbody>
 
-      <tfoot className={!screenshotMode ? 'd-none' : ''}>
-        <tr>
+      <tfoot>
+        <ButtonDeleteSelectedItems />
+
+        <tr className={!screenshotMode ? 'd-none' : ''}>
           <td colSpan={9} className="text-right">
             <strong>{Translator('FINAL_VALUE')}</strong>
           </td>

@@ -320,6 +320,7 @@ const OrderListProvider = ({children}) => {
   // Control modal with list of clothes
   const [modalClothesOpened, setModalClothesOpened] = useState(false);
   const [modalSequencialListOpen, setModalSequencialListOpen] = useState(false);
+  const [modalDeleteSelectedOpen, setModalDeleteSelectedOpen] = useState(false);
 
   const updateLanguage = (countryCode) => {
     i18n.changeLanguage(countryCode);
@@ -464,6 +465,14 @@ const OrderListProvider = ({children}) => {
       needReceive: fixedNeedReceive,
       totalProgressAsPercentage: fixedTotalProgressAsPercentage,
     });
+
+    // COLLECT SELECTED ROWS TO FURTHER DELETION
+    const selectedRowsID = [];
+    orderListItems.forEach((orderItem) => {
+      if (orderItem.payment.paid) selectedRowsID.push(orderItem.id);
+    });
+
+    setPaidOrderItems(selectedRowsID);
   }, [orderListItems]);
 
   // SAVE LIST NAME / ORDER LIST NOTES / CYCLING FLAG
@@ -710,6 +719,8 @@ const OrderListProvider = ({children}) => {
     setModalClothesOpened,
     modalSequencialListOpen,
     setModalSequencialListOpen,
+    modalDeleteSelectedOpen,
+    setModalDeleteSelectedOpen,
     initialStateTempOrderItem,
     tempOrderItem,
     setTempOrderItem,
