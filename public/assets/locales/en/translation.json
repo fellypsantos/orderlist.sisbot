@@ -62,6 +62,7 @@
   "CLEAR": "Clear",
   "CLOSE": "Close",
   "DELETE": "Delete",
+  "DELETE_SELECTED": "Delete Selected",
   "SAVE_CHANGES": "Save changes",
   "CONFIRM": "Confirm",
   "GENERATE": "Generate",
@@ -118,6 +119,7 @@
   "CONFIRM_DELETE_ITEM": "Really want to delete this item from order list ?",
   "CONFIRM_DELETE_ITEM_MODAL": "Really want to delete selected item ?",
   "CONFIRM_DELETE_ALL_ORDERITEMS": "Are you sure that you want to fully clear your order list ? It can't be undone.",
+  "CONFIRM_DELETE_SELECTED_ITEMS": "Are you sure you want to delete selected items from list? This action can't be undone!",
 
   "HEADER_PHRASE_NO_NAME": "Select what you need to this new order.",
   "HEADER_PHRASE_WITH_NAME": "Select what you need for ",
@@ -143,6 +145,7 @@
   "SEQUENCY_WARNING_FILTER_DISABLED": "The filter for clothes without budget stays disabled by default in current screen.",
 
   "EMAIL_BODY": "Attached is the zip file with the list of orders.",
+  "WARNING": "Warning!",
 
   "LINK_EXPIRED": "Link already expired.",
   "TOAST_EMPTY_LIST": "Empty List! Nothing to add for now.",
@@ -171,6 +174,7 @@
   "TOAST_RANGE_INVALID": "Start number is greater than final number, can't generate a sequence.",
   "TOAST_NO_SIZE_SELECTED": "Select any size to sequential list.",
   "TOAST_SEQUENCIAL_LIST_WAS_GENERATED": "Your sequential list was successfully generated!",
+  "TOAST_SELECTED_ITEMS_DELETED": "Done! Selected items has been removed from order list.",
 
   "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at list.oneformes.com to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
 }

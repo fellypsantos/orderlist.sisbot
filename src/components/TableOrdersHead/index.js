@@ -7,63 +7,20 @@ import {
   faTrash,
   faEye,
 } from '@fortawesome/free-solid-svg-icons';
-import Button from 'react-bootstrap/Button';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
+import ButtonDeleteSelectedItems from '../ButtonDeleteSelectedItems';
 
 const TableOrdersHead = () => {
-  const {
-    clothingIcons,
-    screenshotMode,
-    Translator,
-    isCycling,
-    orderListItems,
-    setOrderListItems,
-    paidOrderItems,
-    setPaidOrderItems,
-  } = useContext(OrderListContext);
+  const {clothingIcons, screenshotMode, Translator, isCycling, orderListItems} =
+    useContext(OrderListContext);
 
   const [totalOfPieces, setTotalOfPieces] = useState(0);
-
-  const handleDeleteSelectedItems = () => {
-    const confirm = window.confirm(
-      'Deseja remover todos os itens selecionados na lista? Não é possível desfazer.',
-    );
-    if (confirm) {
-      const newListData = orderListItems.filter((orderItem) => {
-        const indexToDelete = paidOrderItems.findIndex(
-          (index) => orderItem.id === index,
-        );
-        if (indexToDelete > -1) return false;
-        return true;
-      });
-
-      // UPDATE GLOBAL LIST
-      setPaidOrderItems([]);
-      setOrderListItems(newListData);
-    }
-  };
-
-  const ButtonDeleteSelectedItems = () => (
-    <tr
-      className={screenshotMode || paidOrderItems.length === 0 ? 'd-none' : ''}>
-      <td colSpan={12} className="text-right">
-        <Button variant="danger" size="sm" onClick={handleDeleteSelectedItems}>
-          <FontAwesomeIcon icon={faTrash} />
-          <span className="ml-1 d-none d-md-inline-block">
-            Excluir Selecionados
-          </span>
-        </Button>
-      </td>
-    </tr>
-  );
 
   useEffect(() => {
     const calculated = Utils.HelperCountTotalOfPieces(orderListItems, true);
     setTotalOfPieces(calculated);
   }, [orderListItems]);
-
-  console.log('->', paidOrderItems.length);
 
   return (
     <thead>
