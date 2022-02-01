@@ -45,6 +45,7 @@ const CustomSelectClothingSize = ({
   return (
     <Select
       isClearable
+      isSearchable={false}
       options={
         !shouldFilter
           ? clothingSizesDropDown
