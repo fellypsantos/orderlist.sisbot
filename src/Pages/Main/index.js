@@ -366,8 +366,10 @@ const Main = () => {
       setSettings({...settings, uuidFromLoadedPriceTable: ''}); // Remove last uuid loaded
       setRequestLoading(false);
       setTargetEmail('');
-      setOrderListItems([]); // Remove list from client
-      setOrderListItemsNotes('');
+      if (settings.shouldClearOrderListAfterSent) {
+        setOrderListItems([]); // Remove list from client
+        setOrderListItemsNotes('');
+      }
     } else {
       addToast(Translator('TOAST_FAILED_TO_SENT_LIST'), {
         autoDismiss: true,

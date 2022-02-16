@@ -65,6 +65,8 @@
   "DELETE_SELECTED": "Delete Selected",
   "SAVE_CHANGES": "Save changes",
   "CONFIRM": "Confirm",
+  "YES": "Yes",
+  "NO": "No",
   "GENERATE": "Generate",
   "GOBACK": "Go Back",
   "PRINT": "Print",
@@ -95,6 +97,7 @@
   "ASK_DESTINATION_EMAIL": "What's the destination email?",
   "ASK_CLIENT_NAME": "Type your name to identify the list file",
   "ASK_NOT_ROBOT": "Confirm that you're not a robot",
+  "ASK_CLEAR_ORDERLIST_AFTER_SENT": "Do you wanna clean up client's order list after sent via email?",
 
   "SETTINGS_POPUP_TITLE": "Settings",
   "SETTINGS_COIN_PREFIX": "Coin Prefix",

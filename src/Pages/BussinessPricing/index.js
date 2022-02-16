@@ -26,6 +26,7 @@ import TableCellAsInput from '../../components/TableCellAsInput';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import Utils from '../../Utils';
 import ButtonToggleClothignIcons from '../../components/ButtonToggleClothingIcons';
+import ModalConfirmDialog from '../../components/ModalConfirmDialog';
 
 const API = 'https://list.oneformes.com/api';
 const LS_PRICES_ID = 'sisbot.bussiness.prices';
@@ -49,6 +50,7 @@ const BussinessPricing = () => {
 
   const [projectName, setProjectName] = useState('');
   const [generatedLink, setGeneratedLink] = useState('');
+  const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
   const history = useHistory();
 
   const [priceTableMale, setPriceTableMale] = useState({
@@ -107,9 +109,7 @@ const BussinessPricing = () => {
     return false;
   };
 
-  const generateLink = async (e) => {
-    e.preventDefault();
-
+  const generateLink = async (shouldClearOrderListAfterSent) => {
     await fetch(`${API}/generateLink.php`, {
       method: 'POST',
       body: JSON.stringify({
@@ -121,12 +121,14 @@ const BussinessPricing = () => {
         settings: {
           ...settings,
           filterEnabled: shouldFilter,
+          shouldClearOrderListAfterSent,
         },
       }),
     })
       .then((response) => response.text())
       .then((responseText) => {
         const generatedURL = `${window.location.origin}/${window.location.hash}?query=${responseText}`;
+        console.log('generatedURL', generatedURL);
         setGeneratedLink(generatedURL);
       });
   };
@@ -648,6 +650,22 @@ const BussinessPricing = () => {
         </Tab>
       </Tabs>
 
+      {/* POPUP TO CONFIRM CLEAR ORDER LIST FROM CLIENT AFTER SENT */}
+      <ModalConfirmDialog
+        isOpen={isModalConfirmOpen}
+        title={Translator('CONFIRM')}
+        textContent={Translator('ASK_CLEAR_ORDERLIST_AFTER_SENT')}
+        handleHide={() => setIsModalConfirmOpen(false)}
+        handleConfirm={() => {
+          setIsModalConfirmOpen(false);
+          generateLink(true);
+        }}
+        handleClose={() => {
+          setIsModalConfirmOpen(false);
+          generateLink(false);
+        }}
+      />
+
       {/* SHOW GENERATED LINK */}
       <div
         className={generatedLink !== '' ? 'd-flex' : 'd-none'}
@@ -671,14 +689,19 @@ const BussinessPricing = () => {
       </div>
 
       {/* TRIGGER LINK GENERATION */}
-      <div
-        className="d-flex mt-2"
+      <Row
+        className="d-flex mt-2 mb-4"
         style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Button variant="secondary" size="sm" onClick={generateLink}>
-          <FontAwesomeIcon icon={faLink} />
-          <span className="ml-1">{Translator('GENERATE_LINK')}</span>
-        </Button>
-      </div>
+        <Col xs={12} className="text-center">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setIsModalConfirmOpen(true)}>
+            <FontAwesomeIcon icon={faLink} />
+            <span className="ml-1">{Translator('GENERATE_LINK')}</span>
+          </Button>
+        </Col>
+      </Row>
     </div>
   );
 };
