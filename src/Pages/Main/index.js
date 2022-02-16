@@ -37,10 +37,14 @@ const Main = () => {
     showDashboard,
     setShowDashboard,
     orderListItems,
+    setOrderListItems,
+    setOrderListItemsNotes,
     listName,
     setListName,
     companyEmail,
     modalSequencialListOpen,
+    settings,
+    setSettings,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -325,6 +329,7 @@ const Main = () => {
 
     const postData = {
       token: HCaptchaToken,
+      uuidPriceTable: settings.uuidFromLoadedPriceTable,
       zipfile: zipData,
       email: targetEmail,
       client: clientName,
@@ -357,8 +362,12 @@ const Main = () => {
     if (serverResponse === undefined) return;
 
     if (serverResponse.data === true) {
+      // Sent successfully
+      setSettings({...settings, uuidFromLoadedPriceTable: ''}); // Remove last uuid loaded
       setRequestLoading(false);
       setTargetEmail('');
+      setOrderListItems([]); // Remove list from client
+      setOrderListItemsNotes('');
     } else {
       addToast(Translator('TOAST_FAILED_TO_SENT_LIST'), {
         autoDismiss: true,

@@ -60,6 +60,7 @@ const OrderListProvider = ({children}) => {
     maxQuantityPerClothe: 100,
     filterEnabled: false,
     isDashboardVisible: false,
+    uuidFromLoadedPriceTable: '',
   });
 
   const [clothingIcons] = useState({
@@ -384,6 +385,7 @@ const OrderListProvider = ({children}) => {
           maxQuantityPerClothe: 100,
           filterEnabled: false,
           isDashboardVisible: false,
+          uuidFromLoadedPriceTable: '',
         }),
       );
     }

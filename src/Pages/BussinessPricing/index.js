@@ -138,14 +138,19 @@ const BussinessPricing = () => {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson !== null) {
-          const uploaded = JSON.parse(responseJson);
+          const uploaded = JSON.parse(responseJson.conteudo);
           if (isValidJsonFileForPrices(uploaded)) {
             setProjectName(uploaded.projectName);
             setCompanyEmail(uploaded.companyEmail);
             setPriceTableMale(uploaded.priceTableMale);
             setPriceTableFemale(uploaded.priceTableFemale);
             setPriceTableChildish(uploaded.priceTableChildish);
-            setSettings(uploaded.settings);
+
+            setSettings({
+              ...uploaded.settings,
+              uuidFromLoadedPriceTable: responseJson.uuid,
+            });
+
             setShouldFilter(uploaded.settings.filterEnabled);
 
             addToast(Translator('TOAST_DATA_LOADED_FROM_SERVER'), {
