@@ -173,6 +173,9 @@ const BussinessPricing = () => {
             autoDismiss: true,
             appearance: 'error',
           });
+
+          // INSTA REDIRECT
+          history.push('/');
         }
       });
   };
