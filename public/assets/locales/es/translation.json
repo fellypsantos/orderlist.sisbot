@@ -65,6 +65,8 @@
   "DELETE_SELECTED": "Eliminar seleccionado",
   "SAVE_CHANGES": "Guardar cambios",
   "CONFIRM": "Confirmar",
+  "YES": "Si",
+  "NO": "No",
   "GENERATE": "Gerar",
   "GOBACK": "Regresa",
   "PRINT": "Imprimir",
@@ -95,6 +97,7 @@
   "ASK_DESTINATION_EMAIL": "¿Cuál es el correo electrónico de destino?",
   "ASK_CLIENT_NAME": "Escriba su nombre para identificar el archivo de lista",
   "ASK_NOT_ROBOT": "Confirma que no eres un robot",
+  "ASK_CLEAR_ORDERLIST_AFTER_SENT": "¿Quiere limpiar la lista de pedidos del cliente después de enviarla por correo electrónico?",
 
   "SETTINGS_POPUP_TITLE": "Ajustes",
   "SETTINGS_COIN_PREFIX": "Prefijo de Moneda",
