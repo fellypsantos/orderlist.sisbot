@@ -363,13 +363,19 @@ const Main = () => {
 
     if (serverResponse.data === true) {
       // Sent successfully
-      setSettings({...settings, uuidFromLoadedPriceTable: ''}); // Remove last uuid loaded
       setRequestLoading(false);
       setTargetEmail('');
       if (settings.shouldClearOrderListAfterSent) {
         setOrderListItems([]); // Remove list from client
         setOrderListItemsNotes('');
       }
+
+      // update settings
+      setSettings({
+        ...settings,
+        uuidFromLoadedPriceTable: '',
+        shouldClearOrderListAfterSent: false,
+      }); // Remove last uuid loaded
     } else {
       addToast(Translator('TOAST_FAILED_TO_SENT_LIST'), {
         autoDismiss: true,
@@ -379,29 +385,30 @@ const Main = () => {
     }
   };
 
-  const DropDownButtonToDownload = () => (
-    <Dropdown className="mr-2 d-inline-block">
-      <Dropdown.Toggle variant="success" size="sm">
-        <FontAwesomeIcon icon={faDownload} className="mr-1" />
-        <span className="d-none d-md-inline-block">
-          {Translator('DOWNLOAD')}
-        </span>
-      </Dropdown.Toggle>
+  const DropDownButtonToDownload = () =>
+    !settings.shouldClearOrderListAfterSent && (
+      <Dropdown className="mr-2 d-inline-block">
+        <Dropdown.Toggle variant="success" size="sm">
+          <FontAwesomeIcon icon={faDownload} className="mr-1" />
+          <span className="d-none d-md-inline-block">
+            {Translator('DOWNLOAD')}
+          </span>
+        </Dropdown.Toggle>
 
-      <Dropdown.Menu>
-        <Dropdown.Item onClick={() => handleDownload(false)}>
-          {Translator('DOWNLOAD_DEFAULT')}
-        </Dropdown.Item>
-        <Dropdown.Item
-          onClick={() => {
-            setGroupFilesBySize(true);
-            handleDownload(false);
-          }}>
-          {Translator('DOWNLOAD_GROUP_BY_SIZE')}
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
-  );
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => handleDownload(false)}>
+            {Translator('DOWNLOAD_DEFAULT')}
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => {
+              setGroupFilesBySize(true);
+              handleDownload(false);
+            }}>
+            {Translator('DOWNLOAD_GROUP_BY_SIZE')}
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    );
 
   const SendEmailButton = () => (
     <Button
