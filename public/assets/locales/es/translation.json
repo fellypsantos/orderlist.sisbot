@@ -47,6 +47,7 @@
   "PAYMENT_METHOD": "Método de Pago",
   "ORDERLIST_FINAL_VALUE": "Valor Final del Pedido",
   "ANNOTATIONS": "Anotaciones",
+  "ANNOTATIONS_CLIENT_LABEL": "Las notas a continuación se enviarán a la empresa junto con el archivo de lista de pedidos.",
 
   "GRAND_TOTAL": "Grand Total",
   "TOTAL_RECEIVED": "Total Recibido",

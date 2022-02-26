@@ -47,6 +47,7 @@
   "PAYMENT_METHOD": "Payment Method",
   "ORDERLIST_FINAL_VALUE": "Order Final Value",
   "ANNOTATIONS": "Annotations",
+  "ANNOTATIONS_CLIENT_LABEL": "Notes below will be send to company together with order list file.",
 
   "GRAND_TOTAL": "Grand Total",
   "TOTAL_RECEIVED": "Total Received",

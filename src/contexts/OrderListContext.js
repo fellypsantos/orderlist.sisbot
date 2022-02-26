@@ -234,6 +234,8 @@ const OrderListProvider = ({children}) => {
 
   const [orderListItemsNotes, setOrderListItemsNotes] = useState('');
 
+  const [orderListClientNotes, setOrderListClientNotes] = useState('');
+
   const [lastChangeI18Next, setLastChangeI18Next] = useState(null);
 
   const [editMode, setEditMode] = useState({
@@ -343,7 +345,11 @@ const OrderListProvider = ({children}) => {
 
       // RESTORE NOTES
       setOrderListItemsNotes(data.orderListItemsNotes);
-      console.log('✅ Loaded order list notes.');
+      console.log('✅ Loaded order list company notes.');
+
+      // RESTORE CLIENT NOTES
+      setOrderListClientNotes(data.orderListClientNotes);
+      console.log('✅ Loaded order list client notes.');
 
       // RESTORE CYCLING FLAG
       setIsCycling(data.isCycling);
@@ -355,6 +361,7 @@ const OrderListProvider = ({children}) => {
         JSON.stringify({
           listName: '',
           orderListItemsNotes,
+          orderListClientNotes,
           orderListItems: [],
           isCycling: false,
         }),
@@ -509,10 +516,11 @@ const OrderListProvider = ({children}) => {
         listName,
         orderListItems,
         orderListItemsNotes,
+        orderListClientNotes,
         isCycling,
       }),
     );
-  }, [listName, orderListItemsNotes, isCycling]);
+  }, [listName, orderListItemsNotes, orderListClientNotes, isCycling]);
 
   useEffect(() => {
     if (orderListItems.length === 0) return false;
@@ -774,6 +782,8 @@ const OrderListProvider = ({children}) => {
     setEditMode,
     orderListItemsNotes,
     setOrderListItemsNotes,
+    orderListClientNotes,
+    setOrderListClientNotes,
     showDashboard,
     setShowDashboard,
     showBudget,
