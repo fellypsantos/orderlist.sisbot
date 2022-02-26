@@ -32,9 +32,8 @@ const Report = () => {
     isCycling,
   } = useContext(OrderListContext);
 
-  const {modalImageSelection, setModalVisibleImageSelection} = useContext(
-    ReportContext,
-  );
+  const {modalImageSelection, setModalVisibleImageSelection} =
+    useContext(ReportContext);
 
   const INITIAL_STATE_SORTED_ORDER_LIST = {
     male: {
@@ -488,7 +487,6 @@ const Report = () => {
             {/* LEFT SIDE */}
             <Col xs="6">
               <ReportHeader
-                title="SISBot"
                 subtitle={Translator('PROCESSING_REPORT_TITLE')}
                 date={moment().format('LLL')}
               />

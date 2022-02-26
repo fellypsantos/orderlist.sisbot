@@ -1,6 +1,15 @@
 import styled from 'styled-components';
 
-export const Title = styled.h1``;
+export const CompanyName = styled.input`
+  border: none;
+  outline: none;
+  margin-bottom: 0.5rem;
+  margin-left: -2px;
+  font-weight: 500;
+  line-height: 1.2;
+  font-size: 2.2rem;
+  width: 100%;
+`;
 
 export const SubTitle = styled.h5`
   margin: 0px;

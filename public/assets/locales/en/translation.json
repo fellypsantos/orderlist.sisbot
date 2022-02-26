@@ -118,6 +118,7 @@
   "COPY_LINK": "Copy Link",
   "BUDGET": "Budget",
   "BUDGET_IDENTIFICATION": "Identification",
+  "COMPANY_NAME": "Company name",
   "COMPANY_EMAIL": "Company e-mail",
 
   "CONFIRM_DELETE_ITEM": "Really want to delete this item from order list ?",

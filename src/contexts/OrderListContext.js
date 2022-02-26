@@ -228,6 +228,8 @@ const OrderListProvider = ({children}) => {
 
   const [listName, setListName] = useState('');
 
+  const [companyName, setCompanyName] = useState('');
+
   const [companyEmail, setCompanyEmail] = useState('');
 
   const [orderListItemsNotes, setOrderListItemsNotes] = useState('');
@@ -369,6 +371,9 @@ const OrderListProvider = ({children}) => {
     const clsData = localStorage.getItem('sisbot');
     const clsSettings = localStorage.getItem('sisbot.settings');
     const clsBussinessPrices = localStorage.getItem('sisbot.bussiness.prices');
+    const clsCompanyInformation = localStorage.getItem(
+      'sisbot.bussiness.company',
+    );
 
     // LOAD ENVIROMENT SETTINGS
     if (clsSettings !== null) {
@@ -399,7 +404,6 @@ const OrderListProvider = ({children}) => {
       // DEFAULT DATA
       const defaultData = {
         projectName: projectName,
-        companyEmail,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
@@ -414,6 +418,25 @@ const OrderListProvider = ({children}) => {
       // SET STATE
       setCurrentClothingPrices(defaultData);
       console.log('💙 Pricing tables set to default.');
+    }
+
+    // LOAD COMPANY DATA
+    if (clsCompanyInformation !== null) {
+      // LOAD ME
+      const data = JSON.parse(clsCompanyInformation);
+      setCompanyName(data.companyName);
+      setCompanyEmail(data.companyEmail);
+    } else {
+      // SET DEFAULT (FIRST LOAD)
+      const defaultData = {
+        companyName,
+        companyEmail,
+      };
+
+      localStorage.setItem(
+        'sisbot.bussiness.company',
+        JSON.stringify(defaultData),
+      );
     }
 
     // LOAD LIST DATA AND NOTES
@@ -571,6 +594,16 @@ const OrderListProvider = ({children}) => {
       }),
     );
   }, [settings, shouldFilter, showDashboard]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      'sisbot.bussiness.company',
+      JSON.stringify({
+        companyName,
+        companyEmail,
+      }),
+    );
+  }, [companyName]);
 
   useEffect(() => {
     if (currentClothingPrices === null) return false; // PREVENT ERROR
@@ -757,6 +790,8 @@ const OrderListProvider = ({children}) => {
     setShouldFilter,
     listName,
     setListName,
+    companyName,
+    setCompanyName,
     companyEmail,
     setCompanyEmail,
   };

@@ -118,6 +118,7 @@
   "COPY_LINK": "Copiar Link",
   "BUDGET": "Presupuesto",
   "BUDGET_IDENTIFICATION": "Identificación",
+  "COMPANY_NAME": "Nombre de empresa",
   "COMPANY_EMAIL": "Correo electrónico de la empresa",
 
   "CONFIRM_DELETE_ITEM": "¿Realmente desea eliminar este artículo de la lista de pedidos?",

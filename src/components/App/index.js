@@ -31,26 +31,26 @@ const App = () => (
   <OrderListProvider>
     <GlobalStyle />
     <ToastProvider>
-      <ModalChooseClothes />
-      <ModalSettings />
-      <NavbarContainer>
-        <NavbarLeftContent>
-          <RedEyeOneFormes />
-          <SettingsButtonNavbar />
-          <LanguageChanger />
-        </NavbarLeftContent>
-      </NavbarContainer>
-      <MainContentContainer>
-        <Container>
-          <HashRouter>
+      <HashRouter>
+        <ModalChooseClothes />
+        <ModalSettings />
+        <NavbarContainer>
+          <NavbarLeftContent>
+            <RedEyeOneFormes />
+            <SettingsButtonNavbar />
+            <LanguageChanger />
+          </NavbarLeftContent>
+        </NavbarContainer>
+        <MainContentContainer>
+          <Container>
             <Switch>
               <Route exact path="/" component={Main} />
               <Route path="/report" component={ReportWithContext} />
               <Route path="/bussiness/pricing" component={BussinessPricing} />
             </Switch>
-          </HashRouter>
-        </Container>
-      </MainContentContainer>
+          </Container>
+        </MainContentContainer>
+      </HashRouter>
     </ToastProvider>
   </OrderListProvider>
 );

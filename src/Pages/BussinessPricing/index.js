@@ -30,6 +30,7 @@ import ModalConfirmDialog from '../../components/ModalConfirmDialog';
 
 const API = 'https://list.oneformes.com/api';
 const LS_PRICES_ID = 'sisbot.bussiness.prices';
+const LS_COMPANY_INFORMATIONS = 'sisbot.bussiness.company';
 
 const BussinessPricing = () => {
   const {
@@ -44,6 +45,7 @@ const BussinessPricing = () => {
     settings,
     shouldFilter,
     setShouldFilter,
+    companyName,
     companyEmail,
     setCompanyEmail,
   } = useContext(OrderListContext);
@@ -88,10 +90,17 @@ const BussinessPricing = () => {
       LS_PRICES_ID,
       JSON.stringify({
         projectName: pProjectName,
-        companyEmail: pCompanyEmail,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+      }),
+    );
+
+    localStorage.setItem(
+      LS_COMPANY_INFORMATIONS,
+      JSON.stringify({
+        companyName: companyName,
+        companyEmail: pCompanyEmail,
       }),
     );
   };
@@ -190,17 +199,24 @@ const BussinessPricing = () => {
     }
 
     const localStorageBussinessPrices = localStorage.getItem(LS_PRICES_ID);
+    const localStorageCompanyData = localStorage.getItem(
+      LS_COMPANY_INFORMATIONS,
+    );
 
-    if (localStorageBussinessPrices !== null) {
+    if (
+      localStorageBussinessPrices !== null &&
+      localStorageCompanyData !== null
+    ) {
       // ALREADY EXISTS DATA
       console.log('ALREADY EXISTS DATA, RESTORE IT');
       const data = JSON.parse(localStorageBussinessPrices);
+      const companyData = JSON.parse(localStorageCompanyData);
 
       // RESTORE PROJECT NAME
       setProjectName(data.projectName);
 
       // RESTORE COMPANY EMAIL
-      setCompanyEmail(data.companyEmail);
+      setCompanyEmail(companyData.companyEmail);
 
       // RESTORE MALE PRICES IF ARE DIFFERENT
       if (hash(priceTableMale) !== hash(data.priceTableMale)) {
@@ -364,6 +380,8 @@ const BussinessPricing = () => {
   };
 
   const handleValidateEmail = (email) => {
+    if (email === '') return;
+
     if (!Utils.IsValidEmail(email)) {
       addToast(Translator('TOAST_INVALID_EMAIL'), {
         autoDismiss: true,
@@ -679,7 +697,7 @@ const BussinessPricing = () => {
               <FontAwesomeIcon icon={faLink} />
             </InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl className="text-center" value={generatedLink} />
+          <FormControl className="text-center" defaultValue={generatedLink} />
           <InputGroup.Append>
             <CopyToClipboard text={generatedLink} onCopy={handleOnCopy}>
               <Button variant="secondary" size="sm">
