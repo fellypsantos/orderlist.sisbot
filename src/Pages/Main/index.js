@@ -430,16 +430,6 @@ const Main = () => {
       {/* CONTROL PANEL CAN SHOW/HIDE */}
       <ControlPanel>
         <Row>
-          <Col xs="12" sm="5">
-            {/* INPUT FOR LIST NAME */}
-            <CustomInputAsHeaderText
-              type="text"
-              value={listName}
-              placeholder={Translator('MAIN_TITLE')}
-              onChange={({target}) => setListName(target.value)}
-            />
-          </Col>
-
           {/* DASHBOARD BUTTONS */}
           <Col className="text-right mb-4">
             <DropDownButtonToDownload />
@@ -472,6 +462,18 @@ const Main = () => {
         {/* BUTTONS TO CONTROL TABLE WITH ORDERS */}
         <TableOrdersMenu />
       </ControlPanel>
+
+      <Row>
+        <Col xs="12" sm="5">
+          {/* INPUT FOR LIST NAME */}
+          <CustomInputAsHeaderText
+            type="text"
+            value={listName}
+            placeholder={Translator('MAIN_TITLE')}
+            onChange={({target}) => setListName(target.value)}
+          />
+        </Col>
+      </Row>
 
       {/* DOWNLOAD */}
       <ModalTextInput
