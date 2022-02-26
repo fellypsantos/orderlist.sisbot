@@ -8,6 +8,7 @@ import html2canvas from '@nidi/html2canvas';
 import {
   faBolt,
   faCamera,
+  faCoins,
   faDollarSign,
   faEraser,
   faSpinner,
@@ -33,6 +34,8 @@ const TableOrdersMenu = () => {
     Translator,
     setOrderListItemsNotes,
     setModalSequencialListOpen,
+    showBudget,
+    setShowBudget,
   } = useContext(OrderListContext);
 
   const [confirmClearOrderItems, setConfirmClearOrderItems] = useState(false);
@@ -188,6 +191,17 @@ const TableOrdersMenu = () => {
               {!screenshotMode
                 ? Translator('TAKE_SCREENSHOT')
                 : Translator('TAKING_SCREENSHOT')}
+            </span>
+          </Button>
+
+          <Button
+            variant="secondary"
+            className={`mr-2 ${!showBudget ? 'active' : ''}`}
+            size="sm"
+            onClick={() => setShowBudget(!showBudget)}>
+            <FontAwesomeIcon icon={faCoins} />
+            <span className="ml-1 d-none d-md-inline-block">
+              {Translator('BUDGET')}
             </span>
           </Button>
 

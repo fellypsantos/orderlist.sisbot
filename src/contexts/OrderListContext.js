@@ -247,6 +247,7 @@ const OrderListProvider = ({children}) => {
   });
 
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showBudget, setShowBudget] = useState(true);
 
   // * * * * * * * * * * * * * * * *
   // CONTROL PRICES FOR EACH GENDER
@@ -742,6 +743,8 @@ const OrderListProvider = ({children}) => {
     setOrderListItemsNotes,
     showDashboard,
     setShowDashboard,
+    showBudget,
+    setShowBudget,
     isCycling,
     setIsCycling,
     isSettingsOpen,

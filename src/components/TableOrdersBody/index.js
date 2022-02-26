@@ -19,6 +19,7 @@ const TableOrdersBody = () => {
     setEditMode,
     setModalClothesOpened,
     settings,
+    showBudget,
   } = useContext(OrderListContext);
 
   const [confirmDeleteItem, setConfirmDeleteItem] = useState({});
@@ -141,8 +142,10 @@ const TableOrdersBody = () => {
               ))}
 
               {/* PAYMENT VALUE */}
-              <TableCell>
-                {settings.coinPrefix} {item.payment.value.toFixed(2)}
+              <TableCell style={!showBudget ? {filter: 'blur(4px)'} : {}}>
+                {showBudget
+                  ? `${settings.coinPrefix} ${item.payment.value.toFixed(2)}`
+                  : '***'}
               </TableCell>
 
               {/* EYE ICON */}
@@ -196,7 +199,11 @@ const TableOrdersBody = () => {
             <strong>{Translator('FINAL_VALUE')}</strong>
           </td>
           <td className="text-center">
-            <strong>$ {dashboardData.totalToReceive}</strong>
+            <strong>
+              {showBudget
+                ? `${settings.coinPrefix} ${dashboardData.totalToReceive}`
+                : '***'}
+            </strong>
           </td>
         </tr>
       </tfoot>
