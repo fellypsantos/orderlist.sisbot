@@ -20,6 +20,7 @@ import ReportMenu from '../../components/ReportMenu';
 import {ReportContext} from '../../contexts/ReportContext';
 import Utils from '../../Utils';
 import DateTimePickerCustom from '../../components/DateTimePickerCustom';
+import ThumbPreview from '../../components/ThumbPreview';
 
 const Report = () => {
   const {
@@ -277,7 +278,7 @@ const Report = () => {
   const [scale, setScale] = useState(50);
   const [croppedArea, setCroppedArea] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [finalProcessedImage, setFinalProcessedImage] = useState(null);
+  const [finalProcessedImageList, setFinalProcessedImageList] = useState([]);
   const [imageDimensions, setImageDimensions] = useState(null);
   const [consolidatedCounting, setConsolidatedCounting] = useState(null);
 
@@ -361,6 +362,11 @@ const Report = () => {
   }, []);
 
   const handleApplyCrop = () => {
+    if (selectedImage === null) {
+      handleCloseModal();
+      return;
+    }
+
     const canvas = document.createElement('canvas');
     canvas.width = croppedArea.width / 2;
     canvas.height = croppedArea.height / 2;
@@ -390,7 +396,22 @@ const Report = () => {
         destHeight,
       );
 
-      setFinalProcessedImage(canvas.toDataURL());
+      setFinalProcessedImageList([
+        ...finalProcessedImageList,
+        {
+          image: canvas.toDataURL(),
+          scale: scale,
+        },
+      ]);
+
+      // Clear handle data to process next image
+      setUseCrop(false);
+      setCrop({x: 0, y: 0});
+      setZoom(1);
+      setScale(50);
+      setCroppedArea(null);
+      setSelectedImage(null);
+
       handleCloseModal();
     };
 
@@ -416,6 +437,13 @@ const Report = () => {
   const handleNoCrop = () => {
     if (!useCrop) setZoom(1);
     setUseCrop(!useCrop);
+  };
+
+  const handleDeleteThumbnail = (imageIndex) => {
+    const filtered = finalProcessedImageList.filter(
+      (_, index) => imageIndex !== index,
+    );
+    setFinalProcessedImageList(filtered);
   };
 
   const cropperAspectRatio =
@@ -492,6 +520,19 @@ const Report = () => {
                 disabled={selectedImage === null}
               />
             </Col>
+          </Row>
+
+          {/* SHOW THUMBNAILS WITH DELETE BUTTON */}
+          <Row>
+            {finalProcessedImageList.map((item, index) => (
+              <Col>
+                <ThumbPreview
+                  image={item.image}
+                  index={index}
+                  handleDelete={handleDeleteThumbnail}
+                />
+              </Col>
+            ))}
           </Row>
         </Modal.Body>
         <Modal.Footer>
@@ -1071,18 +1112,17 @@ const Report = () => {
           </Row>
         )}
 
-        {finalProcessedImage && (
-          <Row className="mt-4">
+        {finalProcessedImageList.length > 0 &&
+          finalProcessedImageList.map((item) => (
             <Col xs="12">
               <h5>{Translator('REPORT_LAYOUT_IMAGE')}</h5>
               <img
                 alt={Translator('REPORT_LAYOUT_IMAGE')}
-                src={finalProcessedImage}
-                width={`${scale}%`}
+                src={item.image}
+                width={`${Math.floor(item.scale)}%`}
               />
             </Col>
-          </Row>
-        )}
+          ))}
       </div>
     </div>
   );
