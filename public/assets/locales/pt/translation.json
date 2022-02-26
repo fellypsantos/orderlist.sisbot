@@ -100,6 +100,10 @@
   "ASK_CLIENT_NAME": "Insira seu nome para identificar o arquivo",
   "ASK_NOT_ROBOT": "Confirme que você não é um robô",
   "ASK_CLEAR_ORDERLIST_AFTER_SENT": "Deseja limpar a lista de pedidos do cliente após efetuar envio desta por e-mail?",
+  "ACCEPTANCE_TERM_TITLE": "Termo de Aceite",
+  "ACCEPTANCE_TERM_TEXT": "Mediante autorização desta lista de pedidos, afirmo estar de acordo com a produção e/ou aplicação deste arquivo com as especificações de tamanho e ortografia, isentando de qualquer responsabilidade os envolvidos pela produção do mesmo.",
+  "ACCEPTANCE_CHECKBOX_LABEL": "Eu aceito os termos acima!",
+  "ACCEPTANCE_CHECKBOX_CHECKED": "Excelente, agora você pode enviar a sua lista.",
 
   "SETTINGS_POPUP_TITLE": "Configurações",
   "SETTINGS_COIN_PREFIX": "Prefixo de Moeda",

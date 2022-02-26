@@ -1,7 +1,8 @@
-import React, {useContext, useRef} from 'react';
+import React, {useState, useContext, useRef} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Alert from 'react-bootstrap/Alert';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 
 import {OrderListContext} from '../../contexts/OrderListContext';
@@ -23,6 +24,8 @@ const ModalSendViaEmail = ({
 
   const HCaptchaRef = useRef();
 
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
   const handleResetCaptcha = () => {
     if (HCaptchaRef.current !== undefined && HCaptchaRef.current !== null) {
       HCaptchaRef.current.resetCaptcha();
@@ -35,6 +38,7 @@ const ModalSendViaEmail = ({
   };
 
   const handleBeforeConfirm = () => {
+    if (!termsAccepted) return;
     handleResetCaptcha();
     handleConfirm();
   };
@@ -83,6 +87,27 @@ const ModalSendViaEmail = ({
               }}
             />
           </Form.Group>
+
+          {/* ACCEPT TERMS */}
+          <Alert variant={!termsAccepted ? 'danger' : 'success'}>
+            <Alert.Heading>{Translator('ACCEPTANCE_TERM_TITLE')}</Alert.Heading>
+            <p>{Translator('ACCEPTANCE_TERM_TEXT')}</p>
+            <hr />
+            <Form.Check type="checkbox" id="checkbox-accept-terms">
+              <Form.Check.Input
+                type="checkbox"
+                isValid={termsAccepted}
+                checked={termsAccepted}
+                onChange={() => setTermsAccepted(!termsAccepted)}
+              />
+              <Form.Check.Label>
+                {Translator('ACCEPTANCE_CHECKBOX_LABEL')}
+              </Form.Check.Label>
+              <Form.Control.Feedback type="valid">
+                {Translator('ACCEPTANCE_CHECKBOX_CHECKED')}
+              </Form.Control.Feedback>
+            </Form.Check>
+          </Alert>
         </form>
 
         {/* LOADER */}
@@ -99,7 +124,7 @@ const ModalSendViaEmail = ({
         <Button variant="secondary" onClick={beforeHandleClose}>
           {Translator('CLOSE')}
         </Button>
-        {requestLoading === null && (
+        {requestLoading === null && termsAccepted && (
           <Button variant="primary" onClick={handleBeforeConfirm}>
             {Translator('CONFIRM')}
           </Button>
