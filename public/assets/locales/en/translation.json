@@ -44,6 +44,8 @@
   "REQUEST_DATE": "Request Date",
   "DELIVERY_DATE": "Delivery Date",
   "REPONSIBLE": "Responsable",
+  "PAYMENT_METHOD": "Payment Method",
+  "ORDERLIST_FINAL_VALUE": "Order Final Value",
   "ANNOTATIONS": "Annotations",
 
   "GRAND_TOTAL": "Grand Total",

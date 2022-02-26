@@ -44,6 +44,8 @@
   "REQUEST_DATE": "Fecha de solicitud",
   "DELIVERY_DATE": "Fecha de entrega",
   "REPONSIBLE": "Responsable",
+  "PAYMENT_METHOD": "Método de Pago",
+  "ORDERLIST_FINAL_VALUE": "Valor Final del Pedido",
   "ANNOTATIONS": "Anotaciones",
 
   "GRAND_TOTAL": "Grand Total",

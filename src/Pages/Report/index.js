@@ -255,6 +255,8 @@ const Report = () => {
   const [responsableName, setResponsableName] = useState('');
   const [orderDate, setOrderDate] = useState(moment());
   const [deliveryDate, setDeliveryDate] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [orderFinalValue, setOrderFinalValue] = useState('');
 
   const [sortedOrderList, setSortedOrderList] = useState(
     JSON.parse(JSON.stringify(INITIAL_STATE_SORTED_ORDER_LIST)),
@@ -603,6 +605,48 @@ const Report = () => {
                         .format('LL')
                     : ''
                 }
+              />
+
+              {/* PAYMENT METHOD */}
+              {/* EDITABLE */}
+              <InputGroup className="mb-2 noprint">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    {Translator('PAYMENT_METHOD')}
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={paymentMethod}
+                  onChange={({target}) => setPaymentMethod(target.value)}
+                />
+              </InputGroup>
+
+              {/* PRINTABLE */}
+              <PenField
+                printOnly
+                label={Translator('PAYMENT_METHOD')}
+                value={paymentMethod}
+              />
+
+              {/* PAYMENT METHOD */}
+              {/* EDITABLE */}
+              <InputGroup className="mb-2 noprint">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    {Translator('ORDERLIST_FINAL_VALUE')}
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={orderFinalValue}
+                  onChange={({target}) => setOrderFinalValue(target.value)}
+                />
+              </InputGroup>
+
+              {/* PRINTABLE */}
+              <PenField
+                printOnly
+                label={Translator('ORDERLIST_FINAL_VALUE')}
+                value={orderFinalValue}
               />
             </Col>
           </Row>
