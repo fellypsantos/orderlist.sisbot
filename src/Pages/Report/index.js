@@ -103,6 +103,17 @@ const Report = () => {
         'T-3XG': 0,
         'T-4XG': 0,
       },
+      socks: {
+        'T-PP': 0,
+        'T-P': 0,
+        'T-M': 0,
+        'T-G': 0,
+        'T-XG': 0,
+        'T-GG': 0,
+        'T-2XG': 0,
+        'T-3XG': 0,
+        'T-4XG': 0,
+      },
     },
     female: {
       tshirt: {
@@ -171,6 +182,17 @@ const Report = () => {
         'T-3XG': 0,
         'T-4XG': 0,
       },
+      socks: {
+        'T-PP': 0,
+        'T-P': 0,
+        'T-M': 0,
+        'T-G': 0,
+        'T-XG': 0,
+        'T-GG': 0,
+        'T-2XG': 0,
+        'T-3XG': 0,
+        'T-4XG': 0,
+      },
     },
     childish: {
       tshirt: {
@@ -224,6 +246,16 @@ const Report = () => {
         'T-16A': 0,
       },
       vest: {
+        'T-2A': 0,
+        'T-4A': 0,
+        'T-6A': 0,
+        'T-8A': 0,
+        'T-10A': 0,
+        'T-12A': 0,
+        'T-14A': 0,
+        'T-16A': 0,
+      },
+      socks: {
         'T-2A': 0,
         'T-4A': 0,
         'T-6A': 0,

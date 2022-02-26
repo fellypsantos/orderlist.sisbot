@@ -29,6 +29,7 @@
   "CSVID_PANTS": "pantalones",
   "CSVID_TANKTOP": "camiseta_sin_mangas",
   "CSVID_VEST": "chaleco",
+  "CSVID_SOCKS": "medias",
 
   "MAIN_TITLE": "Lista de orden",
   "CONTAINS_N_UNITS": "Total de Piezas:",

@@ -62,6 +62,7 @@ const BussinessPricing = () => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   const [priceTableFemale, setPriceTableFemale] = useState({
@@ -71,6 +72,7 @@ const BussinessPricing = () => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   const [priceTableChildish, setPriceTableChildish] = useState({
@@ -80,6 +82,7 @@ const BussinessPricing = () => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   const {addToast} = useToasts();

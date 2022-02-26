@@ -36,6 +36,7 @@ export default function ModalSequencialList({isOpen = false}) {
     false,
     false,
     false,
+    false,
   ]);
 
   const clothingNames = [
@@ -45,6 +46,7 @@ export default function ModalSequencialList({isOpen = false}) {
     'pants',
     'tanktop',
     'vest',
+    'socks',
   ];
 
   const [clothingSizesDropDown, setClothingSizesDropDown] = useState([]);

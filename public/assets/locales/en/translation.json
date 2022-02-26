@@ -29,6 +29,7 @@
   "CSVID_PANTS": "pants",
   "CSVID_TANKTOP": "tanktop",
   "CSVID_VEST": "vest",
+  "CSVID_SOCKS": "socks",
 
   "MAIN_TITLE": "Order List",
   "CONTAINS_N_UNITS": "Total of Pieces:",

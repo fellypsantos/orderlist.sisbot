@@ -46,6 +46,7 @@ const initialTempOrderItem = {
     {id: 4, name: 'pantsCycling', size: '', gender: '', quantity: 0},
     {id: 5, name: 'tanktop', size: '', gender: '', quantity: 0},
     {id: 6, name: 'vest', size: '', gender: '', quantity: 0},
+    {id: 7, name: 'socks', size: '', gender: '', quantity: 0},
   ],
 };
 
@@ -99,6 +100,7 @@ const OrderListProvider = ({children}) => {
     tanktop: {id: 5, icon: ClothingIconsList.tanktop},
 
     vest: {id: 6, icon: ClothingIconsList.vest},
+    socks: {id: 7, icon: ClothingIconsList.socks},
   });
 
   const [clothingSizes] = useState([
@@ -265,6 +267,7 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   const [priceTableFemale] = useState({
@@ -274,6 +277,7 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   const [priceTableChildish] = useState({
@@ -283,6 +287,7 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   // HELPER FUNCTIONS TO UPDATE DASHBOARD
@@ -676,6 +681,7 @@ const OrderListProvider = ({children}) => {
         pants: JSON.parse(JSON.stringify(defaultArraySample)),
         tanktop: JSON.parse(JSON.stringify(defaultArraySample)),
         vest: JSON.parse(JSON.stringify(defaultArraySample)),
+        socks: JSON.parse(JSON.stringify(defaultArraySample)),
       };
 
       // LOOP THROUGH EACH CLOTHE

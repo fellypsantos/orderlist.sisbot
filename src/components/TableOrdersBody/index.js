@@ -195,7 +195,7 @@ const TableOrdersBody = () => {
         <ButtonDeleteSelectedItems />
 
         <tr className={!screenshotMode ? 'd-none' : ''}>
-          <td colSpan={9} className="text-right">
+          <td colSpan={10} className="text-right">
             <strong>{Translator('FINAL_VALUE')}</strong>
           </td>
           <td className="text-center">

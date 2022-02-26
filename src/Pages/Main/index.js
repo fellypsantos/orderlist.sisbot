@@ -132,6 +132,7 @@ const Main = () => {
       PANTS: 'CSVID_PANTS',
       TANKTOP: 'CSVID_TANKTOP',
       VEST: 'CSVID_VEST',
+      SOCKS: 'CSVID_SOCKS',
     };
 
     let csvFullData = [];
@@ -180,6 +181,7 @@ const Main = () => {
       csvHeader.push(Translator('CSVID_PANTS'));
       csvHeader.push(Translator('CSVID_TANKTOP'));
       csvHeader.push(Translator('CSVID_VEST'));
+      csvHeader.push(Translator('CSVID_SOCKS'));
 
       // ADD CSV HEADER
       csvFullData.unshift(csvHeader.join(','));

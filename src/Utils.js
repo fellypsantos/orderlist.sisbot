@@ -72,7 +72,7 @@ export default {
       return columnCount;
     }
 
-    return 13; // default
+    return 14; // default
   },
 
   Sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
@@ -134,6 +134,7 @@ export default {
       pants: 0,
       tanktop: 0,
       vest: 0,
+      socks: 0,
     };
 
     orderListItems.map((orderItem) => {
