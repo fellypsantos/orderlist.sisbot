@@ -62,7 +62,6 @@ const BussinessPricing = () => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   const [priceTableFemale, setPriceTableFemale] = useState({
@@ -72,7 +71,6 @@ const BussinessPricing = () => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
   });
 
   const [priceTableChildish, setPriceTableChildish] = useState({
@@ -82,7 +80,10 @@ const BussinessPricing = () => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0],
-    socks: [0, 0, 0, 0, 0, 0, 0, 0],
+  });
+
+  const [priceTableUnique, setPriceTableUnique] = useState({
+    socks: [0],
   });
 
   const {addToast} = useToasts();
@@ -96,6 +97,7 @@ const BussinessPricing = () => {
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        priceTableUnique,
       }),
     );
 
@@ -113,7 +115,8 @@ const BussinessPricing = () => {
       object.projectName !== undefined &&
       object.priceTableMale !== undefined &&
       object.priceTableFemale !== undefined &&
-      object.priceTableChildish !== undefined
+      object.priceTableChildish !== undefined &&
+      object.priceTableUnique !== undefined
     ) {
       return true;
     }
@@ -130,6 +133,7 @@ const BussinessPricing = () => {
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        priceTableUnique,
         settings: {
           ...settings,
           filterEnabled: shouldFilter,
@@ -159,6 +163,7 @@ const BussinessPricing = () => {
             setPriceTableMale(uploaded.priceTableMale);
             setPriceTableFemale(uploaded.priceTableFemale);
             setPriceTableChildish(uploaded.priceTableChildish);
+            setPriceTableUnique(uploaded.priceTableUnique);
 
             setSettings({
               ...uploaded.settings,
@@ -235,6 +240,11 @@ const BussinessPricing = () => {
       if (hash(priceTableChildish) !== hash(data.priceTableChildish)) {
         setPriceTableChildish(data.priceTableChildish);
       }
+
+      // RESTORE UNIQUE PRICES
+      if (hash(priceTableUnique) !== hash(data.priceTableUnique)) {
+        setPriceTableUnique(data.priceTableUnique);
+      }
     } else {
       // DEFAULT DATA
       saveToLocalStorage();
@@ -252,6 +262,7 @@ const BussinessPricing = () => {
       priceTableMale,
       priceTableFemale,
       priceTableChildish,
+      priceTableUnique,
     });
 
     // FORCE RE-RENDER TABLE TO UPDATE TOTAL PRICE OF EACH ROW
@@ -262,6 +273,7 @@ const BussinessPricing = () => {
     priceTableMale,
     priceTableFemale,
     priceTableChildish,
+    priceTableUnique,
   ]);
 
   const handleUpdatePriceTable = (
@@ -283,6 +295,7 @@ const BussinessPricing = () => {
         selectedPriceTable = priceTableChildish;
         break;
       default:
+        selectedPriceTable = priceTableUnique;
     }
 
     const updated = selectedPriceTable[theClotheName].map((item, index) => {
@@ -320,6 +333,10 @@ const BussinessPricing = () => {
         });
         break;
       default:
+        setPriceTableUnique({
+          ...selectedPriceTable,
+          [theClotheName]: [...updated],
+        });
     }
 
     setCurrentClothingPrices({
@@ -327,6 +344,7 @@ const BussinessPricing = () => {
       priceTableMale,
       priceTableFemale,
       priceTableChildish,
+      priceTableUnique,
     });
   };
 
@@ -338,6 +356,7 @@ const BussinessPricing = () => {
         setPriceTableMale(uploaded.priceTableMale);
         setPriceTableFemale(uploaded.priceTableFemale);
         setPriceTableChildish(uploaded.priceTableChildish);
+        setPriceTableUnique(uploaded.priceTableUnique);
         setSettings(uploaded.settings);
         setShouldFilter(uploaded.settings.filterEnabled);
 
@@ -356,6 +375,7 @@ const BussinessPricing = () => {
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        priceTableUnique,
         settings: {
           ...settings,
           filterEnabled: shouldFilter,
@@ -500,6 +520,8 @@ const BussinessPricing = () => {
               {/* DRAW ROWS */}
               {Object.keys(clothingIcons)
                 .filter((key) => {
+                  if (key === 'socks') return false;
+
                   // Always return no variant clothes
                   if (clothingIcons[key].isCycling === undefined) return true;
 
@@ -563,6 +585,8 @@ const BussinessPricing = () => {
               {/* DRAW ROWS */}
               {Object.keys(clothingIcons)
                 .filter((key) => {
+                  if (key === 'socks') return false;
+
                   // Always return no variant clothes
                   if (clothingIcons[key].isCycling === undefined) return true;
 
@@ -626,6 +650,8 @@ const BussinessPricing = () => {
               {/* DRAW ROWS */}
               {Object.keys(clothingIcons)
                 .filter((key) => {
+                  if (key === 'socks') return false;
+
                   // Always return no variant clothes
                   if (clothingIcons[key].isCycling === undefined) return true;
 
@@ -673,6 +699,32 @@ const BussinessPricing = () => {
           </Table>
         </Tab>
       </Tabs>
+
+      {/* TABLE FOR SOCKS */}
+      <h5>{Translator('T-UNIQ-FULL')}</h5>
+      <Table bordered hover>
+        <tbody>
+          {Object.keys(priceTableUnique).map((item) => (
+            <tr key={item}>
+              <td style={{width: '50px'}}>
+                <img src={clothingIcons.socks.icon} alt="icon" height={25} />
+              </td>
+              <td>
+                <TableCellAsInput
+                  value={
+                    priceTableUnique.socks[0] > 0
+                      ? priceTableUnique.socks[0]
+                      : ''
+                  }
+                  handleBlur={({target}) => {
+                    handleUpdatePriceTable('', 'socks', target.value, 0);
+                  }}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
 
       {/* POPUP TO CONFIRM CLEAR ORDER LIST FROM CLIENT AFTER SENT */}
       <ModalConfirmDialog

@@ -267,7 +267,7 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0],
   });
 
   const [priceTableFemale] = useState({
@@ -277,7 +277,7 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0],
   });
 
   const [priceTableChildish] = useState({
@@ -287,7 +287,11 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    socks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0],
+  });
+
+  const [priceTableUnique] = useState({
+    socks: [0],
   });
 
   // HELPER FUNCTIONS TO UPDATE DASHBOARD
@@ -419,6 +423,7 @@ const OrderListProvider = ({children}) => {
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        priceTableUnique,
       };
 
       // SET LOCALSTORAGE

@@ -104,17 +104,6 @@ const Report = () => {
         'T-3XG': 0,
         'T-4XG': 0,
       },
-      socks: {
-        'T-PP': 0,
-        'T-P': 0,
-        'T-M': 0,
-        'T-G': 0,
-        'T-XG': 0,
-        'T-GG': 0,
-        'T-2XG': 0,
-        'T-3XG': 0,
-        'T-4XG': 0,
-      },
     },
     female: {
       tshirt: {
@@ -183,17 +172,6 @@ const Report = () => {
         'T-3XG': 0,
         'T-4XG': 0,
       },
-      socks: {
-        'T-PP': 0,
-        'T-P': 0,
-        'T-M': 0,
-        'T-G': 0,
-        'T-XG': 0,
-        'T-GG': 0,
-        'T-2XG': 0,
-        'T-3XG': 0,
-        'T-4XG': 0,
-      },
     },
     childish: {
       tshirt: {
@@ -247,16 +225,6 @@ const Report = () => {
         'T-16A': 0,
       },
       vest: {
-        'T-2A': 0,
-        'T-4A': 0,
-        'T-6A': 0,
-        'T-8A': 0,
-        'T-10A': 0,
-        'T-12A': 0,
-        'T-14A': 0,
-        'T-16A': 0,
-      },
-      socks: {
         'T-2A': 0,
         'T-4A': 0,
         'T-6A': 0,
@@ -333,7 +301,11 @@ const Report = () => {
     // PROCESS THE CLOTHES
     orderListItems.map((orderItem) => {
       orderItem.clothingSettings.map((theClothe) => {
-        if (theClothe.quantity > 0 && theClothe.size !== '') {
+        if (
+          theClothe.quantity > 0 &&
+          theClothe.size !== '' &&
+          theClothe.name !== 'socks'
+        ) {
           const tempGender = theClothe.gender.toLowerCase();
           const clotheName = theClothe.name.replace('Cycling', '');
           const clotheSize = theClothe.size;
@@ -734,6 +706,8 @@ const Report = () => {
                     <th>-</th>
                     {Object.keys(clothingIcons)
                       .filter((key) => {
+                        if (key === 'socks') return false;
+
                         // Always return no variant clothes
                         if (clothingIcons[key].isCycling === undefined) {
                           return true;
@@ -794,6 +768,8 @@ const Report = () => {
                         {/* RENDER COLUMNS */}
                         {Object.keys(clothingIcons)
                           .filter((key) => {
+                            if (key === 'socks') return false;
+
                             // Always return no variant clothes
                             if (clothingIcons[key].isCycling === undefined) {
                               return true;
@@ -842,6 +818,8 @@ const Report = () => {
                     <th>-</th>
                     {Object.keys(clothingIcons)
                       .filter((key) => {
+                        if (key === 'socks') return false;
+
                         // Always return no variant clothes
                         if (clothingIcons[key].isCycling === undefined) {
                           return true;
@@ -899,6 +877,8 @@ const Report = () => {
                         <td>{Translator(size.value)}</td>
                         {Object.keys(clothingIcons)
                           .filter((key) => {
+                            if (key === 'socks') return false;
+
                             // Always return no variant clothes
                             if (clothingIcons[key].isCycling === undefined) {
                               return true;
@@ -951,6 +931,8 @@ const Report = () => {
                     <th>-</th>
                     {Object.keys(clothingIcons)
                       .filter((key) => {
+                        if (key === 'socks') return false;
+
                         // Always return no variant clothes
                         if (clothingIcons[key].isCycling === undefined) {
                           return true;
@@ -1006,6 +988,8 @@ const Report = () => {
                       <td>{Translator(size.value)}</td>
                       {Object.keys(clothingIcons)
                         .filter((key) => {
+                          if (key === 'socks') return false;
+
                           // Always return no variant clothes
                           if (clothingIcons[key].isCycling === undefined) {
                             return true;

@@ -201,7 +201,9 @@ const TableOrdersMenu = () => {
             onClick={() => setShowBudget(!showBudget)}>
             <FontAwesomeIcon icon={faCoins} />
             <span className="ml-1 d-none d-md-inline-block">
-              {Translator('BUDGET')}
+              {!showBudget
+                ? Translator('DASHBOARD_BUTTON_SHOW')
+                : Translator('HIDE')}
             </span>
           </Button>
 

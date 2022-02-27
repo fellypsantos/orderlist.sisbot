@@ -20,6 +20,8 @@
   "T-12A": "12 años",
   "T-14A": "14 años",
   "T-16A": "16 años",
+  "T-UNIQ": "Tam.Uni",
+  "T-UNIQ-FULL": "Tamaño único",
   "CSVID_GENDER": "género",
   "CSVID_NAME": "nombre",
   "CSVID_NUMBER": "número",

@@ -57,6 +57,9 @@ const ModalChooseClothes = () => {
     newQuantity,
     clotheIndex,
   ) => {
+    // CHECK IF SELECTED SOCKS -> HAVE NO SIZE VARIATION (ISSO CAGOU A PARADA TODA)
+    if (clotheIndex === 7) newSize = 'T-UNIQ';
+
     const targetClothingSettings = editMode.enabled
       ? editMode.orderItem.clothingSettings
       : tempOrderItem.clothingSettings;
@@ -463,21 +466,33 @@ const ModalChooseClothes = () => {
 
                   {/* SIZE */}
                   <Col xs={5}>
-                    <CustomSelectClothingSize
-                      handleChangeClotingSettings={handleChangeClotingSettings}
-                      handleClearClothingSettings={handleClearClothingSettings}
-                      bgColor={csGetSizeByID(clothingIcons[key].id, key, true)}
-                      value={csGetSizeByID(
-                        clothingIcons[key].id,
-                        safeClotheName,
-                      )}
-                      safeClotheName={safeClotheName}
-                      previewsQuantity={csGetQuantityByID(
-                        clothingIcons[key].id,
-                        getTargetOrderItemToManipulate(),
-                      )}
-                      theClothingIndex={clothingIcons[key].id}
-                    />
+                    {key !== 'socks' ? (
+                      <CustomSelectClothingSize
+                        handleChangeClotingSettings={
+                          handleChangeClotingSettings
+                        }
+                        handleClearClothingSettings={
+                          handleClearClothingSettings
+                        }
+                        bgColor={csGetSizeByID(
+                          clothingIcons[key].id,
+                          key,
+                          true,
+                        )}
+                        value={csGetSizeByID(
+                          clothingIcons[key].id,
+                          safeClotheName,
+                        )}
+                        safeClotheName={safeClotheName}
+                        previewsQuantity={csGetQuantityByID(
+                          clothingIcons[key].id,
+                          getTargetOrderItemToManipulate(),
+                        )}
+                        theClothingIndex={clothingIcons[key].id}
+                      />
+                    ) : (
+                      Translator('T-UNIQ-FULL')
+                    )}
                     {/* END SELECT */}
                   </Col>
 
