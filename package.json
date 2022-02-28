@@ -24,6 +24,7 @@
     "moment": "^2.29.1",
     "object-hash": "^2.2.0",
     "react": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
     "react-bootstrap": "^1.6.4",
     "react-bootstrap-range-slider": "^3.0.2",
     "react-copy-to-clipboard": "^5.0.4",

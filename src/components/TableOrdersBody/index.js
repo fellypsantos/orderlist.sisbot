@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit, faEye, faTrash} from '@fortawesome/free-solid-svg-icons';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {TableCell, TableRow} from './styles';
 import {OrderListContext} from '../../contexts/OrderListContext';
 import ModalConfirmDialog from '../ModalConfirmDialog';
@@ -95,6 +96,23 @@ const TableOrdersBody = () => {
 
   const getCustomTShirtName = (gender) => (gender === 'FEMALE' ? '-BL' : '');
 
+  const handleOnDragEnd = ({source, destination}) => {
+    const sourceIndex = source.index;
+    const destinationIndex = destination.index;
+
+    if (sourceIndex === destinationIndex) return;
+
+    const listToHandle = [...orderListItems];
+    const sourceItem = listToHandle[sourceIndex];
+    const destinationItem = listToHandle[destinationIndex];
+
+    // replace element positions
+    listToHandle[destinationIndex] = sourceItem;
+    listToHandle[sourceIndex] = destinationItem;
+
+    setOrderListItems(listToHandle); // update context
+  };
+
   return (
     <>
       {/* CONFIRM DELETE ITEM FROM LIST */}
@@ -106,90 +124,117 @@ const TableOrdersBody = () => {
         handleClose={handleCloseDeleteDialog}
       />
 
-      <tbody id="tableOrderListItems">
-        {orderListItems.length > 0 ? (
-          // RENDER ALL ITES
-          orderListItems.map((item) => (
-            <TableRow key={item.id} className={item.payment.paid && 'paid'}>
-              {/* PAID */}
-              <TableCell>
-                <input
-                  type="checkbox"
-                  checked={item.payment.paid}
-                  onChange={(e) => handleChange(e, item.id)}
-                />
-              </TableCell>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="droppable-1">
+          {(provided) => (
+            <tbody
+              id="tableOrderListItems"
+              ref={provided.innerRef}
+              {...provided.droppableProps}>
+              {orderListItems.length > 0 ? (
+                // RENDER ALL ITES
+                orderListItems.map((item, index) => (
+                  <Draggable
+                    draggableId={`${item.id}`}
+                    index={index}
+                    key={item.id}>
+                    {(draggableProvided, snapshot) => (
+                      <TableRow
+                        isDragging={snapshot.isDragging}
+                        key={item.id}
+                        className={item.payment.paid && 'paid'}
+                        ref={draggableProvided.innerRef}
+                        {...draggableProvided.draggableProps}
+                        {...draggableProvided.dragHandleProps}>
+                        {/* PAID */}
+                        <TableCell>
+                          <input
+                            type="checkbox"
+                            checked={item.payment.paid}
+                            onChange={(e) => handleChange(e, item.id)}
+                          />
+                        </TableCell>
 
-              {/* NAME */}
-              <TableCell className="text-left">{item.name}</TableCell>
+                        {/* NAME */}
+                        <TableCell className="text-left">{item.name}</TableCell>
 
-              {/* NUMBER */}
-              <TableCell>{item.number}</TableCell>
+                        {/* NUMBER */}
+                        <TableCell>{item.number}</TableCell>
 
-              {/* CLOTHES COLUMNS */}
-              {item.clothingSettings.map((clothe) => (
-                <TableCell
-                  key={clothe.id}
-                  className={`${
-                    !screenshotMode ? 'd-none d-md-table-cell' : ''
-                  }`}>
-                  {isEmptyClothe(clothe)
-                    ? '-'
-                    : `${clothe.quantity}${getCustomTShirtName(
-                        clothe.gender,
-                      )}-${Translator(clothe.size)}`}
-                </TableCell>
-              ))}
+                        {/* CLOTHES COLUMNS */}
+                        {item.clothingSettings.map((clothe) => (
+                          <TableCell
+                            key={clothe.id}
+                            className={`${
+                              !screenshotMode ? 'd-none d-md-table-cell' : ''
+                            }`}>
+                            {isEmptyClothe(clothe)
+                              ? '-'
+                              : `${clothe.quantity}${getCustomTShirtName(
+                                  clothe.gender,
+                                )}-${Translator(clothe.size)}`}
+                          </TableCell>
+                        ))}
 
-              {/* PAYMENT VALUE */}
-              <TableCell style={!showBudget ? {filter: 'blur(4px)'} : {}}>
-                {showBudget
-                  ? `${settings.coinPrefix} ${item.payment.value.toFixed(2)}`
-                  : '***'}
-              </TableCell>
+                        {/* PAYMENT VALUE */}
+                        <TableCell
+                          style={!showBudget ? {filter: 'blur(4px)'} : {}}>
+                          {showBudget
+                            ? `${
+                                settings.coinPrefix
+                              } ${item.payment.value.toFixed(2)}`
+                            : '***'}
+                        </TableCell>
 
-              {/* EYE ICON */}
-              <TableCell className="d-table-cell d-md-none">
-                <Clickable handleClick={() => handleEdit(item)}>
-                  <FontAwesomeIcon icon={faEye} />
-                </Clickable>
-              </TableCell>
+                        {/* EYE ICON */}
+                        <TableCell className="d-table-cell d-md-none">
+                          <Clickable handleClick={() => handleEdit(item)}>
+                            <FontAwesomeIcon icon={faEye} />
+                          </Clickable>
+                        </TableCell>
 
-              {/* EDIT ICON */}
-              <TableCell
-                className={
-                  screenshotMode ? 'd-none' : 'd-none d-md-table-cell'
-                }>
-                <Clickable handleClick={() => handleEdit(item)}>
-                  <FontAwesomeIcon icon={faEdit} />
-                </Clickable>
-              </TableCell>
+                        {/* EDIT ICON */}
+                        <TableCell
+                          className={
+                            screenshotMode ? 'd-none' : 'd-none d-md-table-cell'
+                          }>
+                          <Clickable handleClick={() => handleEdit(item)}>
+                            <FontAwesomeIcon icon={faEdit} />
+                          </Clickable>
+                        </TableCell>
 
-              {/* TRASH ICON */}
-              <TableCell
-                className={
-                  screenshotMode ? 'd-none' : 'd-none d-md-table-cell'
-                }>
-                <Clickable
-                  handleClick={() => handleDelete(item.id)}
-                  className="color-flat-red">
-                  <FontAwesomeIcon icon={faTrash} />
-                </Clickable>
-              </TableCell>
-            </TableRow>
-          ))
-        ) : (
-          // EMPTY LIST
-          <TableRow>
-            <TableCell
-              colSpan={Utils.GetTotalColumnsTableOrderListItems(
-                document.getElementById('tableOrderListItems'),
-              )}>
-              {Translator('LIST_EMPTY')}
-            </TableCell>
-          </TableRow>
-        )}
-      </tbody>
+                        {/* TRASH ICON */}
+                        <TableCell
+                          className={
+                            screenshotMode ? 'd-none' : 'd-none d-md-table-cell'
+                          }>
+                          <Clickable
+                            handleClick={() => handleDelete(item.id)}
+                            className="color-flat-red">
+                            <FontAwesomeIcon icon={faTrash} />
+                          </Clickable>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </Draggable>
+                ))
+              ) : (
+                // EMPTY LIST
+                <TableRow>
+                  <TableCell
+                    colSpan={Utils.GetTotalColumnsTableOrderListItems(
+                      document.getElementById('tableOrderListItems'),
+                    )}>
+                    {Translator('LIST_EMPTY')}
+                  </TableCell>
+                </TableRow>
+              )}
+
+              {provided.placeholder}
+            </tbody>
+          )}
+        </Droppable>
+      </DragDropContext>
 
       <tfoot>
         <ButtonDeleteSelectedItems />
