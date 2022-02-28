@@ -46,6 +46,7 @@ const initialTempOrderItem = {
     {id: 4, name: 'pantsCycling', size: '', gender: '', quantity: 0},
     {id: 5, name: 'tanktop', size: '', gender: '', quantity: 0},
     {id: 6, name: 'vest', size: '', gender: '', quantity: 0},
+    {id: 7, name: 'socks', size: '', gender: '', quantity: 0},
   ],
 };
 
@@ -99,6 +100,7 @@ const OrderListProvider = ({children}) => {
     tanktop: {id: 5, icon: ClothingIconsList.tanktop},
 
     vest: {id: 6, icon: ClothingIconsList.vest},
+    socks: {id: 7, icon: ClothingIconsList.socks},
   });
 
   const [clothingSizes] = useState([
@@ -228,9 +230,13 @@ const OrderListProvider = ({children}) => {
 
   const [listName, setListName] = useState('');
 
+  const [companyName, setCompanyName] = useState('');
+
   const [companyEmail, setCompanyEmail] = useState('');
 
   const [orderListItemsNotes, setOrderListItemsNotes] = useState('');
+
+  const [orderListClientNotes, setOrderListClientNotes] = useState('');
 
   const [lastChangeI18Next, setLastChangeI18Next] = useState(null);
 
@@ -261,6 +267,7 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0],
   });
 
   const [priceTableFemale] = useState({
@@ -270,6 +277,7 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0],
   });
 
   const [priceTableChildish] = useState({
@@ -279,6 +287,11 @@ const OrderListProvider = ({children}) => {
     pants: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     tanktop: [0, 0, 0, 0, 0, 0, 0, 0, 0],
     vest: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    socks: [0],
+  });
+
+  const [priceTableUnique] = useState({
+    socks: [0],
   });
 
   // HELPER FUNCTIONS TO UPDATE DASHBOARD
@@ -341,7 +354,11 @@ const OrderListProvider = ({children}) => {
 
       // RESTORE NOTES
       setOrderListItemsNotes(data.orderListItemsNotes);
-      console.log('✅ Loaded order list notes.');
+      console.log('✅ Loaded order list company notes.');
+
+      // RESTORE CLIENT NOTES
+      setOrderListClientNotes(data.orderListClientNotes);
+      console.log('✅ Loaded order list client notes.');
 
       // RESTORE CYCLING FLAG
       setIsCycling(data.isCycling);
@@ -353,6 +370,7 @@ const OrderListProvider = ({children}) => {
         JSON.stringify({
           listName: '',
           orderListItemsNotes,
+          orderListClientNotes,
           orderListItems: [],
           isCycling: false,
         }),
@@ -369,6 +387,9 @@ const OrderListProvider = ({children}) => {
     const clsData = localStorage.getItem('sisbot');
     const clsSettings = localStorage.getItem('sisbot.settings');
     const clsBussinessPrices = localStorage.getItem('sisbot.bussiness.prices');
+    const clsCompanyInformation = localStorage.getItem(
+      'sisbot.bussiness.company',
+    );
 
     // LOAD ENVIROMENT SETTINGS
     if (clsSettings !== null) {
@@ -399,10 +420,10 @@ const OrderListProvider = ({children}) => {
       // DEFAULT DATA
       const defaultData = {
         projectName: projectName,
-        companyEmail,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        priceTableUnique,
       };
 
       // SET LOCALSTORAGE
@@ -414,6 +435,25 @@ const OrderListProvider = ({children}) => {
       // SET STATE
       setCurrentClothingPrices(defaultData);
       console.log('💙 Pricing tables set to default.');
+    }
+
+    // LOAD COMPANY DATA
+    if (clsCompanyInformation !== null) {
+      // LOAD ME
+      const data = JSON.parse(clsCompanyInformation);
+      setCompanyName(data.companyName);
+      setCompanyEmail(data.companyEmail);
+    } else {
+      // SET DEFAULT (FIRST LOAD)
+      const defaultData = {
+        companyName,
+        companyEmail,
+      };
+
+      localStorage.setItem(
+        'sisbot.bussiness.company',
+        JSON.stringify(defaultData),
+      );
     }
 
     // LOAD LIST DATA AND NOTES
@@ -486,10 +526,11 @@ const OrderListProvider = ({children}) => {
         listName,
         orderListItems,
         orderListItemsNotes,
+        orderListClientNotes,
         isCycling,
       }),
     );
-  }, [listName, orderListItemsNotes, isCycling]);
+  }, [listName, orderListItemsNotes, orderListClientNotes, isCycling]);
 
   useEffect(() => {
     if (orderListItems.length === 0) return false;
@@ -573,6 +614,16 @@ const OrderListProvider = ({children}) => {
   }, [settings, shouldFilter, showDashboard]);
 
   useEffect(() => {
+    localStorage.setItem(
+      'sisbot.bussiness.company',
+      JSON.stringify({
+        companyName,
+        companyEmail,
+      }),
+    );
+  }, [companyName]);
+
+  useEffect(() => {
     if (currentClothingPrices === null) return false; // PREVENT ERROR
     // RUN FILTER WITH SETTINGS WINDOW IS CLOSING
     if (!modalClothesOpened && isSettingsOpen) return false;
@@ -635,6 +686,7 @@ const OrderListProvider = ({children}) => {
         pants: JSON.parse(JSON.stringify(defaultArraySample)),
         tanktop: JSON.parse(JSON.stringify(defaultArraySample)),
         vest: JSON.parse(JSON.stringify(defaultArraySample)),
+        socks: JSON.parse(JSON.stringify(defaultArraySample)),
       };
 
       // LOOP THROUGH EACH CLOTHE
@@ -741,6 +793,8 @@ const OrderListProvider = ({children}) => {
     setEditMode,
     orderListItemsNotes,
     setOrderListItemsNotes,
+    orderListClientNotes,
+    setOrderListClientNotes,
     showDashboard,
     setShowDashboard,
     showBudget,
@@ -757,6 +811,8 @@ const OrderListProvider = ({children}) => {
     setShouldFilter,
     listName,
     setListName,
+    companyName,
+    setCompanyName,
     companyEmail,
     setCompanyEmail,
   };

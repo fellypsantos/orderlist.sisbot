@@ -6,6 +6,8 @@ import {
   faEyeSlash,
   faDownload,
   faEnvelope,
+  faPen,
+  faCommentAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -39,6 +41,8 @@ const Main = () => {
     orderListItems,
     setOrderListItems,
     setOrderListItemsNotes,
+    orderListClientNotes,
+    setOrderListClientNotes,
     listName,
     setListName,
     companyEmail,
@@ -59,6 +63,7 @@ const Main = () => {
   const [clientName, setClientName] = useState('');
   const [targetEmail, setTargetEmail] = useState(companyEmail);
   const [showModalSendMail, setShowModalSendMail] = useState(false);
+  const [showModalAnnotations, setShowModalAnnotations] = useState(false);
 
   const handleCLoseModalTextInput = () => {
     setZIPFileName('');
@@ -127,6 +132,7 @@ const Main = () => {
       PANTS: 'CSVID_PANTS',
       TANKTOP: 'CSVID_TANKTOP',
       VEST: 'CSVID_VEST',
+      SOCKS: 'CSVID_SOCKS',
     };
 
     let csvFullData = [];
@@ -175,10 +181,18 @@ const Main = () => {
       csvHeader.push(Translator('CSVID_PANTS'));
       csvHeader.push(Translator('CSVID_TANKTOP'));
       csvHeader.push(Translator('CSVID_VEST'));
+      csvHeader.push(Translator('CSVID_SOCKS'));
 
       // ADD CSV HEADER
       csvFullData.unshift(csvHeader.join(','));
     };
+
+    /**
+     * GENERATE ANNOTATIONS FILE IF USER TYPED SOMETING
+     */
+    if (orderListClientNotes.length > 0) {
+      zip.file(`${Translator('ANNOTATIONS')}.txt`, orderListClientNotes);
+    }
 
     /**
      *  GENERATE SINGLE CSV FILE
@@ -423,6 +437,21 @@ const Main = () => {
     </Button>
   );
 
+  const WriteClientNotes = () => (
+    <Button
+      variant="secondary"
+      className="mr-2"
+      size="sm"
+      onClick={() => setShowModalAnnotations(true)}>
+      <FontAwesomeIcon
+        icon={orderListClientNotes.length === 0 ? faPen : faCommentAlt}
+      />
+      <span className="ml-1 d-none d-md-inline-block">
+        {Translator('ANNOTATIONS')}
+      </span>
+    </Button>
+  );
+
   return (
     <>
       <FormAddOrderItem />
@@ -433,8 +462,8 @@ const Main = () => {
           {/* DASHBOARD BUTTONS */}
           <Col className="text-right mb-4">
             <DropDownButtonToDownload />
-
             <SendEmailButton />
+            <WriteClientNotes />
 
             <Button
               className="mr-2"
@@ -503,12 +532,26 @@ const Main = () => {
       {/* GENERATE SEQUENCIAL LIST */}
       <ModalSequencialList isOpen={modalSequencialListOpen} />
 
+      {/* CLENT ANNOTATIONS TO SEND IN ZIP */}
+      <ModalTextInput
+        isOpen={showModalAnnotations}
+        useTextarea
+        title={Translator('ANNOTATIONS')}
+        inputTextContent={orderListClientNotes}
+        labelContent={Translator('ANNOTATIONS_CLIENT_LABEL')}
+        placeholderContent={Translator('ANNOTATIONS')}
+        handleChange={(e) => setOrderListClientNotes(e.target.value)}
+        handleConfirm={() => setShowModalAnnotations(false)}
+        handleClose={() => setShowModalAnnotations(false)}
+      />
+
       {/* MAIN TABLE SHOWN ORDERS */}
       <TableOrderList />
 
       {/* NEW POSITION FOR MAIN BUTTONS */}
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
+          <WriteClientNotes />
           <DropDownButtonToDownload />
           <SendEmailButton />
         </Col>

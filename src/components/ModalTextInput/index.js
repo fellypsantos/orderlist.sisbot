@@ -6,9 +6,9 @@ import {OrderListContext} from '../../contexts/OrderListContext';
 
 const ModalTextInput = ({
   title,
-  inputTextContent,
-  labelContent,
-  placeholderContent,
+  inputTextContent = '',
+  labelContent = '',
+  placeholderContent = '',
   isOpen,
   handleChange,
   handleConfirm,

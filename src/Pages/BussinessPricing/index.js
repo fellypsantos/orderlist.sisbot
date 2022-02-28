@@ -30,6 +30,7 @@ import ModalConfirmDialog from '../../components/ModalConfirmDialog';
 
 const API = 'https://list.oneformes.com/api';
 const LS_PRICES_ID = 'sisbot.bussiness.prices';
+const LS_COMPANY_INFORMATIONS = 'sisbot.bussiness.company';
 
 const BussinessPricing = () => {
   const {
@@ -44,6 +45,7 @@ const BussinessPricing = () => {
     settings,
     shouldFilter,
     setShouldFilter,
+    companyName,
     companyEmail,
     setCompanyEmail,
   } = useContext(OrderListContext);
@@ -80,6 +82,10 @@ const BussinessPricing = () => {
     vest: [0, 0, 0, 0, 0, 0, 0, 0],
   });
 
+  const [priceTableUnique, setPriceTableUnique] = useState({
+    socks: [0],
+  });
+
   const {addToast} = useToasts();
 
   const saveToLocalStorage = (pProjectName = '', pCompanyEmail = '') => {
@@ -88,10 +94,18 @@ const BussinessPricing = () => {
       LS_PRICES_ID,
       JSON.stringify({
         projectName: pProjectName,
-        companyEmail: pCompanyEmail,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        priceTableUnique,
+      }),
+    );
+
+    localStorage.setItem(
+      LS_COMPANY_INFORMATIONS,
+      JSON.stringify({
+        companyName: companyName,
+        companyEmail: pCompanyEmail,
       }),
     );
   };
@@ -101,7 +115,8 @@ const BussinessPricing = () => {
       object.projectName !== undefined &&
       object.priceTableMale !== undefined &&
       object.priceTableFemale !== undefined &&
-      object.priceTableChildish !== undefined
+      object.priceTableChildish !== undefined &&
+      object.priceTableUnique !== undefined
     ) {
       return true;
     }
@@ -118,6 +133,7 @@ const BussinessPricing = () => {
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        priceTableUnique,
         settings: {
           ...settings,
           filterEnabled: shouldFilter,
@@ -147,6 +163,7 @@ const BussinessPricing = () => {
             setPriceTableMale(uploaded.priceTableMale);
             setPriceTableFemale(uploaded.priceTableFemale);
             setPriceTableChildish(uploaded.priceTableChildish);
+            setPriceTableUnique(uploaded.priceTableUnique);
 
             setSettings({
               ...uploaded.settings,
@@ -190,17 +207,24 @@ const BussinessPricing = () => {
     }
 
     const localStorageBussinessPrices = localStorage.getItem(LS_PRICES_ID);
+    const localStorageCompanyData = localStorage.getItem(
+      LS_COMPANY_INFORMATIONS,
+    );
 
-    if (localStorageBussinessPrices !== null) {
+    if (
+      localStorageBussinessPrices !== null &&
+      localStorageCompanyData !== null
+    ) {
       // ALREADY EXISTS DATA
       console.log('ALREADY EXISTS DATA, RESTORE IT');
       const data = JSON.parse(localStorageBussinessPrices);
+      const companyData = JSON.parse(localStorageCompanyData);
 
       // RESTORE PROJECT NAME
       setProjectName(data.projectName);
 
       // RESTORE COMPANY EMAIL
-      setCompanyEmail(data.companyEmail);
+      setCompanyEmail(companyData.companyEmail);
 
       // RESTORE MALE PRICES IF ARE DIFFERENT
       if (hash(priceTableMale) !== hash(data.priceTableMale)) {
@@ -215,6 +239,11 @@ const BussinessPricing = () => {
       // RESTORE CHILDISH PRICES
       if (hash(priceTableChildish) !== hash(data.priceTableChildish)) {
         setPriceTableChildish(data.priceTableChildish);
+      }
+
+      // RESTORE UNIQUE PRICES
+      if (hash(priceTableUnique) !== hash(data.priceTableUnique)) {
+        setPriceTableUnique(data.priceTableUnique);
       }
     } else {
       // DEFAULT DATA
@@ -233,6 +262,7 @@ const BussinessPricing = () => {
       priceTableMale,
       priceTableFemale,
       priceTableChildish,
+      priceTableUnique,
     });
 
     // FORCE RE-RENDER TABLE TO UPDATE TOTAL PRICE OF EACH ROW
@@ -243,6 +273,7 @@ const BussinessPricing = () => {
     priceTableMale,
     priceTableFemale,
     priceTableChildish,
+    priceTableUnique,
   ]);
 
   const handleUpdatePriceTable = (
@@ -264,6 +295,7 @@ const BussinessPricing = () => {
         selectedPriceTable = priceTableChildish;
         break;
       default:
+        selectedPriceTable = priceTableUnique;
     }
 
     const updated = selectedPriceTable[theClotheName].map((item, index) => {
@@ -301,6 +333,10 @@ const BussinessPricing = () => {
         });
         break;
       default:
+        setPriceTableUnique({
+          ...selectedPriceTable,
+          [theClotheName]: [...updated],
+        });
     }
 
     setCurrentClothingPrices({
@@ -308,6 +344,7 @@ const BussinessPricing = () => {
       priceTableMale,
       priceTableFemale,
       priceTableChildish,
+      priceTableUnique,
     });
   };
 
@@ -319,6 +356,7 @@ const BussinessPricing = () => {
         setPriceTableMale(uploaded.priceTableMale);
         setPriceTableFemale(uploaded.priceTableFemale);
         setPriceTableChildish(uploaded.priceTableChildish);
+        setPriceTableUnique(uploaded.priceTableUnique);
         setSettings(uploaded.settings);
         setShouldFilter(uploaded.settings.filterEnabled);
 
@@ -337,6 +375,7 @@ const BussinessPricing = () => {
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
+        priceTableUnique,
         settings: {
           ...settings,
           filterEnabled: shouldFilter,
@@ -364,6 +403,8 @@ const BussinessPricing = () => {
   };
 
   const handleValidateEmail = (email) => {
+    if (email === '') return;
+
     if (!Utils.IsValidEmail(email)) {
       addToast(Translator('TOAST_INVALID_EMAIL'), {
         autoDismiss: true,
@@ -479,6 +520,8 @@ const BussinessPricing = () => {
               {/* DRAW ROWS */}
               {Object.keys(clothingIcons)
                 .filter((key) => {
+                  if (key === 'socks') return false;
+
                   // Always return no variant clothes
                   if (clothingIcons[key].isCycling === undefined) return true;
 
@@ -542,6 +585,8 @@ const BussinessPricing = () => {
               {/* DRAW ROWS */}
               {Object.keys(clothingIcons)
                 .filter((key) => {
+                  if (key === 'socks') return false;
+
                   // Always return no variant clothes
                   if (clothingIcons[key].isCycling === undefined) return true;
 
@@ -605,6 +650,8 @@ const BussinessPricing = () => {
               {/* DRAW ROWS */}
               {Object.keys(clothingIcons)
                 .filter((key) => {
+                  if (key === 'socks') return false;
+
                   // Always return no variant clothes
                   if (clothingIcons[key].isCycling === undefined) return true;
 
@@ -653,6 +700,32 @@ const BussinessPricing = () => {
         </Tab>
       </Tabs>
 
+      {/* TABLE FOR SOCKS */}
+      <h5>{Translator('T-UNIQ-FULL')}</h5>
+      <Table bordered hover>
+        <tbody>
+          {Object.keys(priceTableUnique).map((item) => (
+            <tr key={item}>
+              <td style={{width: '50px'}}>
+                <img src={clothingIcons.socks.icon} alt="icon" height={25} />
+              </td>
+              <td>
+                <TableCellAsInput
+                  value={
+                    priceTableUnique.socks[0] > 0
+                      ? priceTableUnique.socks[0]
+                      : ''
+                  }
+                  handleBlur={({target}) => {
+                    handleUpdatePriceTable('', 'socks', target.value, 0);
+                  }}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
       {/* POPUP TO CONFIRM CLEAR ORDER LIST FROM CLIENT AFTER SENT */}
       <ModalConfirmDialog
         isOpen={isModalConfirmOpen}
@@ -679,7 +752,7 @@ const BussinessPricing = () => {
               <FontAwesomeIcon icon={faLink} />
             </InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl className="text-center" value={generatedLink} />
+          <FormControl className="text-center" defaultValue={generatedLink} />
           <InputGroup.Append>
             <CopyToClipboard text={generatedLink} onCopy={handleOnCopy}>
               <Button variant="secondary" size="sm">

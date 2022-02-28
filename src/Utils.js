@@ -23,7 +23,7 @@ export default {
     // console.log('currentPrices', currentPrices);
     // console.log('clothingSizes', clothingSizes);
     // console.log('orderItemClothingSettings', orderItemClothingSettings);
-    // // console.log('genderPriceTable', genderPriceTable);
+    // console.log('genderPriceTable', genderPriceTable);
     // console.warn('* * * CONFERÊNCIA FINALIZADA * * *');
 
     // CONVERT PRICES TO ARRAY
@@ -36,6 +36,7 @@ export default {
       male: convertPriceTableToArray(currentPrices.priceTableMale),
       female: convertPriceTableToArray(currentPrices.priceTableFemale),
       childish: convertPriceTableToArray(currentPrices.priceTableChildish),
+      unique: convertPriceTableToArray(currentPrices.priceTableUnique),
     };
 
     let totalPrice = 0;
@@ -44,10 +45,20 @@ export default {
     // SUM THE PRICES
     orderItemClothingSettings.map((item) => {
       const result =
-        clothingSizes.find((theSize) => theSize.value === item.size) || null;
+        clothingSizes.find(
+          (theSize) => theSize.value === item.size || item.name === 'socks',
+        ) || null;
 
       if (result === null) return false;
 
+      // SPECIFIC CODE FOR DEALING WITH SOCKS
+      if (item.name === 'socks') {
+        const socksPrice = arrPriceTable.unique[0][0];
+        totalPrice += socksPrice * item.quantity;
+        return;
+      }
+
+      // NORMAL FLOW
       const clotheID = item.id - 1;
       const theGender = item.gender.toLowerCase();
       const selectedPriceList = arrPriceTable[theGender][clotheID];
@@ -72,7 +83,7 @@ export default {
       return columnCount;
     }
 
-    return 13; // default
+    return 14; // default
   },
 
   Sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
@@ -134,6 +145,7 @@ export default {
       pants: 0,
       tanktop: 0,
       vest: 0,
+      socks: 0,
     };
 
     orderListItems.map((orderItem) => {

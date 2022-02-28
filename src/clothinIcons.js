@@ -8,6 +8,7 @@ import pants from './images/icons/pants.png';
 import pantsCycling from './images/icons/pants-cycling.png';
 import tanktop from './images/icons/tanktop.png';
 import vest from './images/icons/vest.png';
+import socks from './images/icons/socks.png';
 
 export default {
   tshirt,
@@ -20,4 +21,5 @@ export default {
   pantsCycling,
   tanktop,
   vest,
+  socks,
 };

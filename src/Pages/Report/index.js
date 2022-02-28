@@ -20,6 +20,7 @@ import ReportMenu from '../../components/ReportMenu';
 import {ReportContext} from '../../contexts/ReportContext';
 import Utils from '../../Utils';
 import DateTimePickerCustom from '../../components/DateTimePickerCustom';
+import ThumbPreview from '../../components/ThumbPreview';
 
 const Report = () => {
   const {
@@ -32,9 +33,8 @@ const Report = () => {
     isCycling,
   } = useContext(OrderListContext);
 
-  const {modalImageSelection, setModalVisibleImageSelection} = useContext(
-    ReportContext,
-  );
+  const {modalImageSelection, setModalVisibleImageSelection} =
+    useContext(ReportContext);
 
   const INITIAL_STATE_SORTED_ORDER_LIST = {
     male: {
@@ -246,7 +246,7 @@ const Report = () => {
   const [scale, setScale] = useState(50);
   const [croppedArea, setCroppedArea] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [finalProcessedImage, setFinalProcessedImage] = useState(null);
+  const [finalProcessedImageList, setFinalProcessedImageList] = useState([]);
   const [imageDimensions, setImageDimensions] = useState(null);
   const [consolidatedCounting, setConsolidatedCounting] = useState(null);
 
@@ -256,6 +256,8 @@ const Report = () => {
   const [responsableName, setResponsableName] = useState('');
   const [orderDate, setOrderDate] = useState(moment());
   const [deliveryDate, setDeliveryDate] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [orderFinalValue, setOrderFinalValue] = useState('');
 
   const [sortedOrderList, setSortedOrderList] = useState(
     JSON.parse(JSON.stringify(INITIAL_STATE_SORTED_ORDER_LIST)),
@@ -299,7 +301,11 @@ const Report = () => {
     // PROCESS THE CLOTHES
     orderListItems.map((orderItem) => {
       orderItem.clothingSettings.map((theClothe) => {
-        if (theClothe.quantity > 0 && theClothe.size !== '') {
+        if (
+          theClothe.quantity > 0 &&
+          theClothe.size !== '' &&
+          theClothe.name !== 'socks'
+        ) {
           const tempGender = theClothe.gender.toLowerCase();
           const clotheName = theClothe.name.replace('Cycling', '');
           const clotheSize = theClothe.size;
@@ -328,6 +334,11 @@ const Report = () => {
   }, []);
 
   const handleApplyCrop = () => {
+    if (selectedImage === null) {
+      handleCloseModal();
+      return;
+    }
+
     const canvas = document.createElement('canvas');
     canvas.width = croppedArea.width / 2;
     canvas.height = croppedArea.height / 2;
@@ -357,7 +368,22 @@ const Report = () => {
         destHeight,
       );
 
-      setFinalProcessedImage(canvas.toDataURL());
+      setFinalProcessedImageList([
+        ...finalProcessedImageList,
+        {
+          image: canvas.toDataURL(),
+          scale: scale,
+        },
+      ]);
+
+      // Clear handle data to process next image
+      setUseCrop(false);
+      setCrop({x: 0, y: 0});
+      setZoom(1);
+      setScale(50);
+      setCroppedArea(null);
+      setSelectedImage(null);
+
       handleCloseModal();
     };
 
@@ -383,6 +409,13 @@ const Report = () => {
   const handleNoCrop = () => {
     if (!useCrop) setZoom(1);
     setUseCrop(!useCrop);
+  };
+
+  const handleDeleteThumbnail = (imageIndex) => {
+    const filtered = finalProcessedImageList.filter(
+      (_, index) => imageIndex !== index,
+    );
+    setFinalProcessedImageList(filtered);
   };
 
   const cropperAspectRatio =
@@ -460,6 +493,19 @@ const Report = () => {
               />
             </Col>
           </Row>
+
+          {/* SHOW THUMBNAILS WITH DELETE BUTTON */}
+          <Row>
+            {finalProcessedImageList.map((item, index) => (
+              <Col>
+                <ThumbPreview
+                  image={item.image}
+                  index={index}
+                  handleDelete={handleDeleteThumbnail}
+                />
+              </Col>
+            ))}
+          </Row>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
@@ -488,7 +534,6 @@ const Report = () => {
             {/* LEFT SIDE */}
             <Col xs="6">
               <ReportHeader
-                title="SISBot"
                 subtitle={Translator('PROCESSING_REPORT_TITLE')}
                 date={moment().format('LLL')}
               />
@@ -606,6 +651,48 @@ const Report = () => {
                     : ''
                 }
               />
+
+              {/* PAYMENT METHOD */}
+              {/* EDITABLE */}
+              <InputGroup className="mb-2 noprint">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    {Translator('PAYMENT_METHOD')}
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={paymentMethod}
+                  onChange={({target}) => setPaymentMethod(target.value)}
+                />
+              </InputGroup>
+
+              {/* PRINTABLE */}
+              <PenField
+                printOnly
+                label={Translator('PAYMENT_METHOD')}
+                value={paymentMethod}
+              />
+
+              {/* PAYMENT METHOD */}
+              {/* EDITABLE */}
+              <InputGroup className="mb-2 noprint">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>
+                    {Translator('ORDERLIST_FINAL_VALUE')}
+                  </InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={orderFinalValue}
+                  onChange={({target}) => setOrderFinalValue(target.value)}
+                />
+              </InputGroup>
+
+              {/* PRINTABLE */}
+              <PenField
+                printOnly
+                label={Translator('ORDERLIST_FINAL_VALUE')}
+                value={orderFinalValue}
+              />
             </Col>
           </Row>
 
@@ -619,6 +706,8 @@ const Report = () => {
                     <th>-</th>
                     {Object.keys(clothingIcons)
                       .filter((key) => {
+                        if (key === 'socks') return false;
+
                         // Always return no variant clothes
                         if (clothingIcons[key].isCycling === undefined) {
                           return true;
@@ -679,6 +768,8 @@ const Report = () => {
                         {/* RENDER COLUMNS */}
                         {Object.keys(clothingIcons)
                           .filter((key) => {
+                            if (key === 'socks') return false;
+
                             // Always return no variant clothes
                             if (clothingIcons[key].isCycling === undefined) {
                               return true;
@@ -727,6 +818,8 @@ const Report = () => {
                     <th>-</th>
                     {Object.keys(clothingIcons)
                       .filter((key) => {
+                        if (key === 'socks') return false;
+
                         // Always return no variant clothes
                         if (clothingIcons[key].isCycling === undefined) {
                           return true;
@@ -784,6 +877,8 @@ const Report = () => {
                         <td>{Translator(size.value)}</td>
                         {Object.keys(clothingIcons)
                           .filter((key) => {
+                            if (key === 'socks') return false;
+
                             // Always return no variant clothes
                             if (clothingIcons[key].isCycling === undefined) {
                               return true;
@@ -836,6 +931,8 @@ const Report = () => {
                     <th>-</th>
                     {Object.keys(clothingIcons)
                       .filter((key) => {
+                        if (key === 'socks') return false;
+
                         // Always return no variant clothes
                         if (clothingIcons[key].isCycling === undefined) {
                           return true;
@@ -891,6 +988,8 @@ const Report = () => {
                       <td>{Translator(size.value)}</td>
                       {Object.keys(clothingIcons)
                         .filter((key) => {
+                          if (key === 'socks') return false;
+
                           // Always return no variant clothes
                           if (clothingIcons[key].isCycling === undefined) {
                             return true;
@@ -997,18 +1096,17 @@ const Report = () => {
           </Row>
         )}
 
-        {finalProcessedImage && (
-          <Row className="mt-4">
+        {finalProcessedImageList.length > 0 &&
+          finalProcessedImageList.map((item) => (
             <Col xs="12">
               <h5>{Translator('REPORT_LAYOUT_IMAGE')}</h5>
               <img
                 alt={Translator('REPORT_LAYOUT_IMAGE')}
-                src={finalProcessedImage}
-                width={`${scale}%`}
+                src={item.image}
+                width={`${Math.floor(item.scale)}%`}
               />
             </Col>
-          </Row>
-        )}
+          ))}
       </div>
     </div>
   );

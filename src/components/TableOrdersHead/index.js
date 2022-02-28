@@ -37,7 +37,7 @@ const TableOrdersHead = () => {
 
       {/* SCREENSHOT MODE */}
       <tr className={!screenshotMode ? 'd-none' : ''}>
-        <td colSpan={10} className="text-center">
+        <td colSpan={11} className="text-center">
           <strong>
             {Translator('MAIN_TITLE')} -{' '}
             {`${Translator('CONTAINS_N_UNITS')} ${totalOfPieces}`}

@@ -2,7 +2,7 @@
   "MOMENTJS": "pt-br",
   "MALE": "Masculino",
   "FEMALE": "Feminino",
-  "CHILDISH": "Juvenil",
+  "CHILDISH": "Inf-Juvenil",
   "T-PP": "PP",
   "T-P": "P",
   "T-M": "M",
@@ -20,6 +20,8 @@
   "T-12A": "12 anos",
   "T-14A": "14 anos",
   "T-16A": "16 anos",
+  "T-UNIQ": "Tam.Uni",
+  "T-UNIQ-FULL": "Tamanho Único",
   "CSVID_GENDER": "genero",
   "CSVID_NAME": "nome",
   "CSVID_NUMBER": "numero",
@@ -29,6 +31,7 @@
   "CSVID_PANTS": "calca",
   "CSVID_TANKTOP": "regata",
   "CSVID_VEST": "colete",
+  "CSVID_SOCKS": "meião",
 
   "MAIN_TITLE": "Lista de Pedidos",
   "CONTAINS_N_UNITS": "Total de Peças:",
@@ -44,7 +47,10 @@
   "REQUEST_DATE": "Data do Pedido",
   "DELIVERY_DATE": "Data de Entrega",
   "REPONSIBLE": "Responsável",
+  "PAYMENT_METHOD": "Forma de Pagamento",
+  "ORDERLIST_FINAL_VALUE": "Valor Total do Pedido",
   "ANNOTATIONS": "Anotações",
+  "ANNOTATIONS_CLIENT_LABEL": "As obervações abaixo serão enviadas para a empresa de produção junto com o arquivo de pedidos.",
 
   "GRAND_TOTAL": "Total Geral",
   "TOTAL_RECEIVED": "Total Recebido",
@@ -60,6 +66,7 @@
 
   "ADD": "Adicionar",
   "CLEAR": "Limpar",
+  "HIDE": "Ocultar",
   "CLOSE": "Fechar",
   "DELETE": "Excluir",
   "DELETE_SELECTED": "Excluir Selecionados",
@@ -98,6 +105,10 @@
   "ASK_CLIENT_NAME": "Insira seu nome para identificar o arquivo",
   "ASK_NOT_ROBOT": "Confirme que você não é um robô",
   "ASK_CLEAR_ORDERLIST_AFTER_SENT": "Deseja limpar a lista de pedidos do cliente após efetuar envio desta por e-mail?",
+  "ACCEPTANCE_TERM_TITLE": "Termo de Aceite",
+  "ACCEPTANCE_TERM_TEXT": "Mediante autorização desta lista de pedidos, afirmo estar de acordo com a produção e/ou aplicação deste arquivo com as especificações de tamanho e ortografia, isentando de qualquer responsabilidade os envolvidos pela produção do mesmo.",
+  "ACCEPTANCE_CHECKBOX_LABEL": "Eu aceito os termos acima!",
+  "ACCEPTANCE_CHECKBOX_CHECKED": "Excelente, agora você pode enviar a sua lista.",
 
   "SETTINGS_POPUP_TITLE": "Configurações",
   "SETTINGS_COIN_PREFIX": "Prefixo de Moeda",
@@ -118,6 +129,7 @@
   "COPY_LINK": "Copiar Link",
   "BUDGET": "Orçamento",
   "BUDGET_IDENTIFICATION": "Identificação",
+  "COMPANY_NAME": "Nome da empresa",
   "COMPANY_EMAIL": "E-mail da empresa",
 
   "CONFIRM_DELETE_ITEM": "Quer mesmo excluir esse item da lista de pedidos?",
