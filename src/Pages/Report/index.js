@@ -1099,9 +1099,8 @@ const Report = () => {
         {finalProcessedImageList.length > 0 &&
           finalProcessedImageList.map((item) => (
             <Col xs="12">
-              <h5>{Translator('REPORT_LAYOUT_IMAGE')}</h5>
               <img
-                alt={Translator('REPORT_LAYOUT_IMAGE')}
+                alt="Layout"
                 src={item.image}
                 width={`${Math.floor(item.scale)}%`}
               />
