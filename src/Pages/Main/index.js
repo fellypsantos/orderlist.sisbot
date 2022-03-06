@@ -40,7 +40,6 @@ const Main = () => {
     Translator,
     showDashboard,
     setShowDashboard,
-    orderListItems,
     setOrderListItems,
     setOrderListItemsNotes,
     orderListClientNotes,
