@@ -6,6 +6,7 @@
   "extends": ["plugin:react/recommended", "airbnb"],
   "plugins": ["react"],
   "rules": {
+    "function-paren-newline": 0,
     "no-alert": 0,
     "array-callback-return": 0,
     "no-param-reassign": 0,

@@ -51,6 +51,9 @@
   "ORDERLIST_FINAL_VALUE": "Valor Total do Pedido",
   "ANNOTATIONS": "Anotações",
   "ANNOTATIONS_CLIENT_LABEL": "As obervações abaixo serão enviadas para a empresa de produção junto com o arquivo de pedidos.",
+  "LIST_MANAGER": "Sublistas",
+  "LIST": "Lista",
+  "ASK_NEW_LIST_NAME": "Informe o nome da lista",
 
   "GRAND_TOTAL": "Total Geral",
   "TOTAL_RECEIVED": "Total Recebido",
@@ -116,6 +119,9 @@
   "SETTINGS_MAX_PER_PIECE": "Máximo por Peça",
   "SETTINGS_MAX_PER_PIECE_DESCSRIPTION": "Valor máximo que pode ser pedido para cada peça de roupa.",
   "SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE": "Não mostrar tamanhos de roupas sem orçamento.",
+
+  "LIST_MANAGER_TITLE": "Gerenciador de Sublistas",
+  "NO_SUBLISTS_YET": "Nenhuma sublista até o momento.",
 
   "REPORT_MODAL_PREVIEW_TITLE": "Imagem do Layout",
   "REPORT_MODAL_PREVIEW_CROP": "Recorte",
@@ -191,6 +197,7 @@
   "TOAST_NO_SIZE_SELECTED": "Selecione um tamanho para a lista sequencial.",
   "TOAST_SEQUENCIAL_LIST_WAS_GENERATED": "Sua lista foi gerada com sucesso.",
   "TOAST_SELECTED_ITEMS_DELETED": "Feito! Os itens selecionados foram removidos da sua lista de pedidos.",
+  "TOAST_VARIABLE_SIZES_AT": "Tamanhos variados em: ",
 
   "INSTRUCTIONS_CONTENT": "Olá, \n\nEsta lista de pedidos foi elaborada no site oneformes.com\nVocê sabia que é possível automatizar sua produção com esta lista?\n\nVeja como funciona em nosso canal do youtube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstruções\n\n.csv é o arquivo de leitura do sisbot para automação no corel.\n.bkp serve para você importar a lista no site list.oneformes.com\n\n\nGere relatórios de produção\nEvite erros e desperdícios.\nAutomatize trabalhos repetitivos\nTenha uma visão ampla do pedido\n\n\nSaudações\nCeo Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

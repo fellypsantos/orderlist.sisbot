@@ -4,5 +4,5 @@ export const ItemToClick = styled.button`
   border: none;
   padding: 0px;
   background-color: transparent;
-  color: #007bff;
+  color: ${(props) => (props.disabled ? '#aaa' : '#007bff')};
 `;
