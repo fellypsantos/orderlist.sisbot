@@ -8,6 +8,7 @@ import {
   faEnvelope,
   faPen,
   faCommentAlt,
+  faList,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -29,6 +30,7 @@ import ModalSendViaEmail from '../../components/ModalSendViaEmail';
 import {CustomInputAsHeaderText} from '../BussinessPricing/styles';
 import ControlPanel from '../../components/ControlPanel';
 import ModalSequencialList from '../../components/ModalSequencialList';
+import ModalListManager from '../../components/ModalListManager';
 
 // const HCAPTCHA_SERVER_CHECK = 'http://localhost/hcaptcha/';
 const HCAPTCHA_SERVER_CHECK = 'https://list.oneformes.com/hcaptcha/';
@@ -38,7 +40,6 @@ const Main = () => {
     Translator,
     showDashboard,
     setShowDashboard,
-    orderListItems,
     setOrderListItems,
     setOrderListItemsNotes,
     orderListClientNotes,
@@ -49,6 +50,7 @@ const Main = () => {
     modalSequencialListOpen,
     settings,
     setSettings,
+    sublists,
   } = useContext(OrderListContext);
 
   const {addToast} = useToasts();
@@ -64,6 +66,7 @@ const Main = () => {
   const [targetEmail, setTargetEmail] = useState(companyEmail);
   const [showModalSendMail, setShowModalSendMail] = useState(false);
   const [showModalAnnotations, setShowModalAnnotations] = useState(false);
+  const [showModalListManager, setShowModalListManager] = useState(false);
 
   const handleCLoseModalTextInput = () => {
     setZIPFileName('');
@@ -78,11 +81,11 @@ const Main = () => {
     setHCaptchaToken('');
   };
 
-  const canSeparateListBySize = () => {
+  const canSeparateListBySize = (pOrderListItem) => {
     let invalidOrderItemToSeparate = 0;
 
     // LOOP THROUGH EACH ORDER ITEM
-    orderListItems.forEach((orderItem) => {
+    pOrderListItem.forEach((orderItem) => {
       // REMOVE EMPTY CLOTHES FROM CHECKING
       const validClothes = orderItem.clothingSettings.filter(
         (clotheItem) => clotheItem.quantity > 0,
@@ -105,11 +108,6 @@ const Main = () => {
 
     // INVALID CLOTHES FOUND
     if (invalidOrderItemToSeparate > 0) {
-      addToast(Translator('TOAST_CANT_SEPARATE_BY_SIZE'), {
-        autoDismiss: true,
-        appearance: 'error',
-      });
-
       return false;
     }
 
@@ -118,6 +116,11 @@ const Main = () => {
 
   const generateZip = async () => {
     const zip = new JSZip();
+
+    // ADD INSTRUCTIONS
+    const instructionsFile = `${Translator('INSTRUCTIONS_FILENAME')}.txt`;
+    const instructionsContent = `${Translator('INSTRUCTIONS_CONTENT')}`;
+    zip.file(instructionsFile, instructionsContent);
 
     const sisbotGender = {
       MALE: 'ma',
@@ -187,60 +190,92 @@ const Main = () => {
       csvFullData.unshift(csvHeader.join(','));
     };
 
-    /**
-     * GENERATE ANNOTATIONS FILE IF USER TYPED SOMETING
-     */
+    // GENERATE ANNOTATIONS FILE IF USER TYPED SOMETING
     if (orderListClientNotes.length > 0) {
       zip.file(`${Translator('ANNOTATIONS')}.txt`, orderListClientNotes);
     }
 
-    /**
-     *  GENERATE SINGLE CSV FILE
-     */
-    if (!groupFilesBySize) {
-      prepareCSVFile(orderListItems);
+    // JOIN MAIN LIST + SUBLISTS
+    const currentSelectedList = JSON.parse(localStorage.getItem('sisbot'));
+    const mergedLists = [currentSelectedList, ...sublists];
 
-      // ADD FILES TO ZIP
-      zip.file(`${Translator('MAIN_TITLE')}.csv`, csvFullData.join('\n'));
-      zip.file('list.bkp', btoa(localStorage.getItem('sisbot')));
-      zip.file(
-        `${Translator('INSTRUCTIONS_FILENAME')}.txt`,
-        `${Translator('INSTRUCTIONS_CONTENT')}`,
-      );
+    // GENERATE SINGLE CSV FILE
+    if (!groupFilesBySize) {
+      mergedLists.map(async (listItem) => {
+        const projectName = listItem.listName || listItem.id;
+        const csvFileName = `${projectName || Translator('MAIN_TITLE')}.csv`;
+        const backupContent = btoa(localStorage.getItem('sisbot'));
+
+        // PREPARE HEADER
+        prepareCSVFile(listItem.orderListItems);
+
+        // ADD FILES TO ZIP
+        zip.folder(projectName).file(csvFileName, csvFullData.join('\n'));
+        zip.folder(projectName).file(`${projectName}.bkp`, backupContent);
+      });
 
       // DOWNLOAD ZIP
       const blobContent = await zip.generateAsync({type: 'blob'});
       return blobContent;
     }
 
-    /**
-     *  GENERATE CSV FILES GROUPED BY SIZE
-     */
+    // GENERATE CSV FILES GROUPED BY SIZE
     if (groupFilesBySize) {
-      // EACH SIZE WILL GENERATE A CSV FILE IF NOT EMPTY
-      const orderItemGroupedBySize = {
-        'T-PP': [],
-        'T-P': [],
-        'T-M': [],
-        'T-G': [],
-        'T-GG': [],
-        'T-XG': [],
-        'T-2XG': [],
-        'T-3XG': [],
-        'T-4XG': [],
-        'T-2A': [],
-        'T-4A': [],
-        'T-6A': [],
-        'T-8A': [],
-        'T-10A': [],
-        'T-12A': [],
-        'T-14A': [],
-        'T-16A': [],
-      };
+      let canProcess = true;
 
-      if (canSeparateListBySize()) {
+      // VALIDATION
+      mergedLists.map(async (listItem) => {
+        const isOK = canSeparateListBySize(listItem.orderListItems);
+        const errorToast = `${Translator('TOAST_VARIABLE_SIZES_AT')}${
+          listItem.listName
+        }`;
+
+        // Shows with list has problems
+        if (!isOK) {
+          addToast(errorToast, {
+            autoDismiss: false,
+            appearance: 'warning',
+          });
+
+          canProcess = isOK;
+        }
+      });
+
+      if (!canProcess) {
+        addToast(Translator('TOAST_CANT_SEPARATE_BY_SIZE'), {
+          autoDismiss: true,
+          appearance: 'error',
+        });
+        return null;
+      } // Any of your lists has size variation
+
+      // EACH SIZE WILL GENERATE A CSV FILE IF NOT EMPTY
+      mergedLists.map(async (listItem) => {
+        const projectName = listItem.listName || listItem.id;
+
+        // Hold sorted items
+        const orderItemGroupedBySize = {
+          'T-PP': [],
+          'T-P': [],
+          'T-M': [],
+          'T-G': [],
+          'T-GG': [],
+          'T-XG': [],
+          'T-2XG': [],
+          'T-3XG': [],
+          'T-4XG': [],
+          'T-2A': [],
+          'T-4A': [],
+          'T-6A': [],
+          'T-8A': [],
+          'T-10A': [],
+          'T-12A': [],
+          'T-14A': [],
+          'T-16A': [],
+        };
+
         // ORGANIZE ORDER ITEM SEPARATING EACH ITEM AS INDIVIDUAL ARRAY FOR THAT SIZE
-        orderListItems.forEach((orderItem) => {
+        listItem.orderListItems.forEach((orderItem) => {
           const noEmptyClothes = orderItem.clothingSettings.filter(
             (clotheItem) => clotheItem.quantity > 0,
           );
@@ -257,21 +292,22 @@ const Main = () => {
           prepareCSVFile(group);
 
           // ADD FILES TO ZIP
-          zip.file(`${Translator(key)}.csv`, csvFullData.join('\n'));
+          zip
+            .folder(projectName)
+            .file(`${Translator(key)}.csv`, csvFullData.join('\n'));
+
           csvFullData = []; // CLEAR TO NEXT PROCESSING
         }); // FINISHED GROUP PROCESSING
 
         // ADD EXTRA FILES
-        zip.file('list.bkp', btoa(localStorage.getItem('sisbot')));
-        zip.file(
-          `${Translator('INSTRUCTIONS_FILENAME')}.txt`,
-          `${Translator('INSTRUCTIONS_CONTENT')}`,
-        );
+        zip
+          .folder(projectName)
+          .file(`${projectName}.bkp`, btoa(localStorage.getItem('sisbot')));
+      }); // end map
 
-        // DOWNLOAD ZIP
-        const blobContent = await zip.generateAsync({type: 'blob'});
-        return blobContent;
-      }
+      // DOWNLOAD ZIP
+      const blobContent = await zip.generateAsync({type: 'blob'});
+      return blobContent;
     }
   };
 
@@ -286,9 +322,13 @@ const Main = () => {
 
     const zipData = await generateZip();
 
+    // Reset modal and group status
+    setShowModalConfirmDownload(false);
+    setGroupFilesBySize(false);
+
     // VALIDATE ZIP DATA
     if (zipData === undefined || zipData === null) {
-      addToast(Translator('Falha na geração do arquivo ZIP.'), {
+      addToast(Translator('TOAST_FAILED_GENERATE_ZIP'), {
         autoDismiss: true,
         appearance: 'error',
       });
@@ -296,9 +336,8 @@ const Main = () => {
       return;
     }
 
+    // SUCCESS
     saveAs(zipData, `${safeFilename}.zip`);
-    setShowModalConfirmDownload(false);
-    setGroupFilesBySize(false);
     setZIPFileName('');
 
     addToast(Translator('TOAST_DOWNLOAD_COMPLETE'), {
@@ -452,6 +491,19 @@ const Main = () => {
     </Button>
   );
 
+  const ManagerList = () => (
+    <Button
+      variant="secondary"
+      className="mr-2"
+      size="sm"
+      onClick={() => setShowModalListManager(true)}>
+      <FontAwesomeIcon icon={faList} />
+      <span className="ml-1 d-none d-md-inline-block">
+        {Translator('LIST_MANAGER')}
+      </span>
+    </Button>
+  );
+
   return (
     <>
       <FormAddOrderItem />
@@ -461,6 +513,7 @@ const Main = () => {
         <Row>
           {/* DASHBOARD BUTTONS */}
           <Col className="text-right mb-4">
+            <ManagerList />
             <DropDownButtonToDownload />
             <SendEmailButton />
             <WriteClientNotes />
@@ -545,12 +598,19 @@ const Main = () => {
         handleClose={() => setShowModalAnnotations(false)}
       />
 
+      {/* SUBLISTS MANAGER */}
+      <ModalListManager
+        isOpen={showModalListManager}
+        handleClose={() => setShowModalListManager(false)}
+      />
+
       {/* MAIN TABLE SHOWN ORDERS */}
       <TableOrderList />
 
       {/* NEW POSITION FOR MAIN BUTTONS */}
       <Row className="mt-2">
         <Col className="d-flex justify-content-center">
+          <ManagerList />
           <WriteClientNotes />
           <DropDownButtonToDownload />
           <SendEmailButton />

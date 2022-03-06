@@ -51,6 +51,9 @@
   "ORDERLIST_FINAL_VALUE": "Valor Final del Pedido",
   "ANNOTATIONS": "Anotaciones",
   "ANNOTATIONS_CLIENT_LABEL": "Las notas a continuación se enviarán a la empresa junto con el archivo de lista de pedidos.",
+  "LIST_MANAGER": "Sublistas",
+  "LIST": "Lista",
+  "ASK_NEW_LIST_NAME": "Escribir nuevo nombre de lista",
 
   "GRAND_TOTAL": "Grand Total",
   "TOTAL_RECEIVED": "Total Recibido",
@@ -66,6 +69,7 @@
 
   "ADD": "Agregar",
   "CLEAR": "Limpiar",
+  "HIDE": "Ocultar",
   "CLOSE": "Cerrar",
   "DELETE": "Borrar",
   "DELETE_SELECTED": "Eliminar seleccionado",
@@ -116,13 +120,15 @@
   "SETTINGS_MAX_PER_PIECE_DESCSRIPTION": "Valor máximo que se puede pedir para cada prenda.",
   "SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE": "No muestre tallas de ropa con precio vacío.",
 
+  "LIST_MANAGER_TITLE": "Administrador de sublistas",
+  "NO_SUBLISTS_YET": "Aún no hay sublistas.",
+
   "REPORT_MODAL_PREVIEW_TITLE": "Imagen de diseño",
   "REPORT_MODAL_PREVIEW_CROP": "Delimitar imagen",
   "REPORT_MODAL_PREVIEW_SCALE": "Escala (Reducir para ahorrar tinta.)",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Usar tamaño original",
   "REPORT_MODAL_PREVIEW_CHOOSE_IMAGE": "Elegir imagen",
   "REPORT_PIECES_COUNTING": "Recuento de piezas",
-  "REPORT_LAYOUT_IMAGE": "Foto de diseño",
   "UNTITLED": "Presupuesto sin título",
   "GENERATE_LINK": "Generar Enlace",
   "COPY_LINK": "Copiar Link",
@@ -190,6 +196,7 @@
   "TOAST_NO_SIZE_SELECTED": "Seleccione cualquier tamaño para la lista secuencial.",
   "TOAST_SEQUENCIAL_LIST_WAS_GENERATED": "¡Su lista secuencial se generó con éxito!",
   "TOAST_SELECTED_ITEMS_DELETED": "¡Hecho! Los artículos seleccionados se han eliminado de la lista de pedidos.",
+  "TOAST_VARIABLE_SIZES_AT": "Tamaños variables en: ",
 
   "INSTRUCTIONS_CONTENT": "Hola,\n\nEsta lista de pedidos se creó utilizando el sitio web oneformes.com.\n¿Sabías que puedes automatizar tu producción usando esta lista?\n\nEche un vistazo a cómo funciona visitando nuestro canal de YouTube.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstrucciones\n\nSISBot lee el archivo .csv para automatizar las producciones de CorelDraw.\n.bkp se puede importar en list.oneformes.com para restaurar la lista de pedidos y realizar cambios.\n\n\nGenere informes de producción.\nEvite errores y desperdicios.\nAutomatiza trabajos repetitivos.\nTenga una visión amplia de la lista de pedidos.\n\n\nSaludos\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net"
 }

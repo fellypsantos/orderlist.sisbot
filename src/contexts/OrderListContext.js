@@ -1,4 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
+import {v4 as uuidv4} from 'uuid';
 // Multilanguage implementation
 import i18n from 'i18next';
 import {useTranslation, initReactI18next} from 'react-i18next';
@@ -226,6 +227,10 @@ const OrderListProvider = ({children}) => {
 
   const [orderListItems, setOrderListItems] = useState([]);
 
+  const [sublists, setSublists] = useState([]);
+
+  const [activeListID, setActiveListID] = useState('');
+
   const [paidOrderItems, setPaidOrderItems] = useState([]);
 
   const [listName, setListName] = useState('');
@@ -344,6 +349,9 @@ const OrderListProvider = ({children}) => {
 
   const loadMainSettings = (data = null) => {
     if (data !== null) {
+      setActiveListID(data.id);
+      console.log('✅ Loaded list ID.');
+
       // RESTORE LIST NAME
       setListName(data.listName);
       console.log('✅ Loaded list name.');
@@ -365,9 +373,15 @@ const OrderListProvider = ({children}) => {
       console.log('✅ Loaded cycling flag.');
     } else {
       console.log('💙 Main informations set to default.');
+
+      const uuid = uuidv4();
+      console.log('uuid', uuid);
+      setActiveListID(uuid);
+
       localStorage.setItem(
         'sisbot',
         JSON.stringify({
+          id: uuid,
           listName: '',
           orderListItemsNotes,
           orderListClientNotes,
@@ -385,6 +399,7 @@ const OrderListProvider = ({children}) => {
     console.log('🔥 LOADING SETTINGS 🔥');
 
     const clsData = localStorage.getItem('sisbot');
+    const clsSublists = localStorage.getItem('sisbot.sublists');
     const clsSettings = localStorage.getItem('sisbot.settings');
     const clsBussinessPrices = localStorage.getItem('sisbot.bussiness.prices');
     const clsCompanyInformation = localStorage.getItem(
@@ -464,6 +479,16 @@ const OrderListProvider = ({children}) => {
       loadMainSettings(); // SET DEFAULT
     }
 
+    // LOAD SUBLISTS
+    if (clsSublists !== null) {
+      const data = JSON.parse(clsSublists);
+      setSublists(data);
+      console.log('✅ Sublists loaded.');
+    } else {
+      // SET DEFAULT
+      localStorage.setItem('sisbot.sublists', '[]');
+    }
+
     setLastChangeI18Next(new Date());
   }, []);
 
@@ -523,6 +548,7 @@ const OrderListProvider = ({children}) => {
     localStorage.setItem(
       'sisbot',
       JSON.stringify({
+        id: activeListID,
         listName,
         orderListItems,
         orderListItemsNotes,
@@ -530,7 +556,18 @@ const OrderListProvider = ({children}) => {
         isCycling,
       }),
     );
-  }, [listName, orderListItemsNotes, orderListClientNotes, isCycling]);
+  }, [
+    listName,
+    orderListItemsNotes,
+    orderListClientNotes,
+    isCycling,
+    activeListID,
+  ]);
+
+  // SAVE SUBLISTS
+  useEffect(() => {
+    localStorage.setItem('sisbot.sublists', JSON.stringify(sublists));
+  }, [sublists]);
 
   useEffect(() => {
     if (orderListItems.length === 0) return false;
@@ -781,6 +818,10 @@ const OrderListProvider = ({children}) => {
     setTempOrderItem,
     orderListItems,
     setOrderListItems,
+    sublists,
+    setSublists,
+    activeListID,
+    setActiveListID,
     paidOrderItems,
     setPaidOrderItems,
     currentClothingPrices,

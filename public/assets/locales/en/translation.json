@@ -51,6 +51,9 @@
   "ORDERLIST_FINAL_VALUE": "Order Final Value",
   "ANNOTATIONS": "Annotations",
   "ANNOTATIONS_CLIENT_LABEL": "Notes below will be send to company together with order list file.",
+  "LIST_MANAGER": "Sublists",
+  "LIST": "List",
+  "ASK_NEW_LIST_NAME": "Write new list name",
 
   "GRAND_TOTAL": "Grand Total",
   "TOTAL_RECEIVED": "Total Received",
@@ -117,13 +120,15 @@
   "SETTINGS_MAX_PER_PIECE_DESCSRIPTION": "Max value that can be ordered for each clothing piece.",
   "SETTINGS_DONT_SHOW_PRICES_WITH_EMPTY_VALUE": "Don't show clothing sizes with empty price.",
 
+  "LIST_MANAGER_TITLE": "Sublist Manager",
+  "NO_SUBLISTS_YET": "No sublists yet.",
+
   "REPORT_MODAL_PREVIEW_TITLE": "Layout Image",
   "REPORT_MODAL_PREVIEW_CROP": "Crop",
   "REPORT_MODAL_PREVIEW_SCALE": "Scale (Reduce to tint economy)",
   "REPORT_MODAL_PREVIEW_CROP_LABEL": "Use original size",
   "REPORT_MODAL_PREVIEW_CHOOSE_IMAGE": "Choose Image",
   "REPORT_PIECES_COUNTING": "Pieces Counting",
-  "REPORT_LAYOUT_IMAGE": "Layout Photo",
   "UNTITLED": "Untitled Budget",
   "GENERATE_LINK": "Generate Link",
   "COPY_LINK": "Copy Link",
@@ -191,6 +196,7 @@
   "TOAST_NO_SIZE_SELECTED": "Select any size to sequential list.",
   "TOAST_SEQUENCIAL_LIST_WAS_GENERATED": "Your sequential list was successfully generated!",
   "TOAST_SELECTED_ITEMS_DELETED": "Done! Selected items has been removed from order list.",
+  "TOAST_VARIABLE_SIZES_AT": "Variable sizes at: ",
 
   "INSTRUCTIONS_CONTENT": "Hi,\n\nThis order list was created using oneformes.com website.\nDid you know that you can automate your production using this list?\n\nTake a look at how it works visiting our YouTube Channel.\nhttps://www.youtube.com/channel/UC87bNVAqN8zibVkrpwIwEEg\n\nInstructions\n\n.csv file is read by SISBot to automate your CorelDraw productions.\n.bkp bkp can be imported at list.oneformes.com to restore the order list and make changes.\n\n\nGenerate production reports.\nAvoid errors and wasting.\nAutomate repetitive works.\nTake a broad view of the order list.\n\n\nGreetings\nCEO Davidson Santos\ninfo@oneformes.com\nwww.aisten.net\n"
 }
