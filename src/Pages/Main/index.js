@@ -204,7 +204,7 @@ const Main = () => {
       mergedLists.map(async (listItem) => {
         const projectName = listItem.listName || listItem.id;
         const csvFileName = `${projectName || Translator('MAIN_TITLE')}.csv`;
-        const backupContent = btoa(localStorage.getItem('sisbot'));
+        const backupContent = btoa(JSON.stringify(listItem));
 
         // PREPARE HEADER
         prepareCSVFile(listItem.orderListItems);
@@ -281,7 +281,6 @@ const Main = () => {
           );
 
           const selectedSize = noEmptyClothes[0].size;
-          console.log('selectedSize', selectedSize);
           orderItemGroupedBySize[selectedSize].push(orderItem);
         });
 
@@ -300,9 +299,8 @@ const Main = () => {
         }); // FINISHED GROUP PROCESSING
 
         // ADD EXTRA FILES
-        zip
-          .folder(projectName)
-          .file(`${projectName}.bkp`, btoa(localStorage.getItem('sisbot')));
+        const backupContent = btoa(JSON.stringify(listItem));
+        zip.folder(projectName).file(`${projectName}.bkp`, btoa(backupContent));
       }); // end map
 
       // DOWNLOAD ZIP
