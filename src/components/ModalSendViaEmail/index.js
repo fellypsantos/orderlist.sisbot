@@ -81,7 +81,7 @@ const ModalSendViaEmail = ({
             {/* HCAPTCHA */}
             <HCaptcha
               ref={HCaptchaRef}
-              sitekey="4d60202c-b4fe-4d13-829a-235c0d7c997e"
+              sitekey="3bb7ba5e-5cba-4ef6-88ca-8577ac7d5236"
               onVerify={(token) => {
                 hcaptchaSolved(token);
               }}
