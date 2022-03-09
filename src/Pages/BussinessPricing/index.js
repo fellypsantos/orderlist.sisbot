@@ -352,6 +352,7 @@ const BussinessPricing = () => {
     Utils.HandleUploadFile('.json', (content) => {
       const uploaded = JSON.parse(content);
       if (isValidJsonFileForPrices(uploaded)) {
+        setCompanyEmail(uploaded.companyEmail);
         setProjectName(uploaded.projectName);
         setPriceTableMale(uploaded.priceTableMale);
         setPriceTableFemale(uploaded.priceTableFemale);
@@ -372,6 +373,7 @@ const BussinessPricing = () => {
     const jsonContent = encodeURIComponent(
       JSON.stringify({
         projectName,
+        companyEmail,
         priceTableMale,
         priceTableFemale,
         priceTableChildish,
