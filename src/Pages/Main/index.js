@@ -212,6 +212,7 @@ const Main = () => {
         // ADD FILES TO ZIP
         zip.folder(projectName).file(csvFileName, csvFullData.join('\n'));
         zip.folder(projectName).file(`${projectName}.bkp`, backupContent);
+        csvFullData = []; // clear to process next csv item
       });
 
       // DOWNLOAD ZIP
