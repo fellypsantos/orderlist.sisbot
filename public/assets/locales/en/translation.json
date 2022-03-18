@@ -40,6 +40,7 @@
   "DOWNLOAD_TITLE": "List Download",
   "LANGUAGE": "Language",
   "INSTRUCTIONS_FILENAME": "Instructions",
+  "TEXTAREA_PLACEHOLDER_LIST": "Paste the list here!",
 
   "PROCESSING_REPORT_TITLE": "Production Sheet",
   "SERVICE_ORDER": "Service Order",
@@ -52,6 +53,7 @@
   "ANNOTATIONS": "Annotations",
   "ANNOTATIONS_CLIENT_LABEL": "Notes below will be send to company together with order list file.",
   "LIST_MANAGER": "Sublists",
+  "PASTE_LIST": "Paste list",
   "LIST": "List",
   "ASK_NEW_LIST_NAME": "Write new list name",
 
@@ -169,6 +171,9 @@
   "WARNING": "Warning!",
 
   "LINK_EXPIRED": "Link already expired.",
+  "TOAST_TEXT_PASTED": "Text pasted with success!",
+  "TOAST_TEXT_COPIED": "Text copied!",
+  "TOAST_TEXT_PASTED_ERROR": "Invalid information!",
   "TOAST_EMPTY_LIST": "Empty List! Nothing to add for now.",
   "TOAST_EMPTY_LIST_ON_UPDATE": "Empty List! You can't edit the informations keeping empty.",
   "TOAST_ITEM_ADDED": "Done! New item was added to your order list.",

@@ -9,6 +9,7 @@ import {
   faPen,
   faCommentAlt,
   faList,
+  faClipboard,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
@@ -31,6 +32,7 @@ import {CustomInputAsHeaderText} from '../BussinessPricing/styles';
 import ControlPanel from '../../components/ControlPanel';
 import ModalSequencialList from '../../components/ModalSequencialList';
 import ModalListManager from '../../components/ModalListManager';
+import ModalPasteList from '../../components/PasteListModal';
 
 // const HCAPTCHA_SERVER_CHECK = 'http://localhost/hcaptcha/';
 const HCAPTCHA_SERVER_CHECK = 'https://list.oneformes.com/hcaptcha/';
@@ -67,6 +69,7 @@ const Main = () => {
   const [showModalSendMail, setShowModalSendMail] = useState(false);
   const [showModalAnnotations, setShowModalAnnotations] = useState(false);
   const [showModalListManager, setShowModalListManager] = useState(false);
+  const [showModalPasteList, setShowModalPasteList] = useState(false);
 
   const handleCLoseModalTextInput = () => {
     setZIPFileName('');
@@ -502,7 +505,19 @@ const Main = () => {
       </span>
     </Button>
   );
-
+  const PasteList = () => (
+    <Button
+      variant="secondary"
+      className="mr-2"
+      size="sm"
+      onClick={() => setShowModalPasteList((isShowing) => !isShowing)}
+    >
+      <FontAwesomeIcon icon={faClipboard} />
+      <span className="ml-1 d-none d-md-inline-block">
+        {Translator('PASTE_LIST')}
+      </span>
+    </Button>
+  );
   return (
     <>
       <FormAddOrderItem />
@@ -512,11 +527,11 @@ const Main = () => {
         <Row>
           {/* DASHBOARD BUTTONS */}
           <Col className="text-right mb-4">
+            <PasteList />
             <ManagerList />
             <DropDownButtonToDownload />
             <SendEmailButton />
             <WriteClientNotes />
-
             <Button
               className="mr-2"
               variant="secondary"
@@ -555,6 +570,14 @@ const Main = () => {
           />
         </Col>
       </Row>
+
+      {/* paste list */}
+      {showModalPasteList && (
+        <ModalPasteList
+          isOpen={showModalPasteList}
+          handleClose={() => setShowModalPasteList(false)}
+        />
+      )}
 
       {/* DOWNLOAD */}
       <ModalTextInput
