@@ -40,6 +40,7 @@
   "DOWNLOAD_TITLE": "Download da Lista",
   "LANGUAGE": "Idioma",
   "INSTRUCTIONS_FILENAME": "Instruções",
+  "TEXTAREA_PLACEHOLDER_LIST": "Cole a lista aqui!",
 
   "PROCESSING_REPORT_TITLE": "Ficha de Produção",
   "SERVICE_ORDER": "Ordem de Serviço",
@@ -52,6 +53,7 @@
   "ANNOTATIONS": "Anotações",
   "ANNOTATIONS_CLIENT_LABEL": "As obervações abaixo serão enviadas para a empresa de produção junto com o arquivo de pedidos.",
   "LIST_MANAGER": "Sublistas",
+  "PASTE_LIST": "Colar lista",
   "LIST": "Lista",
   "ASK_NEW_LIST_NAME": "Informe o nome da lista",
 
@@ -169,6 +171,9 @@
   "WARNING": "Atenção!",
 
   "LINK_EXPIRED": "Esse link já expirou.",
+  "TOAST_TEXT_PASTED": "Texto colado com sucesso!",
+  "TOAST_TEXT_COPIED": "Texto copiado!",
+  "TOAST_TEXT_PASTED_ERROR": "Informação inválida!",
   "TOAST_EMPTY_LIST": "Lista vazia! Não há nada para adicionar até o momento.",
   "TOAST_EMPTY_LIST_ON_UPDATE": "Lista vazia! Você não pode editar a informação deixando vazia.",
   "TOAST_ITEM_ADDED": "Feito! Novo item adicionado na sua lista de pedidos.",
